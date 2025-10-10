@@ -6,21 +6,21 @@ public class Jeu {
 	
 	private Integer id;
 	private String nom;
-	private List<typeJeu> typeJeux; // plateau carte dés
+	private List<TypeJeu> typeJeux; // plateau carte dés
 	private int ageMinimum;
 	private int nbJoueurMinimum;
 	private int nbJoueurMaximum;
 	private int duree;
 	private int nbExemplaire;
 	private double note;
-	private List<categorieJeu> categorieJeux;
+	private List<CategorieJeu> categorieJeux;
 	private String imgURL;
 	private boolean besoinGameMaster;
 	
 	// Constructors
-	public Jeu(Integer id, String nom, List<barJeux.model.typeJeu> typeJeux, int ageMinimum, int nbJoueurMinimum,
+	public Jeu(Integer id, String nom, List<barJeux.model.TypeJeu> typeJeux, int ageMinimum, int nbJoueurMinimum,
 			int nbJoueurMaximum, int duree, int nbExemplaire, double note,
-			List<barJeux.model.categorieJeu> categorieJeux, String imgURL, boolean besoinGameMaster ) {
+			List<barJeux.model.CategorieJeu> categorieJeux, String imgURL, boolean besoinGameMaster ) {
 		this.id = id;
 		this.nom = nom;
 		this.typeJeux = typeJeux;
@@ -34,9 +34,9 @@ public class Jeu {
 		this.imgURL = imgURL;
 		this.besoinGameMaster = besoinGameMaster;
 	}
-	public Jeu(String nom, List<barJeux.model.typeJeu> typeJeux, int ageMinimum, int nbJoueurMinimum,
+	public Jeu(String nom, List<barJeux.model.TypeJeu> typeJeux, int ageMinimum, int nbJoueurMinimum,
 			int nbJoueurMaximum, int duree, int nbExemplaire, double note,
-			List<barJeux.model.categorieJeu> categorieJeux, String imgURL,  boolean besoinGameMaster) {
+			List<barJeux.model.CategorieJeu> categorieJeux, String imgURL,  boolean besoinGameMaster) {
 		this.nom = nom;
 		this.typeJeux = typeJeux;
 		this.ageMinimum = ageMinimum;
@@ -64,10 +64,10 @@ public class Jeu {
 	public void setNom(String nom) {
 		this.nom = nom;
 	}
-	public List<typeJeu> getTypeJeux() {
+	public List<TypeJeu> getTypeJeux() {
 		return typeJeux;
 	}
-	public void setTypeJeux(List<typeJeu> typeJeux) {
+	public void setTypeJeux(List<TypeJeu> typeJeux) {
 		this.typeJeux = typeJeux;
 	}
 	public int getAgeMinimum() {
@@ -106,10 +106,10 @@ public class Jeu {
 	public void setNote(double note) {
 		this.note = note;
 	}
-	public List<categorieJeu> getCategorieJeux() {
+	public List<CategorieJeu> getCategorieJeux() {
 		return categorieJeux;
 	}
-	public void setCategorieJeux(List<categorieJeu> categorieJeux) {
+	public void setCategorieJeux(List<CategorieJeu> categorieJeux) {
 		this.categorieJeux = categorieJeux;
 	}
 
@@ -151,11 +151,11 @@ public class Jeu {
 	}
 	public void retirerExemplaires(int i) {
 		// TODO Auto-generated method stub
-		this.nbExemplaire--;
+		this.nbExemplaire-=i;
 		
 	}
 	public void ajouterExemplaires(int i) {
-		this.nbExemplaire++;
+		this.nbExemplaire-=i;
 	}
 
 	

@@ -1,6 +1,6 @@
 package barJeux.model;
 
-public enum typeJeu {
+public enum TypeJeu {
 	CARTES,
     DES,
     PLATEAU,

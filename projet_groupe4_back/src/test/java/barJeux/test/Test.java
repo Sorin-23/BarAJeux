@@ -20,14 +20,14 @@ public class Test {
 		// Création d'un jeu
 		Jeu jeu = new Jeu(
 				"Catan",
-				Arrays.asList(typeJeu.PLATEAU),
+				Arrays.asList(TypeJeu.PLATEAU),
 				10,    // age minimum
 				3,     // nb joueur min
 				4,     // nb joueur max
 				75,    // durée
 				2,     // nb exemplaires
 				4.6,   // note
-				Arrays.asList(categorieJeu.STRATEGIE),
+				Arrays.asList(CategorieJeu.STRATEGIE),
 				"", //url vide
 				true // besoin d'un GM
 
@@ -35,28 +35,28 @@ public class Test {
 
 		Jeu jeu2 = new Jeu(
 				"Catan2",
-				Arrays.asList(typeJeu.PLATEAU),
+				Arrays.asList(TypeJeu.PLATEAU),
 				10,    // age minimum
 				3,     // nb joueur min
 				4,     // nb joueur max
 				75,    // durée
 				2,     // nb exemplaires
 				4.6,   // note
-				Arrays.asList(categorieJeu.STRATEGIE),
+				Arrays.asList(CategorieJeu.STRATEGIE),
 				"", //url vide
 				true // besoin d'un GM
 
 				);
 		Jeu jeu3 = new Jeu(
 				"Catan3",
-				Arrays.asList(typeJeu.PLATEAU),
+				Arrays.asList(TypeJeu.PLATEAU),
 				10,    // age minimum
 				3,     // nb joueur min
 				4,     // nb joueur max
 				75,    // durée
 				2,     // nb exemplaires
 				4.6,   // note
-				Arrays.asList(categorieJeu.STRATEGIE),
+				Arrays.asList(CategorieJeu.STRATEGIE),
 				"", //url vide
 				true // besoin d'un GM
 
@@ -90,7 +90,7 @@ public class Test {
 
 
 		// Création d'une table
-		Table table = new Table("Table du Roi", 4, true);
+		TableJeu table = new TableJeu("Table du Roi", 4, true);
 
 		// Création d'un employé (GameMaster)
 		Employe gm = new Employe("Martin", "Luc", "luc.martin@mail.com", "mdp456", "0605040302", "GameMaster", true);

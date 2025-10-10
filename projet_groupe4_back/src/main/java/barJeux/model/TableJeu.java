@@ -1,6 +1,6 @@
 package barJeux.model;
 
-public class Table {
+public class TableJeu {
 	
 	private Integer id;
 	private String nomTable;
@@ -8,13 +8,13 @@ public class Table {
 	private boolean disponibilite;
 	
 	// Constructors
-	public Table(Integer id, String nomTable, int capacite, boolean disponibilite) {
+	public TableJeu(Integer id, String nomTable, int capacite, boolean disponibilite) {
 		this.id = id;
 		this.nomTable = nomTable;
 		this.capacite = capacite;
 		this.disponibilite = disponibilite;
 	}
-	public Table(String nomTable, int capacite, boolean disponibilite) {
+	public TableJeu(String nomTable, int capacite, boolean disponibilite) {
 		this.nomTable = nomTable;
 		this.capacite = capacite;
 		this.disponibilite = disponibilite;

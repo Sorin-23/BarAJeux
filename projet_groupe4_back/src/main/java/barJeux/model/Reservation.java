@@ -11,14 +11,14 @@ public class Reservation {
 	private LocalDateTime datetimeDebut;
 	private LocalDateTime datetimeFin;
 	private int nbJoueur;
-	private Table table;
+	private TableJeu table;
 	private Jeu jeu;
 	private StatutReservation statutReservation;
 	private Client client;
 	private Employe gameMaster;
 	
 	// Constructors
-	public Reservation(Integer id, LocalDateTime datetimeDebut, LocalDateTime datetimeFin, int nbJoueur, Table table,
+	public Reservation(Integer id, LocalDateTime datetimeDebut, LocalDateTime datetimeFin, int nbJoueur, TableJeu table,
 			Jeu jeu, StatutReservation statutReservation, Client client, Employe gameMaster) {
 		this.id = id;
 		this.datetimeDebut = datetimeDebut;
@@ -30,14 +30,14 @@ public class Reservation {
 		this.client = client;
 		this.gameMaster = gameMaster;
 	}
-	public Reservation(LocalDateTime datetimeDebut, LocalDateTime datetimeFin, int nbJoueur, Table table, Jeu jeu,
+	public Reservation(LocalDateTime datetimeDebut, LocalDateTime datetimeFin, int nbJoueur, TableJeu table, Jeu jeu,
 			 Client client, Employe gameMaster) {
 		this.datetimeDebut = datetimeDebut;
 		this.datetimeFin = datetimeFin;
 		this.nbJoueur = nbJoueur;
 		this.table = table;
 		this.jeu = jeu;
-		this.statutReservation = statutReservation.confirmée;
+		this.statutReservation = StatutReservation.confirmée;
 		this.client = client;
 		this.gameMaster = gameMaster;
 	}
@@ -67,10 +67,10 @@ public class Reservation {
 	public void setNbJoueur(int nbJoueur) {
 		this.nbJoueur = nbJoueur;
 	}
-	public Table getTable() {
+	public TableJeu getTable() {
 		return table;
 	}
-	public void setTable(Table table) {
+	public void setTable(TableJeu table) {
 		this.table = table;
 	}
 	public Jeu getJeu() {

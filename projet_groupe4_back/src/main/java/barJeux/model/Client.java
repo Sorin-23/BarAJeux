@@ -10,8 +10,8 @@ public class Client extends Personne {
 	private LocalDate dateCreation;
 	private LocalDate dateLastConnexion;
 	private LocalDate dateLastReservation;
-	private List<Reservation> reservations;
-	private List<Emprunt> emprunts; 
+	private List<Reservation> reservations = new ArrayList();
+	private List<Emprunt> emprunts = new ArrayList(); 
 	private String ville;
 	private String codePostale;
 	private String adresse;
@@ -34,8 +34,6 @@ public class Client extends Personne {
 	    this.dateCreation = LocalDate.now();
 	    this.dateLastConnexion = LocalDate.now();
 	    this.dateLastReservation = null;
-	    this.reservations = new ArrayList();
-	    this.emprunts = new ArrayList();
 		this.ville = ville;
 		this.codePostale = codePostale;
 		this.adresse = adresse;
@@ -131,6 +129,7 @@ public class Client extends Personne {
             e.setStatutLocation(StatutLocation.annulé); 
         }
     }
+
 	
 	public void mettreAJourConnexion() {
 	    this.dateLastConnexion = LocalDate.now();

@@ -32,7 +32,7 @@ public class Emprunt {
 	public Emprunt(Client client, Jeu jeu) {
 		this.dateEmprunt = LocalDate.now();
 		this.dateRetour = calculerDateRetour(LocalDate.now());
-		this.statutLocation = statutLocation.enCours;
+		this.statutLocation = StatutLocation.enCours;
 		this.dateRetourReel = null;
 		this.client = client;
 		this.jeu = jeu;

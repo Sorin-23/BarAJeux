@@ -1,6 +1,6 @@
 package barJeux.model;
 
-public enum categorieJeu {
+public enum CategorieJeu {
 	STRATEGIE,
     AMBIANCE,
     ENFANT,
