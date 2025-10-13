@@ -1,11 +1,18 @@
 package barJeux.model;
 
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
+@Entity
+@DiscriminatorValue("Employe")
 public class Employe extends Personne{
-	
+	@Column(columnDefinition="varchar(20)")
 	private String job;
 	private boolean gameMaster;
 	
 	// Constructors
+	public Employe() {}
 	public Employe(Integer id, String nom, String prenom, String mail, String mdp, String telephone, String job,
 			boolean gameMaster) {
 		super(id, nom, prenom, mail, mdp, telephone);

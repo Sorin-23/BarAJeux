@@ -4,19 +4,32 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Client extends Personne {
+import javax.persistence.*;
 
+@Entity
+@DiscriminatorValue("Client")
+public class Client extends Personne {
+	@Column(name="point_fidelite")
 	private int pointFidelite;
+	@Column(name="date_creation")
 	private LocalDate dateCreation;
+	@Column(name="date_derniere_connexion")
 	private LocalDate dateLastConnexion;
+	@Column(name="date_derniere_reservation")
 	private LocalDate dateLastReservation;
+	
+	@OneToMany(mappedBy="client")
 	private List<Reservation> reservations = new ArrayList();
+	
+	@OneToMany(mappedBy="client")
 	private List<Emprunt> emprunts = new ArrayList(); 
 	private String ville;
+	@Column(name="code_postale")
 	private String codePostale;
 	private String adresse;
 
 	// Constructor
+	public Client() {}
 	public Client(Integer id, String nom, String prenom, String mail, String mdp, String telephone, int pointFidelite,
 			LocalDate dateCreation, LocalDate dateLastConnexion, LocalDate dateLastReservation, String ville, String codePostale, String adresse) {
 		super(id, nom, prenom, mail, mdp, telephone);

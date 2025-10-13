@@ -14,7 +14,7 @@ public class Test {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		
+/*		
 		// Création d'un client
 		Client client = new Client("Dupont", "Jean", "jean@mail.com", "1234", "0600000000","Nieppe","59850","100 rue du jeu");
 		// Création d'un jeu
@@ -147,9 +147,9 @@ public class Test {
 		for (Reservation r : reservations) {
 			System.out.println(r.toString() );
 		}
-		 
+		*/
 		
-		/*
+		
 		// lien avec la bdd
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("BarJeuxJPA");
 		EntityManager em = emf.createEntityManager();
@@ -157,19 +157,69 @@ public class Test {
 		// démarre une transaction
 		em.getTransaction().begin();
 
+		 // --- Création d’un Employé ---
+        Employe e1 = new Employe("Dupont", "Jean", "jean.dupont@mail.com", "azerty", "0600000000", "Serveur", true);
+        em.persist(e1);
 
-		Client clientJonahGruson = new Client("Gruson","Jonah","gruson5@gmail.com","mdp","0123456789","aa","aa","56765");
+        // --- Création d’un Client ---
+        Client c1 = new Client("Martin", "Lucie", "lucie.martin@mail.com", "12345", "0700000000","ville","codeP","adress");
+        em.persist(c1);
 
-		// prépare un insert
-		em.persist(clientJonahGruson);
+        // --- Création d’un Jeu ---
+        Jeu j1 = new Jeu(
+            "Catan",
+            Set.of(TypeJeu.PLATEAU, TypeJeu.COOPERATIF),
+            10,
+            3,
+            4,
+            90,
+            5,
+            4.5,
+            Set.of(CategorieJeu.FAMILIAL, CategorieJeu.STRATEGIE),
+            "",
+            false
+        );
+        em.persist(j1);
 
+        Jeu j2 = new Jeu(
+            "Loup-Garou",
+            Set.of(TypeJeu.CARTES, TypeJeu.NARRATIF),
+            10,
+            6,
+            18,
+            30,
+            3,
+            4.0,
+            Set.of(CategorieJeu.AMBIANCE),
+            "",
+            false
+        );
+        em.persist(j2);
 
+        // --- Création d’une Table ---
+        TableJeu t1 = new TableJeu("Table 1", 6, true);
+        em.persist(t1);
 
+        // --- Création d'un emprunt --- 
+        Emprunt emprunt = new Emprunt(c1, j1);
+        em.persist(emprunt);
+        
+    	// --- Création d'une réservation --- 
+        Reservation resa = new Reservation(
+                LocalDateTime.now().plusDays(1),
+                LocalDateTime.now().plusDays(1).plusHours(2),
+                4,
+                t1,
+                j2,
+                c1,
+                e1
+        );
+        em.persist(resa);
 		// envoie en bdd
 		em.getTransaction().commit();
 		em.close();
 		emf.close();
-*/
+
 
 
 	}

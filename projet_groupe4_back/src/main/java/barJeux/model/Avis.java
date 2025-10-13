@@ -1,14 +1,24 @@
 package barJeux.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name="avis_client")
 public class Avis {
-	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private int note;
+	@Column(name="titre",columnDefinition="varchar(20)", nullable=false)
 	private String titre;
+	@Column(name="commentaire",columnDefinition="varchar(200)")
 	private String commentaire;
+	@OneToOne
+	@JoinColumn(name="reservation")
 	private Reservation reservation;
 	
 	// Constructors 
+	public Avis() {}
 	public Avis(Integer id, int note, String titre, String commentaire, Reservation reservation) {
 		this.id = id;
 		this.note = note;

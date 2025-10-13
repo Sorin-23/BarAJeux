@@ -1,54 +1,82 @@
 package barJeux.model;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import javax.persistence.*;
+@Entity
+@Table(name="jeu")
 public class Jeu {
-	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@Column(name="nom_jeu", columnDefinition="varchar(50)", nullable=false)
 	private String nom;
-	private List<TypeJeu> typeJeux; // plateau carte dés
+
+	@ElementCollection(targetClass = TypeJeu.class)
+	@CollectionTable(name = "jeu_types", joinColumns = @JoinColumn(name = "jeu_id"))
+	@Enumerated(EnumType.STRING)
+	@Column(name = "type_jeu", nullable = false)
+	private Set<TypeJeu> typesJeux;
+
+	@Column(name="age_minimum")
 	private int ageMinimum;
+	@Column(name="nombre_joueur_minimum")
 	private int nbJoueurMinimum;
+	@Column(name="nombre_joueur_maximum")
 	private int nbJoueurMaximum;
+	@Column(name="durée")
 	private int duree;
+	@Column(name="nombre_exemplaire")
 	private int nbExemplaire;
+	@Column(columnDefinition="DECIMAL(2,1) CHECK (note >= 0 AND note <= 5)")
 	private double note;
-	private List<CategorieJeu> categorieJeux;
+	
+	@ElementCollection(targetClass = CategorieJeu.class)
+	@CollectionTable(name = "jeu_categories", joinColumns = @JoinColumn(name = "jeu_id"))
+	@Enumerated(EnumType.STRING)
+	@Column(name = "categorie", nullable = false) // juste le nom de la colonne
+    private Set<CategorieJeu> categoriesJeux;
+	@Column(name="img_url")
 	private String imgURL;
+	@Column(name="besoin_game_master")
 	private boolean besoinGameMaster;
 	
 	// Constructors
-	public Jeu(Integer id, String nom, List<barJeux.model.TypeJeu> typeJeux, int ageMinimum, int nbJoueurMinimum,
-			int nbJoueurMaximum, int duree, int nbExemplaire, double note,
-			List<barJeux.model.CategorieJeu> categorieJeux, String imgURL, boolean besoinGameMaster ) {
+	
+
+	public Jeu(Integer id, String nom, Set<TypeJeu> typesJeux, int ageMinimum, int nbJoueurMinimum, int nbJoueurMaximum,
+			int duree, int nbExemplaire, double note, Set<CategorieJeu> categoriesJeux, String imgURL,
+			boolean besoinGameMaster) {
 		this.id = id;
 		this.nom = nom;
-		this.typeJeux = typeJeux;
+		this.typesJeux = typesJeux;
 		this.ageMinimum = ageMinimum;
 		this.nbJoueurMinimum = nbJoueurMinimum;
 		this.nbJoueurMaximum = nbJoueurMaximum;
 		this.duree = duree;
 		this.nbExemplaire = nbExemplaire;
 		this.note = note;
-		this.categorieJeux = categorieJeux;
+		this.categoriesJeux = categoriesJeux;
 		this.imgURL = imgURL;
 		this.besoinGameMaster = besoinGameMaster;
 	}
-	public Jeu(String nom, List<barJeux.model.TypeJeu> typeJeux, int ageMinimum, int nbJoueurMinimum,
-			int nbJoueurMaximum, int duree, int nbExemplaire, double note,
-			List<barJeux.model.CategorieJeu> categorieJeux, String imgURL,  boolean besoinGameMaster) {
+	public Jeu(String nom, Set<TypeJeu> typesJeux, int ageMinimum, int nbJoueurMinimum, int nbJoueurMaximum, int duree,
+			int nbExemplaire, double note, Set<CategorieJeu> categoriesJeux, String imgURL, boolean besoinGameMaster) {
 		this.nom = nom;
-		this.typeJeux = typeJeux;
+		this.typesJeux = typesJeux;
 		this.ageMinimum = ageMinimum;
 		this.nbJoueurMinimum = nbJoueurMinimum;
 		this.nbJoueurMaximum = nbJoueurMaximum;
 		this.duree = duree;
 		this.nbExemplaire = nbExemplaire;
 		this.note = note;
-		this.categorieJeux = categorieJeux;
+		this.categoriesJeux = categoriesJeux;
 		this.imgURL = imgURL;
 		this.besoinGameMaster = besoinGameMaster;
 	}
+
 	
 	
 	// Getters & Setters
@@ -64,11 +92,11 @@ public class Jeu {
 	public void setNom(String nom) {
 		this.nom = nom;
 	}
-	public List<TypeJeu> getTypeJeux() {
-		return typeJeux;
+	public Set<TypeJeu> getTypesJeux() {
+		return typesJeux;
 	}
-	public void setTypeJeux(List<TypeJeu> typeJeux) {
-		this.typeJeux = typeJeux;
+	public void setTypesJeux(Set<TypeJeu> typesJeux) {
+		this.typesJeux = typesJeux;
 	}
 	public int getAgeMinimum() {
 		return ageMinimum;
@@ -106,13 +134,12 @@ public class Jeu {
 	public void setNote(double note) {
 		this.note = note;
 	}
-	public List<CategorieJeu> getCategorieJeux() {
-		return categorieJeux;
+	public Set<CategorieJeu> getCategoriesJeux() {
+		return categoriesJeux;
 	}
-	public void setCategorieJeux(List<CategorieJeu> categorieJeux) {
-		this.categorieJeux = categorieJeux;
+	public void setCategoriesJeux(Set<CategorieJeu> categoriesJeux) {
+		this.categoriesJeux = categoriesJeux;
 	}
-
 	public String getImgURL() {
 		return imgURL;
 	}
@@ -124,6 +151,14 @@ public class Jeu {
 	}
 	public void setBesoinGameMaster(boolean besoinGameMaster) {
 		this.besoinGameMaster = besoinGameMaster;
+	}
+	public void retirerExemplaires(int i) {
+		// TODO Auto-generated method stub
+		this.nbExemplaire-=i;
+		
+	}
+	public void ajouterExemplaires(int i) {
+		this.nbExemplaire+=i;
 	}
 	
 	// Méthodes utilitaires 
@@ -149,22 +184,16 @@ public class Jeu {
 	    
 	    return enUtilisation < nbExemplaire;
 	}
-	public void retirerExemplaires(int i) {
-		// TODO Auto-generated method stub
-		this.nbExemplaire-=i;
-		
-	}
-	public void ajouterExemplaires(int i) {
-		this.nbExemplaire-=i;
-	}
+	
 
 	
 	// toString
 	@Override
 	public String toString() {
-		return "Jeux [id=" + id + ", nom=" + nom + ", typeJeux=" + typeJeux + ", ageMinimum=" + ageMinimum
+		return "Jeu [id=" + id + ", nom=" + nom + ", typesJeux=" + typesJeux + ", ageMinimum=" + ageMinimum
 				+ ", nbJoueurMinimum=" + nbJoueurMinimum + ", nbJoueurMaximum=" + nbJoueurMaximum + ", duree=" + duree
-				+ ", nbExemplaire=" + nbExemplaire + ", note=" + note + ", categorieJeux=" + categorieJeux + "]";
+				+ ", nbExemplaire=" + nbExemplaire + ", note=" + note + ", categoriesJeux=" + categoriesJeux
+				+ ", imgURL=" + imgURL + ", besoinGameMaster=" + besoinGameMaster + "]";
 	}
 	
 	

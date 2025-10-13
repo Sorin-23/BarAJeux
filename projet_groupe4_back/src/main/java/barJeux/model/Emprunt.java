@@ -1,17 +1,31 @@
 package barJeux.model;
 
 import java.time.DayOfWeek;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
+import javax.persistence.*;
+@Entity
+@Table(name="emprunt")
 public class Emprunt {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@Column(name="date_emprunt", nullable=false)
 	private LocalDate dateEmprunt;
+	@Column(name="date_retour", nullable=false)
 	private LocalDate dateRetour;
+	@Enumerated(EnumType.STRING)
+	@Column(name="statut_location",nullable = false,columnDefinition = "enum('rendu', 'enCours', 'enRetard', 'annulé')")
 	private StatutLocation statutLocation;
+	@Column(name="date_retour_reel")
 	private LocalDate dateRetourReel;
+	@ManyToOne
+	@JoinColumn(name="client", nullable=false)
 	private Client client ; 
+	@ManyToOne
+	@JoinColumn(name="jeu", nullable=false)
 	private Jeu jeu;
 	
 	// valeur générique 

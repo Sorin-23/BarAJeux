@@ -1,13 +1,22 @@
 package barJeux.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name="badge")
 public class Badge {
-	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@Column(name="nom_badge", columnDefinition="varchar(30)", nullable=false)
 	private String nomBadge;
+	@Column(name="point_min", nullable=false)
 	private int pointMin;
+	@Column(name="img_url")
 	private String imgURL;
 	
 	// Constructors
+	public Badge() {}
 	public Badge(Integer id, String nomBadge, int pointMin, String imgURL) {
 		this.id = id;
 		this.nomBadge = nomBadge;

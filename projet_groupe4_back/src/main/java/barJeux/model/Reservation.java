@@ -4,38 +4,54 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-
+import javax.persistence.*;
+@Entity
+@Table(name="reservation")
 public class Reservation {
-	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@Column(name="date_debut", nullable = false)
 	private LocalDateTime datetimeDebut;
+	@Column(name="date_fin", nullable = false)
 	private LocalDateTime datetimeFin;
+	@Column(name="nombre_joueur")
 	private int nbJoueur;
-	private TableJeu table;
+	@ManyToOne
+	@JoinColumn(name="table_jeu")
+	private TableJeu tableJeu;
+	@ManyToOne// many car on gère un stock ? 
+	@JoinColumn(name="jeu", nullable=false)
 	private Jeu jeu;
+	@Enumerated(EnumType.STRING)
+	@Column(name="statut_reservation",nullable = false,columnDefinition = "enum('terminée', 'annulée', 'confirmée')")
 	private StatutReservation statutReservation;
+	@ManyToOne
+	@JoinColumn(name="client", nullable=false)
 	private Client client;
+	@ManyToOne
+	@JoinColumn(name="game_master", nullable=false)
 	private Employe gameMaster;
 	
 	// Constructors
-	public Reservation(Integer id, LocalDateTime datetimeDebut, LocalDateTime datetimeFin, int nbJoueur, TableJeu table,
+	public Reservation(Integer id, LocalDateTime datetimeDebut, LocalDateTime datetimeFin, int nbJoueur, TableJeu tableJeu,
 			Jeu jeu, StatutReservation statutReservation, Client client, Employe gameMaster) {
 		this.id = id;
 		this.datetimeDebut = datetimeDebut;
 		this.datetimeFin = datetimeFin;
 		this.nbJoueur = nbJoueur;
-		this.table = table;
+		this.tableJeu = tableJeu;
 		this.jeu = jeu;
 		this.statutReservation = statutReservation;
 		this.client = client;
 		this.gameMaster = gameMaster;
 	}
-	public Reservation(LocalDateTime datetimeDebut, LocalDateTime datetimeFin, int nbJoueur, TableJeu table, Jeu jeu,
+	public Reservation(LocalDateTime datetimeDebut, LocalDateTime datetimeFin, int nbJoueur, TableJeu tableJeu, Jeu jeu,
 			 Client client, Employe gameMaster) {
 		this.datetimeDebut = datetimeDebut;
 		this.datetimeFin = datetimeFin;
 		this.nbJoueur = nbJoueur;
-		this.table = table;
+		this.tableJeu = tableJeu;
 		this.jeu = jeu;
 		this.statutReservation = StatutReservation.confirmée;
 		this.client = client;
@@ -67,11 +83,11 @@ public class Reservation {
 	public void setNbJoueur(int nbJoueur) {
 		this.nbJoueur = nbJoueur;
 	}
-	public TableJeu getTable() {
-		return table;
+	public TableJeu getTableJeu() {
+		return tableJeu;
 	}
-	public void setTable(TableJeu table) {
-		this.table = table;
+	public void setTableJeu(TableJeu tableJeu) {
+		this.tableJeu = tableJeu;
 	}
 	public Jeu getJeu() {
 		return jeu;
@@ -108,12 +124,12 @@ public class Reservation {
 
 	public void confirmerResa() {
 		
-		if(!this.table.isDisponibilite()) {
+		if(!this.tableJeu.isDisponibilite()) {
 			System.out.println("Table non disponible");
 		}
 		else {
 			changerStatut(StatutReservation.confirmée);
-			this.table.setDisponibilite(false);
+			this.tableJeu.setDisponibilite(false);
 			this.jeu.retirerExemplaires(1);
 			
 			System.out.println("Reservation confirmée avec succès");
@@ -126,7 +142,7 @@ public class Reservation {
 		}
 		else {
 			changerStatut(StatutReservation.annulée);
-			table.setDisponibilite(true);
+			tableJeu.setDisponibilite(true);
 			jeu.ajouterExemplaires(1);
 			
 			System.out.println("Reservation annulée avec succès");
@@ -143,7 +159,7 @@ public class Reservation {
 			System.out.println("Date fin doit etre apres date debut");
 		}
 		
-		else if(!this.table.isDisponibilite()) {
+		else if(!this.tableJeu.isDisponibilite()) {
 			System.out.println("Table non disponible");
 		}
 		
@@ -171,7 +187,7 @@ public class Reservation {
 	@Override
 	public String toString() {
 		return "Reservation [id=" + id + ", datetimeDebut=" + datetimeDebut + ", datetimeFin=" + datetimeFin
-				+ ", nbJoueur=" + nbJoueur + ", table=" + table.getNomTable() + ", jeu=" + jeu.getNom() + ", statutReservation="
+				+ ", nbJoueur=" + nbJoueur + ", table=" + tableJeu.getNomTable() + ", jeu=" + jeu.getNom() + ", statutReservation="
 				+ statutReservation + ", client=" + client.getNom() + " " + client.getPrenom() + ", gameMaster=" + (gameMaster != null ? gameMaster.getNom() + " " + gameMaster.getPrenom()  : "Pas de gameMaster") + "]";
 	}
 	

@@ -1,13 +1,21 @@
 package barJeux.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name="table_jeu")
 public class TableJeu {
-	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@Column(name="nom_table",columnDefinition="varchar(50)", nullable=false)
 	private String nomTable;
+	@Column(nullable=false)
 	private int capacite;
 	private boolean disponibilite;
 	
 	// Constructors
+	public TableJeu() {}
 	public TableJeu(Integer id, String nomTable, int capacite, boolean disponibilite) {
 		this.id = id;
 		this.nomTable = nomTable;
