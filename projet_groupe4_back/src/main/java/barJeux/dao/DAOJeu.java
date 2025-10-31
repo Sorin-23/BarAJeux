@@ -65,6 +65,8 @@ public class DAOJeu implements IDAOJeu {
 		em.close();
 		return jeux;
 	}
+	
+	// faire des find by type et catégorie pour faire stats combien de types dés combien de type plateau ??? avec un list d'objet 
 
 
 }
