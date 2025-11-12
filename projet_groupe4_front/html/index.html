@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Accueil</title>
+    <link rel="stylesheet" href="../css/index.css" />
+  </head>
+  <body>
+    <!-- HEADER -->
+    <div id="header-placeholder"></div>
+
+    <!-- CONTENU PRINCIPAL -->
+    <main>
+      <h1>Bienvenue à la Tavern des 4 As !</h1>
+      <div id="message_bienvenu">
+        <p>
+          <br /><!-- affiché message personnalisé si connecté sinon metre autre message ou retirer #message_bienvenu-->
+          Bravo aventurier ! Tes exploits à la Taverne des 4 As ne passent pas
+          inaperçus 🍻 Grâce à tes réservations, tu as obtenu le badge :
+          <br />
+          <br />
+          <br /><br />
+          Continue de jouer, de réserver et de partager des parties épiques pour
+          débloquer de nouveaux insignes de prestige !
+        </p>
+        <img
+          src="../image/badge/novice.png"
+          alt="Badge"
+          class="badge_img"
+        /><!--Image a générer en fonction de son niveau-->
+      </div>
+
+      <h2>La taverne des 4 As</h2>
+
+      <p>
+        La Taverne des 4 As n’est pas un simple bar : c’est un repaire
+        chaleureux où se rencontrent passionnés de jeux, curieux et amis en
+        quête de bons moments. Ici, chaque partie est une aventure, chaque table
+        une histoire, et chaque verre un prétexte à partager.Que vous soyez
+        stratège chevronné, joueur du dimanche ou amateur de découvertes, notre
+        taverne vous ouvre ses portes pour des soirées mémorables autour de jeux
+        de société et de convivialité.
+      </p>
+      <p>
+        “À la Taverne des 4 As, on vient pour jouer… mais on reste pour
+        l’ambiance.”
+      </p>
+      <img src="../image/bienvenue.png" alt="Intérieur du bar" id="img_bar" />
+
+      <div class="bloc-resa">
+        <a href="table.html">
+          <img
+            src="../image/resa_table.png"
+            alt="Réservation de table"
+            class="logo_resa"
+          />
+        </a>
+        <a href="table.html" class="class_resa">
+          <h2>Réserver une table</h2>
+          <p>
+            Réservez votre table, choisissez vos jeux, et laissez la Taverne des
+            4 As s’occuper du reste : convivialité garantie.
+          </p>
+        </a>
+      </div>
+
+      <div id="info_table"></div>
+      <!-- à développer ??-->
+      <div class="bloc-resa">
+        <a href="jeu.html">
+          <img
+            src="../image/resa_jeu.png"
+            alt="Réservation de jeu"
+            class="logo_resa"
+          />
+        </a>
+        <a href="jeu.html" class="class_resa">
+          <h2>Réserver un jeu</h2>
+          <p>
+            Une ludothèque variée où chaque dé lancé et chaque carte jouée
+            rapprochent les joueurs autour de moments inoubliables.
+          </p>
+        </a>
+      </div>
+
+      <div id="info_jeu">
+        <div id="right_container">
+          <div id="top_jeu_resa">
+            Jeux les plus réserver :
+            <ol>
+              <li>jeu 1</li>
+              <li>jeu 2</li>
+              <li>jeu 3</li>
+            </ol>
+          </div>
+
+          <div id="top_jeu_loue">
+            Jeux les plus loué :
+            <ol>
+              <li>jeu 1</li>
+              <li>jeu 2</li>
+              <li>jeu 3</li>
+            </ol>
+          </div>
+
+          <div id="top_jeu_aime">
+            Jeux les plus aimé :
+            <ol>
+              <li>jeu 1</li>
+              <li>jeu 2</li>
+              <li>jeu 3</li>
+            </ol>
+          </div>
+          <div>
+            <a href="jeu.html"><input type="button" value="Louer une jeu" class="btn"  /></a>
+            <a href="table.html"><input type="button" value="Réserver une table" class="btn" /></a>
+          </div>
+        </div>
+        <div id="left_container">
+          <img src="../image/jeux/catan.jpg" alt="image du jeu le plus réserver" />
+        </div>
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Script à la fin -->
+  <script src="../js/script.js"></script>
+  </body>
+</html>

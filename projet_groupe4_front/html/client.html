@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Compte client</title>
+    <link rel="stylesheet" href="../css/index.css" />
+  </head>
+  <body>
+    <!-- HEADER -->
+    <div id="header-placeholder"></div>
+
+    <!-- CONTENU PRINCIPAL -->
+    <main>
+      <h1>Interface client</h1>
+      <div id="client_formulaire">
+        <div id="client_badge">
+          <input
+            type="button"
+            value="Voir mes réservations"
+            class="btn"
+            id="voir_resa_perso"
+          />
+          <img
+            src="../image/badge/novice.png"
+            alt="Badge"
+            class="badge_img"
+          /><!--Image a générer en fonction de son niveau-->
+          <h4>Points de fidélité : 120</h4>
+          <!-- a généré avce la bdd-->
+        </div>
+
+        <div id="informations" class="block_white">
+          <h2>Mes informations personnels</h2>
+          <form class="general_fields">
+            <label for="nom">Nom :</label>
+            <input type="text" id="nom" name="nom" value="Dupont" />
+
+            <label for="prenom">Prénom :</label>
+            <input type="text" id="prenom" name="prenom" value="Jean" />
+
+            <label for="mail">Email :</label>
+            <input
+              type="email"
+              id="mail"
+              name="mail"
+              value="jean.dupont@mail.com"
+            />
+
+            <label for="motdepasse">Mot de passe :</label>
+            <input
+              type="password"
+              id="motdepasse"
+              name="motdepasse"
+              value="azerty"
+            />
+
+            <label for="telephone">Téléphone :</label>
+            <input
+              type="text"
+              id="telephone"
+              name="telephone"
+              value="0600000000"
+            />
+
+            <!-- Champs spécifiques selon type -->
+            <div id="employe_fields">
+              <label for="job">Fonction :</label>
+              <input type="text" id="job" name="job" value="Serveur" />
+              <label for="game_master">Game master :</label>
+              <input type="checkbox" id="gameMaster" name="gameMaster" />
+            </div>
+
+            <div id="client_fields">
+              <label for="date_derniere_reservation"
+                >Dernière réservation :</label
+              >
+              <input
+                type="date"
+                id="date_derniere_reservation"
+                name="date_derniere_reservation"
+                value=""
+              />
+              <label for="adresse">Adresse :</label>
+              <input type="text" id="adresse" name="adresse" value="" />
+
+              <label for="ville">Ville :</label>
+              <input type="text" id="ville" name="ville" value="" />
+
+              <label for="code_postale">Code postal :</label>
+              <input
+                type="text"
+                id="code_postale"
+                name="code_postale"
+                value=""
+              />
+            </div>
+            <div id="client_btn_section">
+              <input
+                type="button"
+                name="modifier"
+                class="btn modifier"
+                id="modifier"
+                value="Modifier"
+              />
+              <input
+                type="button"
+                name="annuler"
+                class="btn annuler"
+                id="annuler"
+                value="Annuler"
+              />
+              <input
+                type="button"
+                name="enregistrer"
+                class="btn enregistrer"
+                id="enregistrer"
+                value="Enregistrer"
+              />
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div id="client_reservation">
+        <div id="client_retour_infos">
+          <input
+            type="button"
+            value="Voir mes informations"
+            class="btn"
+            id="voir_info_perso"
+          />
+        </div>
+
+        <!--  afficher le bdd des réservations du client avec Date Heure JEu et laisser case vide pour un texte aera pour ajouter avis puis btn enregistrer / si avsi déja en bdd paqs de modification possible 
+      -->
+        <div id="client_reservation_avis" class="block_white">
+          <h2>Mes réservations</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>id</th>
+                <th>Date</th>
+                <!-- uniqument la date pour gain de place -->
+                <th>Nom du game master</th>
+                <!-- récuperer avec id-->
+                <th>Nom du jeu</th>
+                <!-- récuperer avec id-->
+                <th>Nom de la table</th>
+                <!-- récuperer avec id-->
+                <th>Titre de l'avis</th>
+                <!-- ajouter en bdd l'avis -->
+                <th>Commentaire</th>
+                <th>Note</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>2025-10-14</td>
+                <td>Jojo</td>
+                <td>Catan</td>
+                <td>La table du trone</td>
+                <td>
+                  <input
+                    type="text"
+                    name="titre"
+                    class="input_avis"
+                    placeholder="Titre de l'avis"
+                  />
+                </td>
+                <td>
+                  <textarea
+                    name="commentaire"
+                    class="input_avis"
+                    placeholder="Votre commentaire..."
+                  ></textarea>
+                </td>
+                <td>
+                  <div class="note_etoiles" data-note="5">
+                    <span data-value="1">★</span>
+                    <span data-value="2">★</span>
+                    <span data-value="3">★</span>
+                    <span data-value="4">★</span>
+                    <span data-value="5">★</span>
+                  </div>
+                </td>
+                <td>
+                  <button class="btn_crud btn_ajouter" title="Ajouter">
+                    ✏️
+                  </button>
+                </td>
+              </tr>
+
+              <!-- si un avis est déjà mis pas possibilité de le modifié -->
+              <tr>
+                <td>2</td>
+                <td>2025-10-14</td>
+                <td>Jojojo</td>
+                <td>Catan</td>
+                <td>La table du trone</td>
+                <td>
+                  <input
+                    type="text"
+                    value="Super ambiance !"
+                    class="input_avis"
+                    disabled
+                  />
+                </td>
+                <td>
+                  <textarea class="input_avis" disabled>
+ Une partie top avec un super game master.</textarea
+                  >
+                </td>
+                <td>
+                  <div class="note_etoiles disabled" data-note="4"> <!-- ici la date_note doit etre celle de la bdd avis du client pour cette résa-->
+                    <span data-value="1">★</span>
+                    <span data-value="2">★</span>
+                    <span data-value="3">★</span>
+                    <span data-value="4">★</span>
+                    <span data-value="5">★</span>
+                  </div>
+                </td>
+
+                <td>
+                 <!-- <button class="btn_crud btn_ajouter" title="Ajouter l'avis" disabled>
+                    ✏️
+                  </button>-->
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Script à la fin -->
+    <script src="../js/script.js"></script>
+    <script>
+      const form_client = document.querySelector("#informations form");
+      const btnModifier = document.querySelector(".modifier");
+      const btnAnnuler = document.querySelector(".annuler");
+      const btnEnregistrer = document.querySelector(".enregistrer");
+
+      // Tous les champs du formulaire (hors boutons)
+      const inputs_client = form_client.querySelectorAll(
+        "input:not([type=button])"
+      );
+      // Mode lecture seule au chargement
+      inputs_client.forEach((input) => (input.disabled = true));
+      btnAnnuler.style.display = "none";
+      btnEnregistrer.style.display = "none";
+
+      // Clique sur "Modifier"
+      btnModifier.addEventListener("click", () => {
+        inputs_client.forEach((input) => (input.disabled = false)); // Active les champs
+        btnModifier.style.display = "none";
+        btnAnnuler.style.display = "inline-block";
+        btnEnregistrer.style.display = "inline-block";
+      });
+
+      // Clique sur "Annuler"
+      btnAnnuler.addEventListener("click", () => {
+        inputs_client.forEach((input) => (input.disabled = true));
+        btnModifier.style.display = "inline-block";
+        btnAnnuler.style.display = "none";
+        btnEnregistrer.style.display = "none";
+      });
+
+      // Clique sur "Enregistrer"
+      btnEnregistrer.addEventListener("click", () => {
+        alert("Les modifications ont été enregistrées !");
+        inputs_client.forEach((input) => (input.disabled = true));
+        btnModifier.style.display = "inline-block";
+        btnAnnuler.style.display = "none";
+        btnEnregistrer.style.display = "none";
+      });
+
+      // cliquer pour voir les résa du client (bdd de ses résa)
+      const switchToResaClient = document.getElementById("voir_resa_perso");
+      switchToResaClient.addEventListener("click", () => {
+        client_formulaire.style.display = "none";
+        client_reservation.style.display = "flex";
+      });
+
+      // cliquer pour voir les infos du client
+      const switchToInfoClient = document.getElementById("voir_info_perso");
+      switchToInfoClient.addEventListener("click", () => {
+        client_formulaire.style.display = "flex";
+        client_reservation.style.display = "none";
+      });
+
+      document.querySelectorAll(".note_etoiles").forEach((starsContainer) => {
+        const stars = starsContainer.querySelectorAll("span");
+
+        stars.forEach((star) => {
+          star.addEventListener("click", () => {
+            const value = star.getAttribute("data-value");
+            starsContainer.setAttribute("data-note", value);
+
+            // Met à jour le style
+            stars.forEach((s) => {
+              s.classList.toggle(
+                "active",
+                s.getAttribute("data-value") <= value
+              );
+            });
+
+            console.log("Note sélectionnée :", value); // Tu peux envoyer ça en BDD
+          });
+        });
+      });
+      document.querySelectorAll(".note_etoiles").forEach((container) => {
+        const note = container.dataset.note;
+        container.querySelectorAll("span").forEach((s) => {
+          s.classList.toggle("active", s.dataset.value <= note);
+        });
+      });
+    </script>
+  </body>
+</html>

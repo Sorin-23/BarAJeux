@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Réservation de jeu</title>
+    <link rel="stylesheet" href="../css/index.css" />
+  </head>
+  <body>
+    <!-- HEADER -->
+    <div id="header-placeholder"></div>
+
+    <!-- CONTENU PRINCIPAL -->
+    <main>
+      <h1>Réservez votre jeu préféré</h1>
+      <p>Découvrez notre ludothèque et sélectionnez les jeux à réserver.</p>
+
+      <section id="recherche_section" class="block_white">
+        <input
+          type="text"
+          id="rechercheJeu"
+          class="barre_recherche"
+          placeholder="🔍 Rechercher un jeu..."
+        />
+      </section>
+      <section id="filtre_section" class="block_white">
+        <h2>Filtrer les jeux</h2>
+        <form id="filtre_form">
+          <div class="filtre_groupe">
+            <label for="categorie">Catégorie</label>
+            <select id="categorie">
+              <option value="">Toutes</option>
+              <option value="strategie">Stratégie</option>
+              <option value="ambiance">Ambiance</option>
+              <option value="Famillial">Famillial</option>
+            </select>
+          </div>
+
+          <div class="filtre_groupe">
+            <label for="type">Type</label>
+            <select id="type">
+              <option value="">Tous</option>
+              <option value="cooperatif">Coopératif</option>
+              <option value="plateau">Plateau</option>
+              <option value="cartes">Cartes</option>
+              <option value="narratif">Narratif</option>
+            </select>
+          </div>
+
+          <div class="filtre_groupe">
+            <label>Nombre de joueurs</label>
+            <div class="filtre_range">
+              <div>
+                <!--<label for="min_joueurs">Min</label>-->
+                <input
+                  type="number"
+                  id="min_joueurs"
+                  min="1"
+                  max="10"
+                  placeholder="min : 1"
+                />
+              </div>
+              <div>
+                <!--<label for="max_joueurs">Max</label>-->
+                <input
+                  type="number"
+                  id="max_joueurs"
+                  min="1"
+                  max="10"
+                  placeholder="max : 10"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="filtre_groupe">
+            <label for="duree">Durée</label>
+            <select id="duree">
+              <option value="">Toutes</option>
+              <option value="-30">Moins de 30 min</option>
+              <option value="30-60">30 à 60 min</option>
+              <option value="60+">Plus d’1h</option>
+            </select>
+          </div>
+
+          <div class="filtre_groupe">
+            <label for="age">Âge minimum</label>
+            <select id="age">
+              <option value="">Tous</option>
+              <option value="6">Dès 6 ans</option>
+              <option value="10">Dès 10 ans</option>
+              <option value="14">Dès 14 ans</option>
+            </select>
+          </div>
+
+          <input type="submit" value="Appliquer les filtres" class="btn" />
+        </form>
+      </section>
+
+      <section id="resultat_filtre" class="block_white">
+        <h2>🎲 Nos jeux</h2>
+        <div class="carrousel-container">
+          <button class="nav-btn prev">&#10094;</button>
+
+          <div class="carrousel">
+            <div class="carte-jeu">
+              <img src="../image/jeux/catan.jpg" alt="Catan" />
+              <div class="carte-info">
+                <h3>Catan</h3>
+                <p>Stratégie • 3-4 joueurs</p>
+                <div class="actions">
+                  <button class="btn">Louer</button> <!-- Si location -->
+                  <button class="btn">Choisir</button> <!-- Si table sélectionné-->
+                  <button class="btn">Réserver avec table</button> <!-- si table non sélectionné-->
+                </div>
+              </div>
+            </div>
+
+            <div class="carte-jeu">
+              <img src="../image/jeux/dixit.jpg" alt="Dixit" />
+              <div class="carte-info">
+                <h3>Dixit</h3>
+                <p>Ambiance • 3-6 joueurs</p>
+                <div class="actions">
+                  <button class="btn">Louer</button> <!-- Si location -->
+                  <button class="btn">Choisir</button> <!-- Si table sélectionné-->
+                  <button class="btn">Réserver avec table</button> <!-- si table non sélectionné-->
+                </div>
+              </div>
+            </div>
+
+            <div class="carte-jeu">
+              <img src="../image/jeux/7wonders.jpg" alt="7 Wonders" />
+              <div class="carte-info">
+                <h3>7 Wonders</h3>
+                <p>Stratégie • 3-7 joueurs</p>
+                <div class="actions">
+                  <button class="btn">Louer</button> <!-- Si location -->
+                  <button class="btn">Choisir</button> <!-- Si table sélectionné-->
+                  <button class="btn">Réserver avec table</button> <!-- si table non sélectionné-->
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <button class="nav-btn next">&#10095;</button>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Script à la fin -->
+    <script src="../js/script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin</title>
+    <link rel="stylesheet" href="../css/index.css" />
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header-placeholder"></div>
+
+    <!-- CONTENU PRINCIPAL -->
+    <main>
+      <h1>Interface d'administrateur</h1>
+      <div id="admin_bouton_section" class="block_white">
+        <button class="btn btn_admin active" data-table="bdd_dashboard">
+          Dashboard
+        </button>
+        <button class="btn btn_admin" data-table="bdd_jeux">Jeux</button>
+        <button class="btn btn_admin" data-table="bdd_table">Tables</button>
+        <button class="btn btn_admin" data-table="bdd_employe">Employés</button>
+        <button class="btn btn_admin" data-table="bdd_badge">Badges</button>
+      </div>
+
+      <div id="admin_table_section" class="block_white">
+        <div id="bdd_dashboard" style="display: block">
+          <h2>Tableau de bord</h2>
+          <div class="dashboard_cards">
+            <div class="dashboard_card">
+              <h3>Jeux</h3>
+              <p class="dashboard_value" id="count_jeux">25</p>
+            </div>
+            <div class="dashboard_card">
+              <h3>Employés</h3>
+              <p class="dashboard_value" id="count_employes">6</p>
+            </div>
+            <div class="dashboard_card">
+              <h3>Tables</h3>
+              <p  class="dashboard_value" id="count_tables">10</p>
+            </div>
+            <div class="dashboard_card">
+              <h3>Badges</h3>
+              <p class="dashboard_value" id="count_badges">8</p>
+            </div>
+            <div class="dashboard_card">
+              <h3>Réservations du jour</h3>
+              <p class="dashboard_value" id="count_reservations">3</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="bdd_jeux" style="display: none">
+          <section id="bdd_recherche_ajout">
+            <input
+              type="text"
+              id="recherche_bdd"
+              class="barre_recherche"
+              placeholder="🔍 Rechercher..."
+            />
+            <button class="btn_crud btn_ajouter" title="Ajouter">➕</button>
+          </section>
+          <table>
+            <thead>
+              <tr>
+                <th data-type="number">id</th>
+                <th data-type="text">Nom du jeu</th>
+                <th data-type="number">Age minimum</th>
+                <th data-type="checkbox">Besoin d'un GameMaster</th>
+                <th data-type="number">Durée</th>
+                <th data-type="text">Image</th>
+                <th data-type="number">Nombres d'exemplaires</th>
+                <th data-type="number">Nombres de joueurs minimum</th>
+                <th data-type="number">Nombres de joueurs maximum</th>
+                <th
+                  data-type="liste"
+                  data-options="STRATEGIE,COOPERATIF,ENFANT,AMBIANCE,RAPIDITE,REFLEXION"
+                >
+                  Catégories
+                </th>
+                <th
+                  data-type="liste"
+                  data-options="PLATEAU,CARTE,DES,ROLE,AMBIANCE"
+                >
+                  Types
+                </th>
+                <th data-type="number">Note</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Catan</td>
+                <td>10</td>
+                <td>true</td>
+                <td>90</td>
+                <td>catan.jpg</td>
+                <td>5</td>
+                <td>3</td>
+                <td>4</td>
+                <td
+                  data-type="liste"
+                  data-options="STRATEGIE,COOPERATIF,ENFANT,AMBIANCE,RAPIDITE,REFLEXION"
+                >
+                  AMBIANCE,ENFANT
+                </td>
+                <td
+                  data-type="liste"
+                  data-options="PLATEAU,CARTE,DES,ROLE,AMBIANCE"
+                >
+                  ROLE,CARTE
+                </td>
+                <td>4.5</td>
+                <td>
+                  <button class="btn_crud btn_modifier" title="Modifier">
+                    ✏️
+                  </button>
+                  <button class="btn_crud btn_supprimer" title="Supprimer">
+                    🗑️
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Catan 2</td>
+                <td>10</td>
+                <td>true</td>
+                <td>90</td>
+                <td>catan.jpg</td>
+                <td>5</td>
+                <td>3</td>
+                <td>4</td>
+                <td
+                  data-type="liste"
+                  data-options="STRATEGIE,COOPERATIF,ENFANT,AMBIANCE,RAPIDITE,REFLEXION"
+                >
+                  STRATEGIE,COOPERATIF
+                </td>
+                <td
+                  data-type="liste"
+                  data-options="PLATEAU,CARTE,DES,ROLE,AMBIANCE"
+                >
+                  PLATEAU,CARTE
+                </td>
+                <td>4.5</td>
+                <td>
+                  <button class="btn_crud btn_modifier" title="Modifier">
+                    ✏️
+                  </button>
+                  <button class="btn_crud btn_supprimer" title="Supprimer">
+                    🗑️
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="bdd_table" style="display: none">
+          <section id="bdd_recherche_ajout">
+            <input
+              type="text"
+              id="recherche_bdd"
+              class="barre_recherche"
+              placeholder="🔍 Rechercher..."
+            />
+            <button class="btn_crud btn_ajouter" title="Ajouter">➕</button>
+          </section>
+          <table>
+            <thead>
+              <tr>
+                <th data-type="number">id</th>
+                <th data-type="number">Capacité</th>
+                <th data-type="checkbox">Disponibilité</th>
+                <th data-type="text">Nom de table</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>6</td>
+                <td>true</td>
+                <td>Le trône du jeu</td>
+                <td>
+                  <button class="btn_crud btn_modifier" title="Modifier">
+                    ✏️
+                  </button>
+                  <button class="btn_crud btn_supprimer" title="Supprimer">
+                    🗑️
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>2</td>
+                <td>true</td>
+                <td>Le trône du jeu 2</td>
+                <td>
+                  <button class="btn_crud btn_modifier" title="Modifier">
+                    ✏️
+                  </button>
+                  <button class="btn_crud btn_supprimer" title="Supprimer">
+                    🗑️
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>3</td>
+                <td>true</td>
+                <td>Le trône du jeu 3</td>
+                <td>
+                  <button class="btn_crud btn_modifier" title="Modifier">
+                    ✏️
+                  </button>
+                  <button class="btn_crud btn_supprimer" title="Supprimer">
+                    🗑️
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="bdd_employe" style="display: none">
+          <section id="bdd_recherche_ajout">
+            <input
+              type="text"
+              id="recherche_bdd"
+              class="barre_recherche"
+              placeholder="🔍 Rechercher..."
+            />
+            <button class="btn_crud btn_ajouter" title="Ajouter">➕</button>
+          </section>
+          <table>
+            <thead>
+              <tr>
+                <th data-type="number">id</th>
+                <th data-type="email">Mail</th>
+                <th data-type="password">Mot de passe</th>
+                <th data-type="text">Nom</th>
+                <th data-type="text">Prénom</th>
+                <th data-type="tel">N° téléphone</th>
+                <th data-type="checkbox">Game Master</th>
+
+                <th data-type="text">Job</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>jojo@mail.fr</td>
+                <td>mdp</td>
+                <td>gruson</td>
+                <td>jonah</td>
+                <td>0600000000</td>
+                <td>true</td>
+
+                <td>gérant</td>
+                <td>
+                  <button class="btn_crud btn_modifier" title="Modifier">
+                    ✏️
+                  </button>
+                  <button class="btn_crud btn_supprimer" title="Supprimer">
+                    🗑️
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>jojo@mail.fr</td>
+                <td>mdp</td>
+                <td>gruson</td>
+                <td>jonah</td>
+                <td>0600000000</td>
+                <td>true</td>
+                <td>gérant</td>
+                <td>
+                  <button class="btn_crud btn_modifier" title="Modifier">
+                    ✏️
+                  </button>
+                  <button class="btn_crud btn_supprimer" title="Supprimer">
+                    🗑️
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>jojo@mail.fr</td>
+                <td>mdp</td>
+                <td>gruson</td>
+                <td>jonah</td>
+                <td>0600000000</td>
+                <td>true</td>
+                <td>gérant</td>
+                <td>
+                  <button class="btn_crud btn_modifier" title="Modifier">
+                    ✏️
+                  </button>
+                  <button class="btn_crud btn_supprimer" title="Supprimer">
+                    🗑️
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="bdd_badge" style="display: none">
+          <section id="bdd_recherche_ajout">
+            <input
+              type="text"
+              id="recherche_bdd"
+              class="barre_recherche"
+              placeholder="🔍 Rechercher..."
+            />
+            <button class="btn_crud btn_ajouter" title="Ajouter">➕</button>
+          </section>
+          <table>
+            <thead>
+              <tr>
+                <th data-type="number">id</th>
+                <th data-type="text">Image</th>
+                <th data-type="text">Nom</th>
+                <th data-type="number">Point minimum</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>novice.jpg</td>
+                <td>Novice</td>
+                <td>0</td>
+
+                <td>
+                  <button class="btn_crud btn_modifier" title="Modifier">
+                    ✏️
+                  </button>
+                  <button class="btn_crud btn_supprimer" title="Supprimer">
+                    🗑️
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>apprenti.jpg</td>
+                <td>Apprenti</td>
+                <td>0</td>
+                <td>
+                  <button class="btn_crud btn_modifier" title="Modifier">
+                    ✏️
+                  </button>
+                  <button class="btn_crud btn_supprimer" title="Supprimer">
+                    🗑️
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="modal_crud" class="modal" style="display: none">
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modal_title">Titre</h2>
+            <form id="modal_form">
+              <!-- Les champs seront ajoutés dynamiquement selon l'action et la table -->
+            </form>
+            <div class="modal-footer">
+              <button type="button" id="modal_cancel">Annuler</button>
+              <button type="submit" id="modal_confirm">Confirmer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Script à la fin -->
+    <script src="../js/script.js"></script>
+    <script>
+      // Sélectionne tous les boutons admin
+      const boutons = document.querySelectorAll(".btn_admin");
+      // Sélectionne toutes les sections dans .admin_bdd
+      const sections = document.querySelectorAll("#admin_table_section > div");
+
+      // Boucle sur chaque bouton
+      boutons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          // Retirer la classe active de tous les boutons
+          boutons.forEach((b) => b.classList.remove("active"));
+
+          // Ajouter la classe active sur le bouton cliqué
+          btn.classList.add("active");
+
+          // Récupérer la section cible
+          const cible = btn.getAttribute("data-table");
+
+          // Cacher toutes les sections
+          sections.forEach((s) => (s.style.display = "none"));
+
+          // Afficher uniquement la bonne section
+          document.getElementById(cible).style.display = "block";
+        });
+      });
+
+      const modal = document.getElementById("modal_crud");
+      const modalTitle = document.getElementById("modal_title");
+      const modalForm = document.getElementById("modal_form");
+      const modalClose = modal.querySelector(".close");
+      const modalCancel = document.getElementById("modal_cancel");
+
+      // Fonction pour ouvrir la modal
+      function openModal(action, tableId, rowData = null) {
+        modalTitle.textContent = `${action}`;
+        modalForm.innerHTML = ""; // Reset du formulaire
+
+        if (action === "Ajouter" || action === "Modifier") {
+          // Dynamique : on crée des inputs selon les colonnes
+          // Récupère toutes les colonnes du tableau
+          const columns = document.querySelector(
+            `#${tableId} table thead tr`
+          ).children;
+          Array.from(columns).forEach((col, index) => {
+            // Pour chaque colonne, on crée un input, sauf pour la colonne "Actions" et "id"
+            if (col.textContent === "Actions") return; // On skip la colonne actions
+            if (col.textContent === "id") return;
+            // création de la div pour rassembler le nom du label et l'input
+            const inputWrapper = document.createElement("div");
+            // label = titre de la colonne
+            const label = document.createElement("label");
+            label.textContent = col.textContent;
+            // Récupère le type défini dans le HTML (ou text par défaut)
+            const inputType = col.dataset.type || "text";
+            let input;
+
+            // Création du bon type d’input selon data-type
+            switch (inputType) {
+              case "boolean":
+              case "checkbox":
+                input = document.createElement("input");
+                input.type = "checkbox";
+                if (rowData) {
+                  const cellValue = rowData[index].textContent
+                    .trim()
+                    .toLowerCase();
+                  input.checked =
+                    cellValue === "true" ||
+                    cellValue === "1" ||
+                    cellValue === "oui";
+                }
+                break;
+              case "liste":
+                input = document.createElement("select");
+                input.multiple = true;
+
+                // Récupère les options depuis data-options
+                const options = (col.dataset.options || "").split(",");
+                options.forEach((opt) => {
+                  const option = document.createElement("option");
+                  option.value = opt.trim();
+                  option.textContent = opt.trim();
+                  input.appendChild(option);
+                });
+
+                // Si on modifie une ligne existante : coche les bonnes options
+                if (rowData) {
+                  const selectedValues = rowData[index].textContent
+                    .split(",") // si les catégories sont affichées séparées par virgule dans ton tableau
+                    .map((v) => v.trim().toUpperCase());
+                  Array.from(input.options).forEach((opt) => {
+                    if (selectedValues.includes(opt.value.toUpperCase())) {
+                      opt.selected = true;
+                    }
+                  });
+                }
+                break; // section à revoir car nous on a bdd séparé ....
+              /*case "date":
+              case "number":
+              case "email":
+              case "password":
+              case "tel":
+              case "text":*/
+              default:
+                input = document.createElement("input");
+                input.type = inputType; // Utilise le type HTML correspondant
+                if (rowData) input.value = rowData[index].textContent.trim();
+                break;
+            }
+
+            // Le name de l'input correspond au nom de la colonne, formaté pour être utilisable en JS // "Nom du jeu" devient "nom_du_jeu"
+            input.name = col.textContent.toLowerCase().replace(/\s+/g, "_");
+
+            // préremplissage des champs si modification
+            //if (rowData) input.value = rowData[index].textContent;
+            inputWrapper.appendChild(label);
+            inputWrapper.appendChild(input);
+            modalForm.appendChild(inputWrapper);
+          });
+        } else if (action === "Supprimer") {
+          const p = document.createElement("p");
+          p.textContent = "Voulez-vous vraiment supprimer cet élément ?";
+          modalForm.appendChild(p);
+        }
+
+        modal.style.display = "flex";
+
+        // Gestion du submit
+        modalForm.onsubmit = (e) => {
+          e.preventDefault();
+          const data = {};
+          modalForm.querySelectorAll("input, select").forEach((el) => {
+            if (el.type === "checkbox") {
+              data[el.name] = el.checked ? 1 : 0;
+            } else if (el.tagName === "SELECT" && el.multiple) {
+              data[el.name] = Array.from(el.selectedOptions).map(
+                (opt) => opt.value
+              );
+            } else {
+              data[el.name] = el.value.trim();
+            }
+          });
+
+          console.log(`${action} sur ${tableId}`, data);
+          modal.style.display = "none";
+        };
+      }
+
+      // Fermeture
+      modalClose.onclick = modalCancel.onclick = () =>
+        (modal.style.display = "none");
+      window.onclick = (e) => {
+        if (e.target === modal) modal.style.display = "none";
+      };
+
+      // Exemple d'utilisation pour chaque bouton
+      document.querySelectorAll(".btn_ajouter").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const tableId = btn.closest("div[id^='bdd_']").id;
+          openModal("Ajouter", tableId);
+        });
+      });
+
+      document.querySelectorAll(".btn_modifier").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const tableId = btn.closest("div[id^='bdd_']").id;
+          // récpère les valeur remplis pour les inputs
+          const rowData = btn.closest("tr").children;
+          openModal("Modifier", tableId, rowData);
+        });
+      });
+
+      document.querySelectorAll(".btn_supprimer").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const tableId = btn.closest("div[id^='bdd_']").id;
+          openModal("Supprimer", tableId);
+        });
+      });
+    </script>
+  </body>
+</html>
