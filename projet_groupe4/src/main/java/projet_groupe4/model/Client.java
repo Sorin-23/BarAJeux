@@ -4,42 +4,50 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
+import projet_groupe4.view.Views;
 
 @Entity
 @DiscriminatorValue("Client")
 public class Client extends Personne {
 	@Column(name="point_fidelite")
+	@JsonView(Views.Common.class)
 	private int pointFidelite;
 	@Column(name="date_creation")
+	@JsonView(Views.Common.class)
 	private LocalDate dateCreation;
 	@Column(name="date_derniere_connexion")
+	@JsonView(Views.Common.class)
 	private LocalDate dateLastConnexion;
-	@Column(name="date_derniere_reservation")
-	private LocalDate dateLastReservation;
 	
 	@OneToMany(mappedBy="client")
+	@JsonView(Views.ClientWithReservation.class)
 	private List<Reservation> reservations = new ArrayList();
 	
 	@OneToMany(mappedBy="client")
+	@JsonView(Views.ClientWithEmprunt.class)
 	private List<Emprunt> emprunts = new ArrayList(); 
+	@JsonView(Views.Common.class)
 	private String ville;
 	@Column(name="code_postale")
+	@JsonView(Views.Common.class)
 	private String codePostale;
+	@JsonView(Views.Common.class)
 	private String adresse;
 
 	// Constructor
 	public Client() {}
 	public Client(Integer id, String nom, String prenom, String mail, String mdp, String telephone, int pointFidelite,
-			LocalDate dateCreation, LocalDate dateLastConnexion, LocalDate dateLastReservation, String ville, String codePostale, String adresse) {
+			LocalDate dateCreation, LocalDate dateLastConnexion, String ville, String codePostale, String adresse) {
 		super(id, nom, prenom, mail, mdp, telephone);
 		this.pointFidelite = pointFidelite;
 		this.dateCreation = dateCreation;
 		this.dateLastConnexion = dateLastConnexion;
-		this.dateLastReservation = dateLastReservation;
 		this.ville = ville;
 		this.codePostale = codePostale;
 		this.adresse = adresse;
@@ -49,7 +57,6 @@ public class Client extends Personne {
 	    this.pointFidelite = 0;
 	    this.dateCreation = LocalDate.now();
 	    this.dateLastConnexion = LocalDate.now();
-	    this.dateLastReservation = null;
 		this.ville = ville;
 		this.codePostale = codePostale;
 		this.adresse = adresse;
@@ -82,13 +89,6 @@ public class Client extends Personne {
 		this.dateLastConnexion = dateLastConnexion;
 	}
 
-	public LocalDate getDateLastReservation() {
-		return dateLastReservation;
-	}
-
-	public void setDateLastReservation(LocalDate dateLastReservation) {
-		this.dateLastReservation = dateLastReservation;
-	}
 
 	public List<Reservation> getReservations() {
 		return reservations;
@@ -151,9 +151,6 @@ public class Client extends Personne {
 	    this.dateLastConnexion = LocalDate.now();
 	}
 	
-	public void mettreAJourDerniereReservation() {
-	    this.dateLastReservation = LocalDate.now();
-	}
 	
 	public int calculerPointsFidelite() {
 	    int points = 0;
@@ -217,7 +214,6 @@ public class Client extends Personne {
 		return "Client [pointFidelite=" + pointFidelite 
 				+ ", dateCreation=" + dateCreation 
 				+ ", dateLastConnexion=" + dateLastConnexion
-				+ ", dateLastReservation=" + dateLastReservation 
 				+ ", nbReservations=" + reservations.size()
 				+ ", nbEmprunts=" + emprunts.size()
 				+ ", adresse=" + adresse

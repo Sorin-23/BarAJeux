@@ -3,6 +3,8 @@ package projet_groupe4.model;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -14,42 +16,55 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
+import projet_groupe4.view.Views;
 @Entity
 @Table(name="jeu")
 public class Jeu {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonView(Views.Common.class)
 	private Integer id;
 	@Column(name="nom_jeu", columnDefinition="varchar(50)", nullable=false)
+	@JsonView(Views.Common.class)
 	private String nom;
 
 	@ElementCollection(targetClass = TypeJeu.class)
 	@CollectionTable(name = "jeu_types", joinColumns = @JoinColumn(name = "jeu_id"))
 	@Enumerated(EnumType.STRING)
 	@Column(name = "type_jeu", nullable = false)
+	@JsonView(Views.Common.class)
 	private Set<TypeJeu> typesJeux;
 
 	@Column(name="age_minimum")
+	@JsonView(Views.Common.class)
 	private int ageMinimum;
 	@Column(name="nombre_joueur_minimum")
+	@JsonView(Views.Common.class)
 	private int nbJoueurMinimum;
 	@Column(name="nombre_joueur_maximum")
+	@JsonView(Views.Common.class)
 	private int nbJoueurMaximum;
 	@Column(name="durée")
+	@JsonView(Views.Common.class)
 	private int duree;
 	@Column(name="nombre_exemplaire")
+	@JsonView(Views.Common.class)
 	private int nbExemplaire;
 	@Column(columnDefinition="DECIMAL(2,1) CHECK (note >= 0 AND note <= 5)")
+	@JsonView(Views.Common.class)
 	private double note;
 	
 	@ElementCollection(targetClass = CategorieJeu.class)
 	@CollectionTable(name = "jeu_categories", joinColumns = @JoinColumn(name = "jeu_id"))
 	@Enumerated(EnumType.STRING)
 	@Column(name = "categorie", nullable = false) // juste le nom de la colonne
-    private Set<CategorieJeu> categoriesJeux;
+    @JsonView(Views.Common.class)
+	private Set<CategorieJeu> categoriesJeux;
 	@Column(name="img_url")
+	@JsonView(Views.Common.class)
 	private String imgURL;
 	@Column(name="besoin_game_master")
+	@JsonView(Views.Common.class)
 	private boolean besoinGameMaster;
 	
 	// Constructors
@@ -88,7 +103,10 @@ public class Jeu {
 
 	
 	
-	// Getters & Setters
+	public Jeu() {
+        //TODO Auto-generated constructor stub
+    }
+    // Getters & Setters
 	public Integer getId() {
 		return id;
 	}

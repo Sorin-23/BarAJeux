@@ -1,14 +1,19 @@
 package projet_groupe4.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import projet_groupe4.view.Views;
 
 @Entity
 @DiscriminatorValue("Employe")
 public class Employe extends Personne{
 	@Column(columnDefinition="varchar(20)")
+	@JsonView(Views.Common.class)
 	private String job;
+	@JsonView(Views.Common.class)
 	private boolean gameMaster;
 	
 	// Constructors

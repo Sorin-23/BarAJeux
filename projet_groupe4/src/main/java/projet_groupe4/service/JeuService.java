@@ -1,12 +1,12 @@
 package projet_groupe4.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import projet_groupe4.dao.IDAOJeu;
-import projet_groupe4.exception.ResourceNotFoundException;
 import projet_groupe4.model.Jeu;
 
 @Service
@@ -18,8 +18,8 @@ public class JeuService {
 		return this.dao.findAll();
 	}
 	
-	public Jeu getById(Integer id) {
-		return this.dao.findById(id).orElseThrow(() -> new ResourceNotFoundException());
+	public Optional<Jeu> getById(Integer id) {
+		return this.dao.findById(id);
 	}
 	
 	public Jeu create(Jeu jeu) {

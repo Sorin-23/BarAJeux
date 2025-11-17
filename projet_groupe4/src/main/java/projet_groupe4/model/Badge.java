@@ -1,23 +1,30 @@
 package projet_groupe4.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import projet_groupe4.view.Views;
 
 @Entity
 @Table(name="badge")
 public class Badge {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonView(Views.Common.class)
 	private Integer id;
 	@Column(name="nom_badge", columnDefinition="varchar(30)", nullable=false)
+	@JsonView(Views.Common.class)
 	private String nomBadge;
 	@Column(name="point_min", nullable=false)
+	@JsonView(Views.Common.class)
 	private int pointMin;
 	@Column(name="img_url")
+	@JsonView(Views.Common.class)
 	private String imgURL;
 	
 	// Constructors

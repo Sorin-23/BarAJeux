@@ -1,6 +1,7 @@
 package projet_groupe4.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,6 +18,8 @@ public interface IDAOPersonne extends JpaRepository<Personne,Integer> {
 
 	@Query("from Employe")
 	public List<Employe> findAllEmploye(); 
+	@Query("Select c from client c where c.id =:id")
+	public Optional<Client>findClientById(@Param("id") Integer id);
 
 	//public Client findByIdWithEmprunts(Integer idClient);
 	@Query("SELECT c FROM Client c LEFT JOIN FETCH c.emprunts WHERE c.id = :id")
@@ -34,6 +37,6 @@ public interface IDAOPersonne extends JpaRepository<Personne,Integer> {
 	public List<Personne> findByPrenomContaining(String prenom);
 
 	// public Personne findByLoginAndPassword(String mail, String mdp); 
-	public Personne findByLoginAndPassword(String mail, String mdp);
+	public Optional<Personne> findByLogin(String mail);
 
 }

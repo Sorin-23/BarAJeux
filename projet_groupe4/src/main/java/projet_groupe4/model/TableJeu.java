@@ -1,36 +1,39 @@
 package projet_groupe4.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import projet_groupe4.view.Views;
 
 @Entity
 @Table(name="table_jeu")
 public class TableJeu {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonView(Views.Common.class)
 	private Integer id;
 	@Column(name="nom_table",columnDefinition="varchar(50)", nullable=false)
+	@JsonView(Views.Common.class)
 	private String nomTable;
 	@Column(nullable=false)
+	@JsonView(Views.Common.class)
 	private int capacite;
-	private boolean disponibilite;
 	
 	// Constructors
 	public TableJeu() {}
-	public TableJeu(Integer id, String nomTable, int capacite, boolean disponibilite) {
+	public TableJeu(Integer id, String nomTable, int capacite) {
 		this.id = id;
 		this.nomTable = nomTable;
 		this.capacite = capacite;
-		this.disponibilite = disponibilite;
 	}
-	public TableJeu(String nomTable, int capacite, boolean disponibilite) {
+	public TableJeu(String nomTable, int capacite) {
 		this.nomTable = nomTable;
 		this.capacite = capacite;
-		this.disponibilite = disponibilite;
 	}
 	
 	// Getters & Setters
@@ -52,26 +55,14 @@ public class TableJeu {
 	public void setCapacite(int capacite) {
 		this.capacite = capacite;
 	}
-	public boolean isDisponibilite() {
-		return disponibilite;
-	}
-	public void setDisponibilite(boolean disponibilite) {
-		this.disponibilite = disponibilite;
-	}
 	
-	// Méthodes utilitaires 
-	public void reserver() {
-	    disponibilite = false;
-	}
-	public void liberer() {
-	    disponibilite = true;
-	}
+	
+
 
 	// toString
 	@Override
 	public String toString() {
-		return "Table [id=" + id + ", nomTable=" + nomTable + ", capacite=" + capacite + ", disponibilite="
-				+ disponibilite + "]";
+		return "Table [id=" + id + ", nomTable=" + nomTable + ", capacite=" + capacite + "]";
 	}
 	
 	

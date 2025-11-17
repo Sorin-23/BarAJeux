@@ -4,17 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import projet_groupe4.dao.IDAOPersonne;
-import projet_groupe4.exception.BadRequestException;
 import projet_groupe4.exception.ResourceNotFoundException;
 import projet_groupe4.model.Client;
 import projet_groupe4.model.Employe;
-import projet_groupe4.model.Jeu;
 import projet_groupe4.model.Personne;
 
 @Service
@@ -40,41 +37,21 @@ public class PersonneService {
 		return this.dao.findById(id).orElseThrow(() -> new ResourceNotFoundException());
 	}
 	
-	public Client getClientById(Integer clientId) {
-        Optional personne = this.dao.findById(clientId);
-        if(personne.isEmpty()) {return null;}
-		else {
-
-			if(personne.get() instanceof Client)
-			{
-				return (Client) personne.get();
-			}
-			else
-			{
-				throw new BadRequestException();
-			}
-		}
+	public Optional<Client> getClientById(Integer clientId) {
+        return dao.findById(clientId)
+				.filter(p -> p instanceof Client) // garde uniquement si c’est un Client
+				.map(p -> (Client) p);
 	}
 	
-	public Employe getEmployeById(Integer empId) {
-        Optional personne = this.dao.findById(empId);
-        if(personne.isEmpty()) {return null;}
-		else {
-
-			if(personne.get() instanceof Employe)
-			{
-				return (Employe) personne.get();
-			}
-			else
-			{
-				throw new BadRequestException();
-			}
-		}
+	public Optional<Employe> getEmployeById(Integer empId) {
+       	return dao.findById(empId)
+				.filter(p -> p instanceof Employe) // garde uniquement si c’est un Client
+				.map(p -> (Employe) p);
 	}
 	
-	public Personne getByLoginAndPassword(String login,String password)
+	public Optional<Personne> getByLogin(String login)
 	{
-		return this.dao.findByLoginAndPassword(login,password);
+		return this.dao.findByLogin(login);
 	}
 	
 	public Personne create(Personne personne)

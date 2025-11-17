@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -16,26 +18,35 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import projet_groupe4.view.Views;
 @Entity
 @Table(name="emprunt")
 public class Emprunt {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonView(Views.Common.class)
 	private Integer id;
+	
 	@Column(name="date_emprunt", nullable=false)
+	@JsonView(Views.Common.class)
 	private LocalDate dateEmprunt;
 	@Column(name="date_retour", nullable=false)
+	@JsonView(Views.Common.class)
 	private LocalDate dateRetour;
 	@Enumerated(EnumType.STRING)
 	@Column(name="statut_location",nullable = false,columnDefinition = "enum('rendu', 'enCours', 'enRetard', 'annulé')")
+	@JsonView(Views.Common.class)
 	private StatutLocation statutLocation;
 	@Column(name="date_retour_reel")
+	@JsonView(Views.Common.class)
 	private LocalDate dateRetourReel;
 	@ManyToOne
 	@JoinColumn(name="client", nullable=false)
+	@JsonView(Views.ClientWithEmprunt.class)
 	private Client client ; 
 	@ManyToOne
 	@JoinColumn(name="jeu", nullable=false)
+	@JsonView(Views.Emprunt.class)
 	private Jeu jeu;
 	
 	// valeur générique 

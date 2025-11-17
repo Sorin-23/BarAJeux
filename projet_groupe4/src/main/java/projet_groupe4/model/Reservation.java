@@ -3,6 +3,8 @@ package projet_groupe4.model;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,32 +15,42 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import projet_groupe4.view.Views;
 @Entity
 @Table(name="reservation")
 public class Reservation {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonView(Views.Common.class)
 	private Integer id;
 	@Column(name="date_debut", nullable = false)
+	@JsonView(Views.Common.class)
 	private LocalDateTime datetimeDebut;
 	@Column(name="date_fin", nullable = false)
+	@JsonView(Views.Common.class)
 	private LocalDateTime datetimeFin;
 	@Column(name="nombre_joueur")
+	@JsonView(Views.Common.class)
 	private int nbJoueur;
 	@ManyToOne
 	@JoinColumn(name="table_jeu")
+	@JsonView(Views.TableJeu.class)
 	private TableJeu tableJeu;
 	@ManyToOne// many car on gère un stock ? 
 	@JoinColumn(name="jeu", nullable=false)
+	@JsonView(Views.Jeu.class)
 	private Jeu jeu;
 	@Enumerated(EnumType.STRING)
 	@Column(name="statut_reservation",nullable = false,columnDefinition = "enum('terminée', 'annulée', 'confirmée')")
+	@JsonView(Views.Common.class)
 	private StatutReservation statutReservation;
 	@ManyToOne
 	@JoinColumn(name="client", nullable=false)
+	@JsonView(Views.ClientWithReservation.class)
 	private Client client;
 	@ManyToOne
 	@JoinColumn(name="game_master", nullable=false)
+	@JsonView(Views.Employe.class)
 	private Employe gameMaster;
 	
 	// Constructors
@@ -66,7 +78,10 @@ public class Reservation {
 		this.gameMaster = gameMaster;
 	}
 	
-	// Getters & Setters
+	public Reservation() {
+        //TODO Auto-generated constructor stub
+    }
+    // Getters & Setters
 	public Integer getId() {
 		return id;
 	}
@@ -130,7 +145,7 @@ public class Reservation {
 		this.statutReservation = StatutReservation.terminée; 
 	}
 
-	public void confirmerResa() {
+	/*public void confirmerResa() {
 		
 		if(!this.tableJeu.isDisponibilite()) {
 			System.out.println("Table non disponible");
@@ -175,7 +190,7 @@ public class Reservation {
 			this.datetimeDebut = nvlDateDebut;
 			this.datetimeFin = nvlDateFin;
 		}
-	}
+	}*/
 	
 	public int calculerDuree() {
 		return (int) ChronoUnit.DAYS.between(this.datetimeDebut, this.datetimeFin);
