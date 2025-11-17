@@ -1,0 +1,39 @@
+package projet_groupe4.dao;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import projet_groupe4.model.Client;
+import projet_groupe4.model.Employe;
+import projet_groupe4.model.Personne;
+
+public interface IDAOPersonne extends JpaRepository<Personne,Integer> {
+
+	@Query("from Client")
+	public List<Client> findAllClient(); 
+
+	@Query("from Employe")
+	public List<Employe> findAllEmploye(); 
+
+	//public Client findByIdWithEmprunts(Integer idClient);
+	@Query("SELECT c FROM Client c LEFT JOIN FETCH c.emprunts WHERE c.id = :id")
+    public Client findByIdWithEmprunts(@Param("id") Integer id);
+	
+	//public Client findByIdWithReservations(Integer idClient);
+	@Query("SELECT c from Client c LEFT JOIN FETCH c.reservations where c.id=:id")
+    public Client findByIdWithReservations(@Param("id") Integer id);
+
+	//public List<Personne> findByNomLike(String nom); 
+	public List<Personne> findByNomContaining(String nom);
+	
+
+	//public List<Personne> findByPrenomLike(String prenom);
+	public List<Personne> findByPrenomContaining(String prenom);
+
+	// public Personne findByLoginAndPassword(String mail, String mdp); 
+	public Personne findByLoginAndPassword(String mail, String mdp);
+
+}
