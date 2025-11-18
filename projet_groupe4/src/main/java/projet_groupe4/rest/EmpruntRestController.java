@@ -34,8 +34,8 @@ public class EmpruntRestController {
 	
 	@GetMapping
 	@JsonView(Views.Emprunt.class)
-	public List<Emprunt> allEmprunts(){
-		return this.srv.getAll();
+	public List<EmpruntResponse> allEmprunts(){
+		return this.srv.getAll().stream().map(EmpruntResponse::convert).toList();
 	}
 	
 	@GetMapping("/{id}")
@@ -71,7 +71,7 @@ public class EmpruntRestController {
 	}
 
 	@DeleteMapping("/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('EMPLOYE')")
 	public void deleteEmprunt(@PathVariable Integer id)
 	{
 		this.srv.deleteById(id);

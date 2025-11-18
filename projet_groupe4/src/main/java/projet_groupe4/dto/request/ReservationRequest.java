@@ -1,15 +1,18 @@
 package projet_groupe4.dto.request;
 
 import java.time.LocalDateTime;
-import jakarta.validation.constraints.NotBlank;
+
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 public class ReservationRequest {
 
-    @NotBlank
+	@NotNull
 	private LocalDateTime datetimeDebut;
-	@NotBlank
+	@NotNull
 	private LocalDateTime datetimeFin;
-	@NotBlank
+	@NotNull
+	@Min(1)
 	private int nbJoueur;
 
     public LocalDateTime getDatetimeDebut() {

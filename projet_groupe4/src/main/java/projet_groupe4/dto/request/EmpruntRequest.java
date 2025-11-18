@@ -2,15 +2,15 @@ package projet_groupe4.dto.request;
 
 import java.time.LocalDate;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class EmpruntRequest {
 
-@NotBlank
+@NotNull
 private LocalDate dateEmprunt;
-@NotBlank
+@NotNull
 private LocalDate dateRetour;
-@NotBlank
+@NotNull
 private LocalDate dateRetourReel;
 public LocalDate getDateEmprunt() {
 return dateEmprunt;

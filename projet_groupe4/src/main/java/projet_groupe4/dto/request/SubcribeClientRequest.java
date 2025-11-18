@@ -2,15 +2,19 @@ package projet_groupe4.dto.request;
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 
 public class SubcribeClientRequest {
 
+	@NotNull
+	@Min(0)
 	private int pointFidelite;
-	@NotBlank
+	@NotNull
 	private LocalDate dateCreation;
-	@NotBlank
+	@NotNull
 	private LocalDate dateLastConnexion;
 	
 	@NotBlank

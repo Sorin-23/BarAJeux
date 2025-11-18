@@ -1,20 +1,27 @@
 package projet_groupe4.dto.request;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class JeuRequest {
     @NotBlank
 	private String nom;
 
-    @NotBlank
+    @NotNull
+    @Min(0)
 	private int ageMinimum;
-    @NotBlank
+    @NotNull
+    @Min(1)
 	private int nbJoueurMinimum;
-	@NotBlank
+    @NotNull
+    @Min(1)
 	private int nbJoueurMaximum;
-	@NotBlank
+    @NotNull
+    @Min(1)
 	private int duree;
-	@NotBlank
+    @NotNull
+    @Min(1)
 	private int nbExemplaire;
 	
 	public String getNom() {

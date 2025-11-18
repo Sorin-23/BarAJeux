@@ -5,7 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 public class SubcribeEmployeRequest {
     @NotBlank
     private String job;
-    @NotBlank
+    
+    
 	private boolean gameMaster;
     public String getJob() {
         return job;

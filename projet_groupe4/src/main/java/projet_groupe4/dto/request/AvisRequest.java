@@ -1,9 +1,10 @@
 package projet_groupe4.dto.request;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
 public class AvisRequest {
 
-@NotBlank
+@Min(0)
 private int note;
 @NotBlank
 private String titre;

@@ -1,12 +1,15 @@
 package projet_groupe4.dto.request;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class TableRequest {
 
 @NotBlank
 private String nomTable;
-@NotBlank
+@NotNull
+@Min(1)
 private int capacite;
 public String getNomTable() {
 return nomTable;

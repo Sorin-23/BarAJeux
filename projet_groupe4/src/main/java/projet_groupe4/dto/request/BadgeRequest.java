@@ -1,12 +1,15 @@
 package projet_groupe4.dto.request;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class BadgeRequest {
 
 @NotBlank
 private String nomBadge;
-@NotBlank
+@NotNull
+@Min(0)
 private int pointMin;
 @NotBlank
 private String imgURL;

@@ -1,4 +1,5 @@
 package projet_groupe4.dto.request;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 public class SubcribeUserRequest {
     @NotBlank
@@ -6,9 +7,11 @@ public class SubcribeUserRequest {
     @NotBlank
     private String prenom;
     @NotBlank
+    @Email
     private String mail;
     @NotBlank
     private String mdp;
+    
     private String telephone;
     
     public String getNom() {
