@@ -22,7 +22,37 @@ public class JeuResponse {
 	private int duree;
     @JsonView(Views.Common.class)
 	private int nbExemplaire;
-    public String getNom() {
+    
+    @JsonView(Views.Common.class)
+	private double note;
+    @JsonView(Views.Common.class)
+	private String imgURL;
+    @JsonView(Views.Common.class)
+	private boolean besoinGameMaster;
+    
+    
+    
+    
+
+	public double getNote() {
+		return note;
+	}
+	public void setNote(double note) {
+		this.note = note;
+	}
+	public String getImgURL() {
+		return imgURL;
+	}
+	public void setImgURL(String imgURL) {
+		this.imgURL = imgURL;
+	}
+	public boolean isBesoinGameMaster() {
+		return besoinGameMaster;
+	}
+	public void setBesoinGameMaster(boolean besoinGameMaster) {
+		this.besoinGameMaster = besoinGameMaster;
+	}
+	public String getNom() {
         return nom;
     }
     public void setNom(String nom) {
@@ -75,6 +105,10 @@ public class JeuResponse {
         resp.setNbJoueurMaximum(jeu.getNbJoueurMaximum());
         resp.setDuree(jeu.getDuree());
         resp.setNbExemplaire(jeu.getNbExemplaire());
+        resp.setNote(jeu.getNote());
+        resp.setImgURL(jeu.getImgURL());
+        resp.setBesoinGameMaster(jeu.isBesoinGameMaster());
+        
         
         return resp;
         

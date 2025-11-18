@@ -18,10 +18,10 @@ public class EmployeResponse {
 	
 	@JsonView(Views.Common.class)
 	private String mail;
-	
+	/*
 	@JsonView(Views.Common.class)
 	private String mdp;
-
+*/
 	
 	@JsonView(Views.Common.class)
 	private String telephone;
@@ -54,12 +54,12 @@ public class EmployeResponse {
     public void setMail(String mail) {
         this.mail = mail;
     }
-    public String getMdp() {
+   /* public String getMdp() {
         return mdp;
     }
     public void setMdp(String mdp) {
         this.mdp = mdp;
-    }
+    }*/
     public String getTelephone() {
         return telephone;
     }
@@ -85,7 +85,7 @@ public class EmployeResponse {
         resp.setNom(employe.getNom());
         resp.setPrenom(employe.getPrenom());
         resp.setMail(employe.getMail());
-        resp.setMdp(employe.getMdp());
+        //resp.setMdp(employe.getMdp());
         resp.setTelephone(employe.getTelephone());
         resp.setJob(employe.getJob());
         resp.setGameMaster(employe.isGameMaster());

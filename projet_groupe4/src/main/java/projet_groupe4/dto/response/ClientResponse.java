@@ -25,8 +25,8 @@ public class ClientResponse {
 	@JsonView(Views.Common.class)
 	private String mail;
 	
-	@JsonView(Views.Common.class)
-	private String mdp;
+	/*@JsonView(Views.Common.class)
+	private String mdp;*/
 
 	
 	@JsonView(Views.Common.class)
@@ -42,9 +42,9 @@ public class ClientResponse {
 	private LocalDate dateLastConnexion;
 
     @JsonView(Views.ClientWithReservation.class)
-	private List<Reservation> reservations = new ArrayList();
+	private List<Reservation> reservations = new ArrayList();// voi si faut pas utiliser ReservationResponse par la suite 
     @JsonView(Views.ClientWithEmprunt.class)
-	private List<Emprunt> emprunts = new ArrayList(); 
+	private List<Emprunt> emprunts = new ArrayList(); // ici aussi 
     @JsonView(Views.Common.class)
 	private String ville;
     @JsonView(Views.Common.class)
@@ -124,12 +124,12 @@ public class ClientResponse {
     public void setMail(String mail) {
         this.mail = mail;
     }
-    public String getMdp() {
+    /*public String getMdp() {
         return mdp;
     }
     public void setMdp(String mdp) {
         this.mdp = mdp;
-    }
+    }*/
     public String getTelephone() {
         return telephone;
     }
@@ -143,7 +143,7 @@ public class ClientResponse {
         resp.setNom(client.getNom());
         resp.setPrenom(client.getPrenom());
         resp.setMail(client.getMail());
-        resp.setMdp(client.getMdp());
+        //resp.setMdp(client.getMdp());
         resp.setTelephone(client.getTelephone());
         resp.setPointFidelite(client.getPointFidelite());
         resp.setDateCreation(client.getDateCreation());

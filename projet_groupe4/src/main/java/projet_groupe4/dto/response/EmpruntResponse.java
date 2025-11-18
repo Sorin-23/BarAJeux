@@ -18,10 +18,35 @@ public class EmpruntResponse {
     private LocalDate dateRetour;
     @JsonView(Views.Common.class)
     private LocalDate dateRetourReel;
+    
+    @JsonView(Views.Common.class)
+    private Integer clientId; 
+    @JsonView(Views.Common.class)
+    private Integer jeuId;
 
 
 
-    public Integer getId() {
+    public Integer getClientId() {
+		return clientId;
+	}
+
+
+	public void setClientId(Integer clientId) {
+		this.clientId = clientId;
+	}
+
+
+	public Integer getJeuId() {
+		return jeuId;
+	}
+
+
+	public void setJeuId(Integer jeuId) {
+		this.jeuId = jeuId;
+	}
+
+
+	public Integer getId() {
         return id;
     }
 
@@ -68,6 +93,10 @@ public class EmpruntResponse {
         resp.setDateEmprunt(emprunt.getDateEmprunt());
         resp.setDateRetour(emprunt.getDateRetour());
         resp.setDateRetourReel(emprunt.getDateRetourReel());
+        resp.setClientId(emprunt.getClient().getId());
+        resp.setJeuId(emprunt.getJeu().getId());
+        
+        
 
         return resp;
 
