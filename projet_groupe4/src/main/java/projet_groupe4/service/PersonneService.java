@@ -49,9 +49,9 @@ public class PersonneService {
 				.map(p -> (Employe) p);
 	}
 	
-	public Optional<Personne> getByLogin(String login)
+	public Optional<Personne> getByMail(String mail)
 	{
-		return this.dao.findByLogin(login);
+		return this.dao.findByMail(mail);
 	}
 	
 	public Personne create(Personne personne)

@@ -29,7 +29,7 @@ public class JpaUserDetailsService implements UserDetailsService{
             };
         };
 
-        return this.dao.findByLogin(username)
+        return this.dao.findByMail(username)
             .map(person -> User
                     .withUsername(username)
                     .password(person.getMdp())

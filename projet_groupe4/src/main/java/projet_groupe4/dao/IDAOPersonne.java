@@ -37,6 +37,6 @@ public interface IDAOPersonne extends JpaRepository<Personne,Integer> {
 	public List<Personne> findByPrenomContaining(String prenom);
 
 	// public Personne findByLoginAndPassword(String mail, String mdp); 
-	public Optional<Personne> findByLogin(String mail);
+	public Optional<Personne> findByMail(String mail);
 
 }

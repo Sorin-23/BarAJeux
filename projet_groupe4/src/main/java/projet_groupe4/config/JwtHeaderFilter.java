@@ -35,7 +35,7 @@ public class JwtHeaderFilter extends OncePerRequestFilter{
             Optional<String> optUsername = JwtUtils.validateAndGetSubjet(token);
 
             if (optUsername.isPresent()) {
-                Personne personne = this.daoPersonne.findByLogin(optUsername.get()).orElseThrow();
+                Personne personne = this.daoPersonne.findByMail(optUsername.get()).orElseThrow();
 
                 // On refabrique une liste de rôles pour l'utilisateur
                 List<GrantedAuthority> autorities = new ArrayList<>();
