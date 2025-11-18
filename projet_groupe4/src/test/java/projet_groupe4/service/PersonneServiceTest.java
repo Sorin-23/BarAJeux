@@ -48,28 +48,77 @@ public class PersonneServiceTest {
 	    employe1.setPrenom("Jean22");
 	    employe1.setMail("jean22.dupont22@test.com");
 	    employe1.setMdp("test12322");
+	    
+	    when(dao.findAllClient()).thenReturn(List.of(client1, client2));
+	    
+	    
+	    
 	    List<Client> result = service.getAllClients();
 	    assertThat(result).hasSize(2);
+	    assertThat(result).containsExactly(client1, client2);
     }
     
     @Test
     void testGetAllEmployes() {
-    	
+    	Client client1 = new Client();
+	    client1.setNom("Dupont");
+	    client1.setPrenom("Jean");
+	    client1.setMail("jean.dupont@test.com");
+	    client1.setMdp("test123");
+	    Client client2 = new Client();
+	    client2.setNom("Dutoit");
+	    client2.setPrenom("Toto");
+	    client2.setMail("totodutoit@test.com");
+	    client2.setMdp("123456");
+	    Employe employe1 = new Employe();
+	    employe1.setNom("Dupont22");
+	    employe1.setPrenom("Jean22");
+	    employe1.setMail("jean22.dupont22@test.com");
+	    employe1.setMdp("test12322");
+	    
+	    when(dao.findAllEmploye()).thenReturn(List.of(employe1));
+	    
+	    
+	    
+	    List<Employe> result = service.getAllEmployes();
+	    assertThat(result).hasSize(1);
+	    assertThat(result).containsExactly(employe1);
     }
     
     @Test
     void testGetClientById() {
     	
+    	Client c = new Client();
+        c.setId(1);
+        when(dao.findById(1)).thenReturn(Optional.of(c));
+
+        Optional<Client> result = service.getClientById(1);
+
+        assertThat(result).isPresent();
+        assertThat(result.get()).isEqualTo(c);
+    	
     }
     
     @Test
     void testGetEmployeById() {
-    	
+    	Employe e = new Employe();
+        e.setId(2);
+        when(dao.findById(2)).thenReturn(Optional.of(e));
+
+        Optional<Employe> result = service.getEmployeById(2);
+
+        assertThat(result).isPresent();
+        assertThat(result.get()).isEqualTo(e);
     }
     
     @Test
     void testGetByMail() {
-    	
+    	 Personne p = new Client();
+         when(dao.findByMail("mail@test.com")).thenReturn(Optional.of(p));
+
+         Optional<Personne> result = service.getByMail("mail@test.com");
+
+         assertThat(result).contains(p);
     }
     
     @Test
@@ -109,21 +158,47 @@ public class PersonneServiceTest {
     
     @Test
     void testGetByNomContaining() {
-    	
+    	Personne p1 = new Client();
+        Personne p2 = new Client();
+        when(dao.findAll()).thenReturn(List.of(p1, p2));
+
+        List<Personne> resultNull = service.getByNomContaining(null);
+        List<Personne> resultEmpty = service.getByNomContaining(" ");
+
+        assertThat(resultNull).hasSize(2);
+        assertThat(resultEmpty).hasSize(2);
     }
     
     @Test
     void testGetByPrenomContaining() {
-    	
+    	Personne p1 = new Client();
+        Personne p2 = new Client();
+        when(dao.findAll()).thenReturn(List.of(p1, p2));
+
+        List<Personne> resultNull = service.getByPrenomContaining(null);
+        List<Personne> resultEmpty = service.getByPrenomContaining("");
+
+        assertThat(resultNull).hasSize(2);
+        assertThat(resultEmpty).hasSize(2);
     }
     
     @Test
     void testFindByIdWithEmprunts() {
-    	
+    	 Client c = new Client();
+         when(dao.findByIdWithEmprunts(1)).thenReturn(Optional.of(c));
+
+         Optional<Client> result = service.findByIdWithEmprunts(1);
+
+         assertThat(result).contains(c);
     }
     @Test
     void testFindByIdWithReservations() {
-    	
+    	Client c = new Client();
+        when(dao.findByIdWithReservations(1)).thenReturn(Optional.of(c));
+
+        Optional<Client> result = service.findByIdWithReservations(1);
+
+        assertThat(result).contains(c);
     }
 
 }
