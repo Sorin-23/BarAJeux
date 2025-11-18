@@ -1,5 +1,8 @@
 package projet_groupe4.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonView;
 
 import jakarta.persistence.Column;
@@ -7,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import projet_groupe4.view.Views;
 
@@ -23,7 +27,9 @@ public class TableJeu {
 	@Column(nullable=false)
 	@JsonView(Views.Common.class)
 	private int capacite;
-	
+	@OneToMany(mappedBy = "tableJeu")
+	@JsonView(Views.TableJeu.class)
+	private List<Reservation> reservations = new ArrayList();
 	// Constructors
 	public TableJeu() {}
 	public TableJeu(Integer id, String nomTable, int capacite) {
