@@ -18,16 +18,16 @@ public interface IDAOPersonne extends JpaRepository<Personne,Integer> {
 
 	@Query("from Employe")
 	public List<Employe> findAllEmploye(); 
-	@Query("Select c from client c where c.id =:id")
-	public Optional<Client>findClientById(@Param("id") Integer id);
+	@Query("Select c from Client c where c.id =:id")
+	public Optional<Client> findClientById(@Param("id") Integer id);
 
 	//public Client findByIdWithEmprunts(Integer idClient);
 	@Query("SELECT c FROM Client c LEFT JOIN FETCH c.emprunts WHERE c.id = :id")
-    public Client findByIdWithEmprunts(@Param("id") Integer id);
+    public Optional<Client> findByIdWithEmprunts(@Param("id") Integer id);
 	
 	//public Client findByIdWithReservations(Integer idClient);
 	@Query("SELECT c from Client c LEFT JOIN FETCH c.reservations where c.id=:id")
-    public Client findByIdWithReservations(@Param("id") Integer id);
+    public Optional<Client> findByIdWithReservations(@Param("id") Integer id);
 
 	//public List<Personne> findByNomLike(String nom); 
 	public List<Personne> findByNomContaining(String nom);
