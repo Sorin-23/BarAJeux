@@ -83,7 +83,9 @@ public class PersonneService {
 	{
 		Personne personne = this.dao.findById(id).get();
 		personne.setMail(login);
-		personne.setMdp(password);
+		if (password != null) {
+		personne.setMdp(this.passwordEncoder.encode(password)); 
+		}
 		return this.dao.save(personne);
 	}
 
@@ -108,16 +110,16 @@ public class PersonneService {
 		if (prenom == null || prenom.trim().isEmpty()) {
 	        return getAll();
 	    }
-		return this.dao.findByNomContaining(prenom);
+		return this.dao.findByPrenomContaining(prenom);
 	}
 	
 	
-    public Client findByIdWithEmprunts(@Param("id") Integer id) {
+    public Optional<Client> findByIdWithEmprunts(@Param("id") Integer id) {
     	return this.dao.findByIdWithEmprunts(id);
     }
 	
 	
-    public Client findByIdWithReservations(@Param("id") Integer id) {
+    public Optional<Client> findByIdWithReservations(@Param("id") Integer id) {
     	return this.dao.findByIdWithReservations(id);
     }
 	
