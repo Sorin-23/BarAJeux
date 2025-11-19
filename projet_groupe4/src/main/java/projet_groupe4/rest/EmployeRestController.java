@@ -34,8 +34,9 @@ public class EmployeRestController {
 
     @GetMapping
     @JsonView(Views.Employe.class)
-    public List<Employe> allEmployes() {
-        return this.srv.getAllEmployes();
+    public List<EmployeResponse> allEmployes() {
+    	System.out.println("Appel de allEmployes");
+    	return this.srv.getAllEmployes().stream().map(EmployeResponse::convert).toList();
     }
 
     @GetMapping("/{id}")
@@ -59,8 +60,7 @@ public class EmployeRestController {
     @PutMapping("/{id}")
     @JsonView(Views.Employe.class)
     @PreAuthorize("hasRole('EMPLOYE')")
-    public EmployeResponse modifierEmploye(@PathVariable Integer id,
-            @Valid @RequestBody SubcribeEmployeRequest request) {
+    public EmployeResponse modifierEmploye(@PathVariable Integer id, @Valid @RequestBody SubcribeEmployeRequest request) {
         Employe employe = this.srv.getEmployeById(id).orElseThrow(IdNotFoundException::new);
         BeanUtils.copyProperties(request, employe);
 

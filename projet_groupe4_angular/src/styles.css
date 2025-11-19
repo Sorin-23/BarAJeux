@@ -27,6 +27,7 @@ main {
     color: var(--couleur-principale);
     font-family: 'Verdana', sans-serif;
     padding: 30px;
+    flex: 1; 
 
 }
 
@@ -38,10 +39,6 @@ footer {
 
 }
 
-.main-content {
-  flex: 1; 
-}
-
 app-root {
   display: flex;
   flex-direction: column;
@@ -51,44 +48,10 @@ app-root {
 
 
 /* ============================================= */
-/* =========== HEADER ========================== */
-/* ============================================= */
-header {
-    display: flex;
-    height: 12vh;
-    justify-content: space-between;
-    align-items: center;
-
-}
-
-header .logo img {
-    height: 10vh;
-    width: auto;
-    margin: 1vh;
-}
-
-header nav a {
-    color: var(--couleur-secondaire);
-    text-decoration: none;
-    margin-left: 15px;
-
-}
-
-header nav a:hover {
-    text-decoration: underline;
-}
-
-header .menu a.active {
-    color: var(--couleur-tertiaire);
-    font-weight: bold;
-    border-bottom: 2px solid var(--couleur-tertiaire);
-}
-
-/* ============================================= */
 /* =========== MAIN - GLOBAL ============== */
 /* ============================================= */
 
-main .btn {
+.btn {
     background-color: var(--couleur-tertiaire);
     border: none;
     border-radius: 12px;
@@ -97,18 +60,18 @@ main .btn {
 }
 
 
-main .btn:hover {
+.btn:hover {
     background-color: var(--couleur-secondaire-hover);
 }
 
 
-main h1 {
+h1 {
     text-align: center;
     color: var(--couleur-principale);
     font-family: 'Georgia', serif;
 }
 
-main .block_white {
+.block_white {
     background-color: #fff;
     border-radius: 15px;
     padding: 20px 30px;
@@ -118,7 +81,7 @@ main .block_white {
     overflow-x: auto;
 }
 
-main .barre_recherche {
+.barre_recherche {
     width: 60%;
     padding: 10px 15px;
     border: 1px solid var(--couleur-tertiaire);
@@ -126,38 +89,38 @@ main .barre_recherche {
     transition: 0.2s ease;
 }
 
-main .barre_recherche:focus {
+.barre_recherche:focus {
     outline: none;
     border-color: var(--couleur-principale);
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
-main .modifier {
+.modifier {
     background: var(--couleur-tertiaire);
 }
 
-main .modifier:hover {
+.modifier:hover {
     background: var(--couleur-secondaire-hover);
 }
 
-main .annuler {
+.annuler {
     background: #ccc;
 }
 
-main .annuler:hover {
+.annuler:hover {
     background: #aaa;
 }
 
-main .enregistrer {
+.enregistrer {
     background: var(--couleur-principale);
     color: var(--couleur-secondaire);
 }
 
-main .enregistrer:hover {
+.enregistrer:hover {
     background: var(--couleur-principale-hover);
 }
 
-main .btn_crud {
+.btn_crud {
     border: none;
     border-radius: 12px;
     padding: 1vh 2vh;
@@ -167,547 +130,44 @@ main .btn_crud {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
-main .btn_ajouter {
+.btn_ajouter {
     background-color: #28a745;
 }
 
-main .btn_ajouter:hover {
+.btn_ajouter:hover {
     background-color: #218838;
 }
 
-main .btn_modifier {
+.btn_modifier {
     background-color: #fd7e14;
 }
 
-main .btn_modifier:hover {
+.btn_modifier:hover {
     background-color: #e96b0c;
 }
 
-main .btn_supprimer {
+.btn_supprimer {
     background-color: #dc3545;
 }
 
-main .btn_supprimer:hover {
+.btn_supprimer:hover {
     background-color: #c82333;
 }
 
-main table td .btn_crud {
+table td .btn_crud {
     padding: 1vh 2vh;
     margin: 0 3px;
 }
 
-main .btn_crud i {
+.btn_crud i {
     margin-right: 5px;
 }
 
 /* ============================================= */
-/* =========== MAIN - PAGE INDEX ============== */
+/* =========== - CARROUSSELLE ============= */
 /* ============================================= */
 
-main #message_bienvenu {
-    display: flex;
-    flex-direction: row;
-    gap: 5vh;
-}
-
-main #message_bienvenu .badge_img {
-    height: 10vh;
-    width: auto;
-    border-radius: 10px;
-}
-
-
-main #img_bar {
-    height: 40vh;
-    display: block;
-    margin: 20px auto;
-    width: auto;
-
-}
-
-main .bloc-resa {
-    display: flex;
-    height: 12vh;
-    align-items: center;
-    text-align: center;
-    margin-top: 10vh;
-    gap: 5%;
-
-
-}
-
-
-main .bloc-resa .logo_resa {
-    flex: 1;
-    max-height: 20vh;
-    width: auto;
-    border-radius: 20px;
-
-}
-
-main .class_resa {
-    flex: 2;
-    text-decoration: none;
-    color: var(--couleur-principale);
-    margin-right: 20vh;
-    width: 80%;
-}
-
-main .class_resa:hover {
-    text-decoration: underline;
-
-}
-
-main .bloc-resa h2 {
-    text-align: center;
-}
-
-main #info_jeu {
-    margin: 10vh;
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-main #info_jeu #right_container {
-    flex: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-main #info_jeu #left_container {
-    flex: 3;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-main #info_jeu #left_container img {
-    max-width: 60%;
-    border-radius: 15px;
-    object-fit: cover;
-}
-
-
-
-/* ============================================= */
-/* =========== MAIN - PAGE CLIENT ============== */
-/* ============================================= */
-
-
-main #client_formulaire {
-    display: flex;
-    gap: 5%;
-    padding: 1.5vh;
-
-
-}
-
-main #client_reservation {
-    display: none;
-    gap: 5%;
-    padding: 1.5vh;
-    flex-direction: column;
-    width: 100%;
-
-}
-
-main #client_formulaire #client_badge {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-}
-
-main #client_formulaire #client_badge .badge_img {
-    height: 40vh;
-    width: auto;
-    margin: 1vh;
-    border-radius: 10px;
-    margin-bottom: 1vh;
-
-}
-
-main #client_formulaire #client_badge h4 {
-    text-align: center;
-    margin-top: 1vh;
-}
-
-main #client_formulaire #informations {
-    flex: 4;
-    display: flex;
-    flex-direction: column;
-    gap: 5%;
-}
-
-main #client_formulaire #informations form {
-
-    display: flex;
-    flex-direction: column;
-}
-
-main #client_formulaire #informations label {
-    font-weight: bold;
-    margin-bottom: 0.3vh;
-}
-
-main #client_formulaire #informations #gameMaster {
-    width: 1.2em;
-    height: 1.2em;
-    cursor: pointer;
-    accent-color: var(--couleur-principale);
-
-}
-
-main #client_reservation #client_retour_infos{
-    display: flex;
-    justify-content: flex-start;
-}
-
-main #client_reservation .input_avis {
-  width: 100%;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  padding: 5px;
-  resize: vertical;
-}
-
-main #client_reservation .input_avis:disabled {
-  background-color: #f3f3f3;
-  color: #666;
-}
-
-main #client_btn_section {
-    display: flex;
-    gap: 1rem;
-    justify-content: flex-start;
-    margin-top: 1.5vh;
-}
-
-main #client_btn_section .btn {
-    flex: 1;
-    max-width: 150px;
-}
-
-main .note_etoiles {
-  display: inline-flex;
-  cursor: pointer;
-  color: #ccc;
-  font-size: 1.5rem;
-}
-
-main .note_etoiles span {
-  transition: color 0.2s;
-}
-
-main .note_etoiles span.active {
-  color: gold;
-}
-main .note_etoiles.disabled {
-  pointer-events: none;
-  cursor: default;
-  opacity: 0.7;
-}
-
-
-
-main #client_formulaire #informations input {
-    padding: 0.5em 0.7em;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    width: 100%;
-    box-sizing: border-box;
-
-}
-
-
-/* ============================================= */
-/* =========== MAIN - PAGE CONNEXION =========== */
-/* ============================================= */
-
-main #connexion_main {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: auto;
-    background-color: var(--couleur-secondaire);
-}
-
-main #connexion_main .connexion_card,
-main #connexion_main .inscription_card {
-    position: relative;
-    background-color: #fff;
-    border-radius: 12px;
-    padding: 3rem 2rem 2rem 2rem;
-    width: 350px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    text-align: center;
-    border: 2px solid var(--couleur-tertiaire);
-}
-
-main #connexion_main
-
-/*.connexion_card*/
-.card_title {
-    position: absolute;
-    top: -0.9rem;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #fff;
-    padding: 0 1rem;
-    color: var(--couleur-principale);
-    font-weight: bold;
-    font-family: 'Georgia', serif;
-    font-size: 1.4rem;
-    border: 2px solid var(--couleur-tertiaire);
-    border-radius: 10px;
-}
-
-main .connexion_card form,
-main .inscription_card form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    width: 100%;
-}
-
-main .connexion_card form label,
-main .inscription_card form label {
-    align-self: flex-start;
-    margin-left: 1rem;
-    font-weight: bold;
-    color: var(--couleur-principale);
-}
-
-main .connexion_card form input,
-main .inscription_card form input {
-    width: 80%;
-}
-
-
-
-
-
-/* ============================================= */
-/* =========== MAIN - PAGE ADMIN ============== */
-/* ============================================= */
-
-main .btn_admin.active {
-    background-color: var(--couleur-principale);
-    color: var(--couleur-secondaire);
-}
-
-main #bdd_recherche_ajout {
-    display: flex;
-    justify-content: space-between;
-}
-
-main table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    
-
-}
-
-main th,
-main  td {
-    border: 1px solid #ddd;
-    padding: 12px 15px;
-    text-align: center;
-    word-wrap: break-word;
-}
-
-main  th {
-    background-color: var(--couleur-tertiaire);
-    color: var(--couleur-secondaire);
-    font-weight: bold;
-}
-
-main  tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-main  tr:hover {
-    background-color: #f1f1f1;
-}
-
-main  td .btn_crud {
-    padding: 5px 10px;
-    margin: 0 3px;
-}
-main #bdd_dashboard {
-  padding: 2vh 2vw;
-}
-
-main #bdd_dashboard h2 {
-  margin-bottom: 2vh;
-  text-align: center;
-}
-
-main .dashboard_cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 2vh;
-}
-
-main .dashboard_card {
-  background-color: #f5f5f5;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  padding: 2vh;
-  text-align: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-main .dashboard_card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-}
-
-main .dashboard_card h3 {
-  font-size: 1.2em;
-  margin-bottom: 1vh;
-  color: var(--couleur-principale, #333);
-}
-
-main .dashboard_value {
-  font-size: 2em;
-  font-weight: bold;
-  color: #222;
-}
-
-
-
-/* ============================================= */
-/* =========== MAIN - MODAL ==================== */
-/* ============================================= */
-/* ----- MODAL CRUD ----- */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 999;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.6);
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-content {
-    position: relative;
-  background-color: white;
-  padding: 2vh 3vh;
-  border-radius: 15px;
-  width: 40%;
-  min-width: 350px;
-  max-height: 80vh;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 2vh;
-}
-
-.modal-content h2 {
-  text-align: center;
-  margin-bottom: 1vh;
-  color: var(--couleur-principale);
-}
-.modal-content select[multiple] {
-  width: 100%;
-  min-height: 6em;
-  padding: 0.4em;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background-color: #fdfdfd;
-  font-size: 0.95em;
-}
-
-
-.modal .close {
-  position:absolute ;
-  right: 2vh;
-  top: 2vh;
-  font-size: 1.8em;
-  cursor: pointer;
-  color: #666;
-  transition: 0.2s;
-}
-
-.modal .close:hover {
-  color: var(--couleur-principale);
-}
-
-/* Champs du formulaire dans la modal */
-#modal_form div {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1vh;
-}
-
-#modal_form label {
-  font-weight: bold;
-  margin-bottom: 0.5vh;
-}
-
-#modal_form input {
-  padding: 0.8vh 1vh;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 1em;
-}
-
-/* Boutons de bas de modal */
-.modal-footer {
-  display: flex;
-  justify-content: space-between;
-  gap: 1vh;
-  margin-top: 2vh;
-}
-
-#modal_cancel,
-#modal_confirm {
-  flex: 1;
-  padding: 1vh;
-  border: none;
-  border-radius: 8px;
-  font-size: 1em;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-#modal_cancel {
-  background-color: #ccc;
-}
-
-#modal_cancel:hover {
-  background-color: #bbb;
-}
-
-#modal_confirm {
-  background-color: var(--couleur-principale);
-  color: white;
-}
-
-#modal_confirm:hover {
-  background-color: var(--couleur-secondaire);
-}
-
-
-
-
-/* ============================================= */
-/* =========== MAIN - CARROUSSELLE ============= */
-/* ============================================= */
-
-main #recherche_section {
+#recherche_section {
     display: flex;
     justify-content: center;
     margin: 20px auto;
@@ -715,39 +175,39 @@ main #recherche_section {
 
 
 
-main #filtre_section h2 {
+#filtre_section h2 {
     text-align: center;
     margin-bottom: 20px;
     color: var(--couleur-principale);
 }
 
-main #filtre_form {
+#filtre_form {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
 }
 
-main .filtre_groupe {
+.filtre_groupe {
     display: flex;
     flex-direction: column;
     min-width: 180px;
 }
 
-main .filtre_groupe label {
+.filtre_groupe label {
     margin-bottom: 5px;
     font-weight: bold;
     color: var(--couleur-principale);
 }
 
-main .filtre_groupe select {
+.filtre_groupe select {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 8px;
     background-color: #f9f9f9;
 }
 
-main #filtre_form .btn {
+#filtre_form .btn {
     background-color: var(--couleur-principale);
     color: var(--couleur-secondaire);
     border: none;
@@ -757,22 +217,22 @@ main #filtre_form .btn {
     transition: 0.3s;
 }
 
-main #filtre_form .btn:hover {
+#filtre_form .btn:hover {
     background-color: var(--couleur-principale-hover);
 }
 
-main .filtre_range {
+.filtre_range {
     display: flex;
     gap: 10px;
 }
 
-main .filtre_range div {
+.filtre_range div {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 }
 
-main .filtre_range input[type="number"] {
+.filtre_range input[type="number"] {
     width: 80px;
     padding: 6px;
     border: 1px solid #ccc;
@@ -781,7 +241,7 @@ main .filtre_range input[type="number"] {
 }
 
 
-main .carrousel-container {
+.carrousel-container {
     position: relative;
     display: flex;
     align-items: center;
@@ -795,7 +255,7 @@ main .carrousel-container {
 }
 
 /* Carrousel horizontal */
-main .carrousel {
+.carrousel {
     display: flex;
     gap: 20px;
     overflow-x: auto;
@@ -804,12 +264,12 @@ main .carrousel {
     scrollbar-width: none;
 }
 
-main .carrousel::-webkit-scrollbar {
+.carrousel::-webkit-scrollbar {
     display: none;
 }
 
 /* Cartes de jeux */
-main .carte-jeu, main .carte-table{
+.carte-jeu, .carte-table{
     flex: 0 0 250px;
     background: var(--couleur-secondaire);
     border-radius: 12px;
@@ -818,13 +278,13 @@ main .carte-jeu, main .carte-table{
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
-main .carte-jeu:hover  main .carte-table:hover{
+.carte-jeu:hover  .carte-table:hover{
     transform: scale(1.05);
     box-shadow: 0 4px 10px rgba(75, 30, 13, 0.3);
 }
 
 /* Image */
-main .carte-jeu img,  main .carte-table img {
+.carte-jeu img,  .carte-table img {
     width: 100%;
     height: 160px;
     object-fit: fill;
@@ -832,29 +292,29 @@ main .carte-jeu img,  main .carte-table img {
 }
 
 /* Informations */
-main .carte-info {
+.carte-info {
     padding: 10px;
     text-align: center;
     color: var(--couleur-principale);
 }
 
-main .carte-info h3 {
+.carte-info h3 {
     margin-bottom: 5px;
 }
 
-main .carte-info p {
+.carte-info p {
     color: rgba(75, 30, 13, 0.8);
 }
 
 /* Boutons d'action */
-main .actions {
+.actions {
     margin-top: 10px;
     display: flex;
     justify-content: center;
     gap: 8px;
 }
 
-main .actions .btn {
+.actions .btn {
     padding: 6px 12px;
     border: none;
     border-radius: 8px;
@@ -864,13 +324,13 @@ main .actions .btn {
     transition: background 0.2s, transform 0.2s;
 }
 
-main .actions .btn:hover {
+.actions .btn:hover {
     background: var(--couleur-principale-hover);
     transform: scale(1.05);
 }
 
 /* Flèches de navigation */
-main .nav-btn {
+.nav-btn {
     background: var(--couleur-secondaire);
     color: var(--couleur-principale);
     border: 2px solid var(--couleur-tertiaire);
@@ -884,7 +344,7 @@ main .nav-btn {
     transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 
-main .nav-btn:hover {
+.nav-btn:hover {
     background: var(--couleur-secondaire-hover);
     transform: scale(1.1);
     box-shadow: 0 0 6px rgba(75, 30, 13, 0.3);
@@ -916,43 +376,5 @@ main .nav-btn:hover {
     right: 10px;
 }
 
-
-
-
-
-/* ============================================= */
-/* =========== FOOTER ========================== */
-/* ============================================= */
-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap:40px;
-    padding: 4vh 8vh;
-    text-align: center;
-}
-
-footer #footer_contact ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-footer #footer_image,
-footer #footer_contact,
-footer #footer_adresse {
-    flex: 1;
-    min-width: 200px;
-}
-
-footer #footer_image #footer_logo {
-    height: 15vh;
-    object-fit: contain;
-}
-footer #footer_adresse p {
-    margin: 0 0 8px;
-    line-height: 1.4;
-}
 
 

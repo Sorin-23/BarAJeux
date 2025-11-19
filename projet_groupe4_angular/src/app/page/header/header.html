@@ -18,7 +18,7 @@
       <a routerLink="/table" routerLinkActive="active">Réservation de table</a>
       <a routerLink="/jeu" routerLinkActive="active">Réservation de jeu</a>
       <a routerLink="/client" routerLinkActive="active">Compte</a>
-      <a routerLink="/admin" routerLinkActive="active">Admin</a>
+      <a *ngIf="role === 'ROLE_EMPLOYE'" routerLink="/admin" routerLinkActive="active">Admin</a>
       <a (click)="logout()">Se déconnecter</a>
     </ng-container>
 

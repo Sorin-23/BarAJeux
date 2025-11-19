@@ -1,1 +1,43 @@
-<p>login-page works!</p>
+<div id="connexion_main">
+  <div class="connexion_card bordered">
+    <span class="card_title">Connexion</span>
+    @if (loginError) {
+    <div>Nom d'utilisateur ou mot de passe incorrect</div>
+    }
+    <form (ngSubmit)="connecter()" [formGroup]="userForm">
+      <label for="email">Adresse e-mail</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        placeholder="exemple@mail.com"
+        formControlName="username"
+        required
+      />
+      <span *ngIf="usernameCtrl?.hasError('required')">Le nom d'utilisateur est obligatoire</span>
+        <br>
+      <label for="password">Mot de passe</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Votre mot de passe"
+        formControlName="password"
+        required
+      />
+      <span *ngIf="passwordCtrl?.hasError('required')">Le mot de passe est obligatoire</span>
+    <br>
+      <input type="submit" value="Me connecter" class="btn" [disabled]="userForm.invalid"/>
+      <p>Pas encore inscrit ? <a href="#" id="switchToInscription">Inscription</a></p>
+
+      
+
+    </form>
+  </div>
+
+
+
+<!-- faire la section Inscription -->
+
+</div>
+

@@ -1,0 +1,90 @@
+
+/* ============================================= */
+/* =========== - PAGE INDEX ============== */
+/* ============================================= */
+
+#message_bienvenu {
+    display: flex;
+    flex-direction: row;
+    gap: 5vh;
+}
+
+#message_bienvenu .badge_img {
+    height: 10vh;
+    width: auto;
+    border-radius: 10px;
+}
+
+
+#img_bar {
+    height: 40vh;
+    display: block;
+    margin: 20px auto;
+    width: auto;
+
+}
+
+.bloc-resa {
+    display: flex;
+    height: 12vh;
+    align-items: center;
+    text-align: center;
+    margin-top: 10vh;
+    gap: 5%;
+
+
+}
+
+
+.bloc-resa .logo_resa {
+    flex: 1;
+    max-height: 20vh;
+    width: auto;
+    border-radius: 20px;
+
+}
+
+.class_resa {
+    flex: 2;
+    text-decoration: none;
+    color: var(--couleur-principale);
+    margin-right: 20vh;
+    width: 80%;
+}
+
+.class_resa:hover {
+    text-decoration: underline;
+
+}
+
+.bloc-resa h2 {
+    text-align: center;
+}
+
+#info_jeu {
+    margin: 10vh;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+#info_jeu #right_container {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#info_jeu #left_container {
+    flex: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#info_jeu #left_container img {
+    max-width: 60%;
+    border-radius: 15px;
+    object-fit: cover;
+}

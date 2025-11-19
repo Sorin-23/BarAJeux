@@ -1,0 +1,35 @@
+
+/* ============================================= */
+/* =========== HEADER ========================== */
+/* ============================================= */
+header {
+    display: flex;
+    height: 12vh;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 10px;
+
+}
+
+header .logo img {
+    height: 10vh;
+    width: auto;
+    margin: 1vh;
+}
+
+header nav a {
+    color: var(--couleur-secondaire);
+    text-decoration: none;
+    margin-left: 15px;
+
+}
+
+header nav a:hover {
+    text-decoration: underline;
+}
+
+header .menu a.active {
+    color: var(--couleur-tertiaire);
+    font-weight: bold;
+    border-bottom: 2px solid var(--couleur-tertiaire);
+}

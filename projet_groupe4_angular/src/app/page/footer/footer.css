@@ -1,0 +1,36 @@
+
+/* ============================================= */
+/* =========== FOOTER ========================== */
+/* ============================================= */
+footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap:40px;
+    padding: 4vh 8vh;
+    text-align: center;
+}
+
+footer #footer_contact ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+footer #footer_image,
+footer #footer_contact,
+footer #footer_adresse {
+    flex: 1;
+    min-width: 200px;
+}
+
+footer #footer_image #footer_logo {
+    height: 15vh;
+    object-fit: contain;
+}
+footer #footer_adresse p {
+    margin: 0 0 8px;
+    line-height: 1.4;
+}
+

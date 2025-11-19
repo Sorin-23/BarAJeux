@@ -1,0 +1,132 @@
+
+/* ============================================= */
+/* =========== - PAGE CLIENT ============== */
+/* ============================================= */
+
+
+#client_formulaire {
+    display: flex;
+    gap: 5%;
+    padding: 1.5vh;
+
+
+}
+
+#client_reservation {
+    display: none;
+    gap: 5%;
+    padding: 1.5vh;
+    flex-direction: column;
+    width: 100%;
+
+}
+
+#client_formulaire #client_badge {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+#client_formulaire #client_badge .badge_img {
+    height: 40vh;
+    width: auto;
+    margin: 1vh;
+    border-radius: 10px;
+    margin-bottom: 1vh;
+
+}
+
+#client_formulaire #client_badge h4 {
+    text-align: center;
+    margin-top: 1vh;
+}
+
+#client_formulaire #informations {
+    flex: 4;
+    display: flex;
+    flex-direction: column;
+    gap: 5%;
+}
+
+#client_formulaire #informations form {
+
+    display: flex;
+    flex-direction: column;
+}
+
+#client_formulaire #informations label {
+    font-weight: bold;
+    margin-bottom: 0.3vh;
+}
+
+#client_formulaire #informations #gameMaster {
+    width: 1.2em;
+    height: 1.2em;
+    cursor: pointer;
+    accent-color: var(--couleur-principale);
+
+}
+
+#client_reservation #client_retour_infos{
+    display: flex;
+    justify-content: flex-start;
+}
+
+#client_reservation .input_avis {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 5px;
+  resize: vertical;
+}
+
+#client_reservation .input_avis:disabled {
+  background-color: #f3f3f3;
+  color: #666;
+}
+
+#client_btn_section {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-start;
+    margin-top: 1.5vh;
+}
+
+#client_btn_section .btn {
+    flex: 1;
+    max-width: 150px;
+}
+
+.note_etoiles {
+  display: inline-flex;
+  cursor: pointer;
+  color: #ccc;
+  font-size: 1.5rem;
+}
+
+.note_etoiles span {
+  transition: color 0.2s;
+}
+
+.note_etoiles span.active {
+  color: gold;
+}
+.note_etoiles.disabled {
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.7;
+}
+
+
+
+#client_formulaire #informations input {
+    padding: 0.5em 0.7em;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    width: 100%;
+    box-sizing: border-box;
+
+}

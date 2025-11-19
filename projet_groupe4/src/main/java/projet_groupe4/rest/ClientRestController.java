@@ -47,7 +47,7 @@ public class ClientRestController {
 
     @PostMapping
     @JsonView(Views.Client.class)
-    @PreAuthorize("hasAnyRole('EMPLOYE')")
+    @PreAuthorize("hasAnyRole('CLIENT')")
     public ClientResponse ajouterClient(@Valid @RequestBody SubcribeClientRequest request) {
         Client client = new Client();
         BeanUtils.copyProperties(request, client);
@@ -59,7 +59,7 @@ public class ClientRestController {
 
     @PutMapping("/{id}")
     @JsonView(Views.Client.class)
-    @PreAuthorize("hasAnyRole('EMPLOYE')")
+    @PreAuthorize("hasAnyRole('CLIENT')")
     public ClientResponse modifierClient(@PathVariable int id, @Valid @RequestBody SubcribeClientRequest request) {
         Client client = this.srv.getClientById(id).orElseThrow(IdNotFoundException::new);
         BeanUtils.copyProperties(request, client);
@@ -70,7 +70,7 @@ public class ClientRestController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('EMPLOYE')")
+    @PreAuthorize("hasRole('CLIENT')")
     public void deleteClient(@PathVariable Integer id) {
         this.srv.deleteById(id);
     }

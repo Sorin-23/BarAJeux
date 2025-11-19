@@ -1,0 +1,61 @@
+
+/* ============================================= */
+/* =========== MAIN - PAGE CONNEXION =========== */
+/* ============================================= */
+
+#connexion_main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    background-color: var(--couleur-secondaire);
+}
+
+#connexion_main .connexion_card,
+#connexion_main .inscription_card {
+    position: relative;
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 3rem 2rem 2rem 2rem;
+    width: 350px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    border: 2px solid var(--couleur-tertiaire);
+}
+
+#connexion_main .card_title {
+    position: absolute;
+    top: -0.9rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fff;
+    padding: 0 1rem;
+    color: var(--couleur-principale);
+    font-weight: bold;
+    font-family: 'Georgia', serif;
+    font-size: 1.4rem;
+    border: 2px solid var(--couleur-tertiaire);
+    border-radius: 10px;
+}
+
+.connexion_card form,
+.inscription_card form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+}
+
+.connexion_card form label,
+.inscription_card form label {
+    align-self: flex-start;
+    margin-left: 1rem;
+    font-weight: bold;
+    color: var(--couleur-principale);
+}
+
+.connexion_card form input,
+.inscription_card form input {
+    width: 80%;
+}
