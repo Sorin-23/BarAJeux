@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpInterceptorFn } from '@angular/common/http';
 
-import { jwtHeaderInterceptorInterceptor } from './jwt-header-interceptor-interceptor';
+import { apiUrlInterceptor } from './api-url-interceptor';
 
-describe('jwtHeaderInterceptorInterceptor', () => {
+describe('apiUrlInterceptor', () => {
   const interceptor: HttpInterceptorFn = (req, next) => 
-    TestBed.runInInjectionContext(() => jwtHeaderInterceptorInterceptor(req, next));
+    TestBed.runInInjectionContext(() => apiUrlInterceptor(req, next));
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
