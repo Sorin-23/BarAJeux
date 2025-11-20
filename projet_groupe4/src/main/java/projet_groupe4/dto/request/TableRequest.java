@@ -11,6 +11,10 @@ private String nomTable;
 @NotNull
 @Min(1)
 private int capacite;
+@NotBlank
+private String imgUrl;
+
+
 public String getNomTable() {
 return nomTable;
 }
@@ -23,6 +27,13 @@ return capacite;
 public void setCapacite(int capacite) {
 this.capacite = capacite;
 }
+public String getImgUrl() {
+	return imgUrl;
+}
+public void setImgUrl(String imgUrl) {
+	this.imgUrl = imgUrl;
+}
+
 
 
 

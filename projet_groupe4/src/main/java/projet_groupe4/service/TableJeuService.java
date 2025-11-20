@@ -1,6 +1,7 @@
 package projet_groupe4.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,8 @@ public class TableJeuService {
 		return this.dao.findAll();
 	}
 	
-	public TableJeu getById(Integer id) {
-		return this.dao.findById(id).orElseThrow(() -> new ResourceNotFoundException());
-	}
+	public Optional<TableJeu>  getById(Integer id) {
+		return this.dao.findById(id);	}
 	
 	public TableJeu create(TableJeu tableJeu) {
 		return this.dao.save(tableJeu);

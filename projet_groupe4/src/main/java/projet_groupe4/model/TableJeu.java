@@ -30,6 +30,9 @@ public class TableJeu {
 	@OneToMany(mappedBy = "tableJeu")
 	@JsonView(Views.TableJeu.class)
 	private List<Reservation> reservations = new ArrayList();
+	@Column(name="img_url", columnDefinition="varchar(100)")
+	@JsonView(Views.Common.class)
+	private String imgUrl;
 	// Constructors
 	public TableJeu() {}
 	public TableJeu(Integer id, String nomTable, int capacite) {
@@ -61,6 +64,8 @@ public class TableJeu {
 	public void setCapacite(int capacite) {
 		this.capacite = capacite;
 	}
+	public String getImgUrl() { return imgUrl; }
+	public void setImgUrl(String imgUrl) { this.imgUrl = imgUrl; }
 	
 	
 
@@ -70,7 +75,7 @@ public class TableJeu {
 	public String toString() {
 		return "Table [id=" + id + ", nomTable=" + nomTable + ", capacite=" + capacite + "]";
 	}
-	
+
 	
 
 }

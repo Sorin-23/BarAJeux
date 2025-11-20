@@ -7,7 +7,8 @@ export class TableJeu {
     private _id: number,
     private _nomTable: string,
     private _capacite: number,
-    private _reservations: Reservation[] = []
+    private _reservations: Reservation[] = [],
+    private _imgUrl : string
   ) {}
 
   // Getters & Setters
@@ -39,11 +40,19 @@ export class TableJeu {
     this._reservations = value;
   }
 
+    public get imgUrl(): string {
+    return this._imgUrl;
+  }
+  public set imgUrl(value: string) {
+    this._imgUrl = value;
+  }
+
   public toJson(): any {
     return {
       nomTable: this._nomTable,
       capacite: this._capacite,
-      reservations: this._reservations.map(r => r.toJson())
+      reservations: this._reservations.map(r => r.toJson()),
+      imgUrl:this._imgUrl
     };
   }
 }
