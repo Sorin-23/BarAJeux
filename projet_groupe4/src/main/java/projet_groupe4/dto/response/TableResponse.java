@@ -1,19 +1,19 @@
 package projet_groupe4.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonView;
 
-import projet_groupe4.view.Views;
+
+
 import projet_groupe4.model.TableJeu;
 
 
 public class TableResponse {
 
 
-    @JsonView(Views.Common.class)
+    
     private Integer id;
-    @JsonView(Views.Common.class)
+    
     private String nomTable;
-    @JsonView(Views.Common.class)
+    
     private int capacite;
 
 

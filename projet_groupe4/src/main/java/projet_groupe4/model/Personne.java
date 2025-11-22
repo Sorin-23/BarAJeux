@@ -1,6 +1,6 @@
 package projet_groupe4.model;
 
-import com.fasterxml.jackson.annotation.JsonView;
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
@@ -11,7 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
-import projet_groupe4.view.Views;
+
 
 @Entity
 @Table(name="compte")
@@ -20,22 +20,22 @@ import projet_groupe4.view.Views;
 public abstract class Personne {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@JsonView(Views.Common.class)
+	
 	private Integer id;
 	@Column(columnDefinition="varchar(20)", nullable=false)
-	@JsonView(Views.Common.class)
+	
 	private String nom;
 	@Column(columnDefinition="varchar(20)", nullable=false)
-	@JsonView(Views.Common.class)
+	
 	private String prenom;
 	@Column(name="mail",columnDefinition="varchar(100)", nullable=false, unique = true)
-	@JsonView(Views.Common.class)
+	
 	private String mail;
 	@Column(name ="mot_de_passe",nullable = false,columnDefinition = "VARCHAR(120)")
-	@JsonView(Views.Common.class)
+	
 	private String mdp;
 	@Column(name="numero_telephone")
-	@JsonView(Views.Common.class)
+	
 	private String telephone;
 
 	

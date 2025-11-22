@@ -1,34 +1,34 @@
 package projet_groupe4.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonView;
+
 
 import projet_groupe4.model.Employe;
-import projet_groupe4.view.Views;
+
 
 public class EmployeResponse {
 
-     @JsonView(Views.Common.class)
+     
 	private Integer id;
 	
-	@JsonView(Views.Common.class)
+	
 	private String nom;
 	
-	@JsonView(Views.Common.class)
+	
 	private String prenom;
 	
-	@JsonView(Views.Common.class)
+	
 	private String mail;
 	/*
-	@JsonView(Views.Common.class)
+	
 	private String mdp;
 */
 	
-	@JsonView(Views.Common.class)
+	
 	private String telephone;
 
-    @JsonView(Views.Common.class)
+    
 	private String job;
-	@JsonView(Views.Common.class)
+	
 	private boolean gameMaster;
     public Integer getId() {
         return id;

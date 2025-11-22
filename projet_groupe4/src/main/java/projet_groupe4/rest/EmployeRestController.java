@@ -14,15 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.annotation.JsonView;
-
 import jakarta.validation.Valid;
-import projet_groupe4.dto.request.SubcribeEmployeRequest;
+import projet_groupe4.dto.request.SubscribeEmployeRequest;
 import projet_groupe4.dto.response.EmployeResponse;
 import projet_groupe4.exception.IdNotFoundException;
 import projet_groupe4.model.Employe;
 import projet_groupe4.service.PersonneService;
-import projet_groupe4.view.Views;
 
 @RestController
 @RequestMapping("/api/employe")
@@ -33,22 +30,19 @@ public class EmployeRestController {
     private PersonneService srv;
 
     @GetMapping
-    @JsonView(Views.Employe.class)
     public List<EmployeResponse> allEmployes() {
-    	System.out.println("Appel de allEmployes");
-    	return this.srv.getAllEmployes().stream().map(EmployeResponse::convert).toList();
+        System.out.println("Appel de allEmployes");
+        return this.srv.getAllEmployes().stream().map(EmployeResponse::convert).toList();
     }
 
     @GetMapping("/{id}")
-    @JsonView(Views.Employe.class)
     public EmployeResponse ficheEmploye(@PathVariable Integer id) {
         return this.srv.getEmployeById(id).map(EmployeResponse::convert).orElseThrow(IdNotFoundException::new);
     }
 
     @PostMapping
-    @JsonView(Views.Employe.class)
     @PreAuthorize("hasRole('EMPLOYE')")
-    public EmployeResponse ajouterEmploye(@Valid @RequestBody SubcribeEmployeRequest request) {
+    public EmployeResponse ajouterEmploye(@Valid @RequestBody SubscribeEmployeRequest request) {
         Employe employe = new Employe();
         BeanUtils.copyProperties(request, employe);
 
@@ -58,9 +52,9 @@ public class EmployeRestController {
     }
 
     @PutMapping("/{id}")
-    @JsonView(Views.Employe.class)
     @PreAuthorize("hasRole('EMPLOYE')")
-    public EmployeResponse modifierEmploye(@PathVariable Integer id, @Valid @RequestBody SubcribeEmployeRequest request) {
+    public EmployeResponse modifierEmploye(@PathVariable Integer id,
+            @Valid @RequestBody SubscribeEmployeRequest request) {
         Employe employe = this.srv.getEmployeById(id).orElseThrow(IdNotFoundException::new);
         BeanUtils.copyProperties(request, employe);
 

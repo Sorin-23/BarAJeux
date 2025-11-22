@@ -13,16 +13,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.annotation.JsonView;
-
 import jakarta.validation.Valid;
 import projet_groupe4.dto.request.AvisRequest;
 import projet_groupe4.dto.response.AvisResponse;
 import projet_groupe4.exception.IdNotFoundException;
 import projet_groupe4.model.Avis;
 import projet_groupe4.service.AvisService;
-import projet_groupe4.view.Views;
 
 @RestController
 @RequestMapping("/api/avis")
@@ -33,19 +29,16 @@ public class AvisRestController {
 	private AvisService srv;
 
 	@GetMapping
-	@JsonView(Views.Avis.class)
 	public List<AvisResponse> allAviss() {
 		return this.srv.getAll().stream().map(AvisResponse::convert).toList();
 	}
 
 	@GetMapping("/{id}")
-	@JsonView(Views.Avis.class)
 	public AvisResponse ficheAvis(@PathVariable int id) {
 		return this.srv.getById(id).map(AvisResponse::convert).orElseThrow(IdNotFoundException::new);
 	}
 
 	@PostMapping
-	@JsonView(Views.Avis.class)
 	@PreAuthorize("hasAnyRole('EMPLOYE')")
 	public AvisResponse ajouterAvis(@Valid @RequestBody AvisRequest request) {
 		Avis avis = new Avis();
@@ -57,7 +50,6 @@ public class AvisRestController {
 	}
 
 	@PutMapping("/{id}")
-	@JsonView(Views.Avis.class)
 	@PreAuthorize("hasAnyRole('EMPLOYE')")
 	public AvisResponse modifierAvis(@PathVariable int id, @Valid @RequestBody AvisRequest request) {
 		Avis avis = this.srv.getById(id).orElseThrow(IdNotFoundException::new);

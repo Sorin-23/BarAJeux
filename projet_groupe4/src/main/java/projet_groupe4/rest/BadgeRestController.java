@@ -14,15 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.annotation.JsonView;
-
 import jakarta.validation.Valid;
 import projet_groupe4.dto.request.BadgeRequest;
 import projet_groupe4.dto.response.BadgeResponse;
 import projet_groupe4.exception.IdNotFoundException;
 import projet_groupe4.model.Badge;
 import projet_groupe4.service.BadgeService;
-import projet_groupe4.view.Views;
 
 @RestController
 @RequestMapping("/api/badge")
@@ -33,19 +30,16 @@ public class BadgeRestController {
     private BadgeService srv;
 
     @GetMapping
-    @JsonView(Views.Badge.class)
     public List<BadgeResponse> allBadges() {
         return this.srv.getAll().stream().map(BadgeResponse::convert).toList();
     }
 
     @GetMapping("/{id}")
-    @JsonView(Views.Badge.class)
     public BadgeResponse ficheBadge(@PathVariable int id) {
         return this.srv.getById(id).map(BadgeResponse::convert).orElseThrow(IdNotFoundException::new);
     }
 
     @PostMapping
-    @JsonView(Views.Badge.class)
     @PreAuthorize("hasAnyRole('EMPLOYE')")
     public BadgeResponse ajouterBadge(@Valid @RequestBody BadgeRequest request) {
         Badge badge = new Badge();
@@ -57,7 +51,6 @@ public class BadgeRestController {
     }
 
     @PutMapping("/{id}")
-    @JsonView(Views.Badge.class)
     @PreAuthorize("hasAnyRole('EMPLOYE')")
     public BadgeResponse modifierBadge(@PathVariable int id, @Valid @RequestBody BadgeRequest request) {
         Badge badge = this.srv.getById(id).orElseThrow(IdNotFoundException::new);

@@ -13,16 +13,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.annotation.JsonView;
-
 import jakarta.validation.Valid;
 import projet_groupe4.dto.request.JeuRequest;
 import projet_groupe4.dto.response.JeuResponse;
 import projet_groupe4.exception.IdNotFoundException;
 import projet_groupe4.model.Jeu;
 import projet_groupe4.service.JeuService;
-import projet_groupe4.view.Views;
 
 @RestController
 @RequestMapping("/api/jeu")
@@ -33,20 +29,17 @@ public class JeuRestController {
     private JeuService srv;
 
     @GetMapping
-    @JsonView(Views.Jeu.class)
     public List<JeuResponse> allJeus() {
         return this.srv.getAll().stream().map(JeuResponse::convert).toList();
     }
 
     @GetMapping("/{id}")
-    @JsonView(Views.Jeu.class)
     public JeuResponse ficheJeu(@PathVariable int id) {
         return this.srv.getById(id).map(JeuResponse::convert).orElseThrow(IdNotFoundException::new);
     }
 
     @PostMapping
-    @JsonView(Views.Jeu.class)
-    @PreAuthorize("hasAnyRole('EMPLOYE')")
+    @PreAuthorize("hasRole('EMPLOYE')")
     public JeuResponse ajouterJeu(@Valid @RequestBody JeuRequest request) {
         Jeu jeu = new Jeu();
         BeanUtils.copyProperties(request, jeu);
@@ -57,8 +50,7 @@ public class JeuRestController {
     }
 
     @PutMapping("/{id}")
-    @JsonView(Views.Jeu.class)
-    @PreAuthorize("hasAnyRole('EMPLOYE')")
+    @PreAuthorize("hasRole('EMPLOYE')")
     public JeuResponse modifierJeu(@PathVariable int id, @Valid @RequestBody JeuRequest request) {
         Jeu jeu = this.srv.getById(id).orElseThrow(IdNotFoundException::new);
         BeanUtils.copyProperties(request, jeu);

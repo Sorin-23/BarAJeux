@@ -14,15 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.annotation.JsonView;
-
 import jakarta.validation.Valid;
-import projet_groupe4.dto.request.SubcribeClientRequest;
+import projet_groupe4.dto.request.SubscribeClientRequest;
 import projet_groupe4.dto.response.ClientResponse;
+import projet_groupe4.dto.response.ClientWithEmpruntResponse;
+import projet_groupe4.dto.response.ClientWithReservationResponse;
 import projet_groupe4.exception.IdNotFoundException;
 import projet_groupe4.model.Client;
 import projet_groupe4.service.PersonneService;
-import projet_groupe4.view.Views;
 
 @RestController
 @RequestMapping("/api/client")
@@ -33,22 +32,31 @@ public class ClientRestController {
     private PersonneService srv;
 
     @GetMapping
-    @JsonView(Views.Client.class)
     public List<ClientResponse> allClients() {
 
         return this.srv.getAllClients().stream().map(ClientResponse::convert).toList();
     }
 
     @GetMapping("/{id}")
-    @JsonView(Views.Client.class)
     public ClientResponse ficheClient(@PathVariable int id) {
         return this.srv.getClientById(id).map(ClientResponse::convert).orElseThrow(IdNotFoundException::new);
     }
 
+    @GetMapping("/reservations/{id}")
+    public ClientWithReservationResponse clientWithResa(@PathVariable int id) {
+        Client client = this.srv.getClientById(id).orElseThrow(IdNotFoundException::new);
+        return ClientWithReservationResponse.convert(client);
+    }
+
+    @GetMapping("/emprunts/{id}")
+    public ClientWithEmpruntResponse clientWithEmprunts(@PathVariable int id) {
+        Client client = this.srv.getClientById(id).orElseThrow(IdNotFoundException::new);
+        return ClientWithEmpruntResponse.convert(client);
+    }
+
     @PostMapping
-    @JsonView(Views.Client.class)
-    @PreAuthorize("hasAnyRole('CLIENT')")
-    public ClientResponse ajouterClient(@Valid @RequestBody SubcribeClientRequest request) {
+    @PreAuthorize("hasRole('EMPLOYE')")
+    public ClientResponse ajouterClient(@Valid @RequestBody SubscribeClientRequest request) {
         Client client = new Client();
         BeanUtils.copyProperties(request, client);
 
@@ -58,9 +66,8 @@ public class ClientRestController {
     }
 
     @PutMapping("/{id}")
-    @JsonView(Views.Client.class)
-    @PreAuthorize("hasAnyRole('CLIENT')")
-    public ClientResponse modifierClient(@PathVariable int id, @Valid @RequestBody SubcribeClientRequest request) {
+    @PreAuthorize("hasRole('EMPLOYE')")
+    public ClientResponse modifierClient(@PathVariable int id, @Valid @RequestBody SubscribeClientRequest request) {
         Client client = this.srv.getClientById(id).orElseThrow(IdNotFoundException::new);
         BeanUtils.copyProperties(request, client);
 
@@ -70,7 +77,7 @@ public class ClientRestController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('CLIENT')")
+    @PreAuthorize("hasRole('EMPLOYE')")
     public void deleteClient(@PathVariable Integer id) {
         this.srv.deleteById(id);
     }

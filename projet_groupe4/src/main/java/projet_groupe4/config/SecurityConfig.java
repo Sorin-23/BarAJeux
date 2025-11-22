@@ -17,10 +17,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
-@EnableMethodSecurity(prePostEnabled =  true)
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
     @Bean
-   SecurityFilterChain filterChain(HttpSecurity http, JwtHeaderFilter jwtFilter) throws Exception {
+    SecurityFilterChain filterChain(HttpSecurity http, JwtHeaderFilter jwtFilter) throws Exception {
         // Configurer ici les accès généraux
         http.authorizeHttpRequests(auth -> {
             // On autorise les ressources externes (JSP, CSS, JS, IMG)
@@ -41,7 +41,8 @@ public class SecurityConfig {
             CorsConfigurationSource source = request -> {
                 CorsConfiguration config = new CorsConfiguration();
 
-                // On autorise toutes les en-têtes HTTP, toutes les méthodes HTTP de tous les domaines
+                // On autorise toutes les en-têtes HTTP, toutes les méthodes HTTP de tous les
+                // domaines
                 config.setAllowedHeaders(List.of("*"));
                 config.setAllowedMethods(List.of("*"));
                 config.setAllowedOrigins(List.of("*"));
@@ -63,7 +64,8 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // Permet d'injecter dans le contexte de Spring l'AuthenticationManager actuellement utilisé par Spring Security
+    // Permet d'injecter dans le contexte de Spring l'AuthenticationManager
+    // actuellement utilisé par Spring Security
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();

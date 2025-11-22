@@ -1,7 +1,5 @@
 package projet_groupe4.model;
 
-import com.fasterxml.jackson.annotation.JsonView;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,26 +8,24 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import projet_groupe4.view.Views;
 
 @Entity
 @Table(name="avis_client")
 public class Avis {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@JsonView(Views.Common.class)
+	
 	private Integer id;
-	@JsonView(Views.Common.class)
+	
 	private int note;
 	@Column(name="titre",columnDefinition="varchar(20)", nullable=false)
-	@JsonView(Views.Common.class)
+	
 	private String titre;
 	@Column(name="commentaire",columnDefinition="varchar(200)")
-	@JsonView(Views.Common.class)
+	
 	private String commentaire;
 	@OneToOne
 	@JoinColumn(name="reservation")
-	@JsonView(Views.Avis.class)
 	private Reservation reservation;
 	
 	// Constructors 

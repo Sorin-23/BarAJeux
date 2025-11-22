@@ -14,15 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.annotation.JsonView;
-
 import jakarta.validation.Valid;
 import projet_groupe4.dto.request.EmpruntRequest;
 import projet_groupe4.dto.response.EmpruntResponse;
 import projet_groupe4.exception.IdNotFoundException;
 import projet_groupe4.model.Emprunt;
 import projet_groupe4.service.EmpruntService;
-import projet_groupe4.view.Views;
 
 @RestController
 @RequestMapping("/api/emprunt")
@@ -33,19 +30,16 @@ public class EmpruntRestController {
 	private EmpruntService srv;
 	
 	@GetMapping
-	@JsonView(Views.Emprunt.class)
 	public List<EmpruntResponse> allEmprunts(){
 		return this.srv.getAll().stream().map(EmpruntResponse::convert).toList();
 	}
 	
 	@GetMapping("/{id}")
-	@JsonView(Views.Emprunt.class)
 	public EmpruntResponse ficheEmprunt(@PathVariable Integer id) {
 		return this.srv.getById(id).map(EmpruntResponse::convert).orElseThrow(IdNotFoundException::new);
 	}
 	
 	@PostMapping
-	@JsonView(Views.Emprunt.class)
 	@PreAuthorize("hasRole('EMPLOYE')")
 	public EmpruntResponse ajouterEmprunt(@Valid @RequestBody EmpruntRequest request)
 	{
@@ -58,7 +52,6 @@ public class EmpruntRestController {
 	}
 
 	@PutMapping("/{id}")
-	@JsonView(Views.Emprunt.class)
 	@PreAuthorize("hasRole('EMPLOYE')")
 	public EmpruntResponse modifierEmprunt(@PathVariable Integer id,@Valid @RequestBody EmpruntRequest request)
 	{
