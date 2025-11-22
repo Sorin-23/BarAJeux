@@ -26,7 +26,8 @@ public class TableJeu {
 	private int capacite;
 	@OneToMany(mappedBy = "tableJeu")
 	private List<Reservation> reservations = new ArrayList<Reservation>();
-
+	@Column(name="img_url", columnDefinition="varchar(100)")
+	private String imgUrl;
 	// Constructors
 	public TableJeu() {
 	}
@@ -66,11 +67,15 @@ public class TableJeu {
 	public void setCapacite(int capacite) {
 		this.capacite = capacite;
 	}
+	public String getImgUrl() { return imgUrl; }
+	public void setImgUrl(String imgUrl) { this.imgUrl = imgUrl; }
 
 	// toString
 	@Override
 	public String toString() {
 		return "Table [id=" + id + ", nomTable=" + nomTable + ", capacite=" + capacite + "]";
 	}
+	
+	
 
 }

@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
 })
 export class Header implements OnInit {
   public role: string = '';
-isLoggedIn$: Observable<boolean>;
+  isLoggedIn$: Observable<boolean>;
 
   constructor(private authService: AuthService, private router : Router) {
     this.isLoggedIn$ = this.authService.isLoggedIn$;

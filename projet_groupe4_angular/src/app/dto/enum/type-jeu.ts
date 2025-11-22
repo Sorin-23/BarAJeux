@@ -1,0 +1,9 @@
+export enum TypeJeu {
+    CARTES = 'CARTES',
+  DES = 'DES',
+  PLATEAU = 'PLATEAU',
+  FIGURINES = 'FIGURINES',
+  ROLE = 'ROLE',
+  COOPERATIF = 'COOPERATIF',
+  NARRATIF = 'NARRATIF'
+}

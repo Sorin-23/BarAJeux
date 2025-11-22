@@ -1,1 +1,50 @@
-<p>table-page works!</p>
+<h1>Réservez votre table</h1>
+<section id="filtre_section" class="block_white">
+  <h2>Filtrer les tables</h2>
+  <form id="filtre_form" [formGroup]="filtreForm" (ngSubmit)="appliquerFiltre()">
+    <div class="filtre_groupe">
+      <label for="nbPersonne">Nombre de personnes</label>
+      <input type="number" id="nbPersonne" min="1" max="10" formControlName="nbPersonnes"/>
+    </div>
+
+    <div class="filtre_groupe">
+      <label for="date">Date</label>
+      <input type="date" id="date" formControlName="date"/>
+      <!-- mettre minimum date du jour-->
+    </div>
+
+    <div class="filtre_groupe">
+      <label for="heureArrivee">Heure d'arrivée</label>
+      <input type="time" id="heureArrivee" formControlName="heureArrivee"/>
+      <!-- mettre inférieur a date départ mais aussi supérieur à heure actuel si date = aujourd'hui-->
+    </div>
+    <div class="filtre_groupe">
+      <label for="heureDepart">Heure de départ</label>
+      <input type="time" id="heureDepart" formControlName="heureDepart"/>
+    </div>
+
+    <input type="submit" value="Appliquer les filtres" class="btn" />
+  </form>
+</section>
+
+<section id="resultat_filtre" class="block_white">
+  <h2>🎲 Nos tables</h2>
+  <div class="carrousel-container">
+    <button class="nav-btn prev" (click)="prev()">&#10094;</button>
+
+    <div class="carrousel">
+      <div class="carte-table" *ngFor="let table of tables">
+        <img [src]="'assets/images/table/' + table.imgUrl" [alt]="table.nomTable" />
+        <div class="carte-info">
+          <h3>{{ table.nomTable }}</h3>
+          <p>{{ table.capacite }} personnes</p>
+          <div class="actions">
+            <button class="btn btn-reserver">Réserver</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="nav-btn next" (click)="next()">&#10095;</button>
+  </div>
+</section>

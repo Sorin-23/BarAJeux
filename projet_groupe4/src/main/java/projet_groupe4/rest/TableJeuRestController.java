@@ -14,57 +14,64 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import jakarta.validation.Valid;
 import projet_groupe4.dto.request.TableRequest;
 import projet_groupe4.dto.response.TableResponse;
 import projet_groupe4.exception.IdNotFoundException;
 import projet_groupe4.model.TableJeu;
 import projet_groupe4.service.TableJeuService;
+import projet_groupe4.view.Views;
 
 @RestController
-@RequestMapping("/api/tablejeu")
+@RequestMapping("/api/tableJeu")
+@PreAuthorize("hasAnyRole('EMPLOYE', 'CLIENT')")
 public class TableJeuRestController {
 
-    @Autowired
-    private TableJeuService srv;
+	@Autowired
+	private TableJeuService srv;
 
-    @GetMapping
-    public List<TableResponse> allTablesJeu() {
-        return this.srv.getAll().stream().map(TableResponse::convert).toList();
-    }
+	@GetMapping
+	@JsonView(Views.TableJeu.class)
+	public List<TableResponse> allTableJeus() {
+		return this.srv.getAll().stream().map(TableResponse::convert).toList();
+	}
 
-    @GetMapping("/{id}")
-    public TableResponse ficheReservation(@PathVariable int id) {
-        return this.srv.getById(id).map(TableResponse::convert).orElseThrow(IdNotFoundException::new);
-    }
+	@GetMapping("/{id}")
+	@JsonView(Views.TableJeu.class)
+	public TableResponse ficheTableJeu(@PathVariable int id) {
+		return this.srv.getById(id).map(TableResponse::convert).orElseThrow(IdNotFoundException::new);
+	}
 
-    @PostMapping
-    @PreAuthorize("hasAnyRole('EMPLOYE')")
-    public TableResponse ajouterReservation(@Valid @RequestBody TableRequest request) {
-        TableJeu tableJeu = new TableJeu();
-        BeanUtils.copyProperties(request, tableJeu);
+	@PostMapping
+	@JsonView(Views.TableJeu.class)
+	@PreAuthorize("hasAnyRole('EMPLOYE')")
+	public TableResponse ajouterTableJeu(@Valid @RequestBody TableRequest request) {
+		TableJeu tableJeu = new TableJeu();
+		BeanUtils.copyProperties(request, tableJeu);
 
-        this.srv.create(tableJeu);
+		this.srv.create(tableJeu);
 
-        return TableResponse.convert(tableJeu);
-    }
+		return TableResponse.convert(tableJeu);
+	}
 
-    @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('EMPLOYE')")
-    public TableResponse modifierReservation(@PathVariable int id,
-            @Valid @RequestBody TableRequest request) {
-        TableJeu tableJeu = this.srv.getById(id).orElseThrow(IdNotFoundException::new);
-        BeanUtils.copyProperties(request, tableJeu);
+	@PutMapping("/{id}")
+	@JsonView(Views.TableJeu.class)
+	@PreAuthorize("hasAnyRole('EMPLOYE')")
+	public TableResponse modifierTableJeu(@PathVariable int id, @Valid @RequestBody TableRequest request) {
+		TableJeu tableJeu = this.srv.getById(id).orElseThrow(IdNotFoundException::new);
+		BeanUtils.copyProperties(request, tableJeu);
 
-        this.srv.update(tableJeu);
+		this.srv.update(tableJeu);
 
-        return TableResponse.convert(tableJeu);
-    }
+		return TableResponse.convert(tableJeu);
+	}
 
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('EMPLOYE')")
-    public void deleteReservation(@PathVariable Integer id) {
-        this.srv.deleteById(id);
-    }
+	@DeleteMapping("/{id}")
+	@PreAuthorize("hasRole('EMPLOYE')")
+	public void deleteTableJeu(@PathVariable Integer id) {
+		this.srv.deleteById(id);
+	}
 
 }

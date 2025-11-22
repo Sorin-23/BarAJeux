@@ -15,7 +15,8 @@ public class TableResponse {
     private String nomTable;
     
     private int capacite;
-
+    @JsonView(Views.Common.class)
+    private String imgUrl;
 
 
 
@@ -48,14 +49,26 @@ public class TableResponse {
     public void setCapacite(int capacite) {
         this.capacite = capacite;
     }
+    
 
 
-    public static TableResponse convert(TableJeu table) {
+    public String getImgUrl() {
+		return imgUrl;
+	}
+
+
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
+	}
+
+
+	public static TableResponse convert(TableJeu table) {
         TableResponse resp = new TableResponse();
 
         resp.setId(table.getId());
         resp.setNomTable(table.getNomTable());
         resp.setCapacite(table.getCapacite());
+        resp.setImgUrl(table.getImgUrl());
 
         return resp;
 
