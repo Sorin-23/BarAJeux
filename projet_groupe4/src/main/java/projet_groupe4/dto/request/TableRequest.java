@@ -6,33 +6,29 @@ import jakarta.validation.constraints.NotNull;
 
 public class TableRequest {
 
-@NotBlank
-private String nomTable;
-@NotNull
-@Min(1)
-private int capacite;
-@NotBlank
-private String imgUrl;
+    @NotBlank
+    private String nomTable;
+    @NotNull
+    @Min(1)
+    private int capacite;
+    @NotBlank
+    private String imgUrl;
 
+    public int getCapacite() {
+        return capacite;
+    }
 
-public String getNomTable() {
-return nomTable;
-}
-public void setNomTable(String nomTable) {
-this.nomTable = nomTable;
-}
-public int getCapacite() {
-return capacite;
-}
-public void setCapacite(int capacite) {
-this.capacite = capacite;
-}
-public String getImgUrl() {
-	return imgUrl;
-}
-public void setImgUrl(String imgUrl) {
-	this.imgUrl = imgUrl;
-}
+    public void setCapacite(int capacite) {
+        this.capacite = capacite;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
 
     public String getNomTable() {
         return nomTable;
@@ -41,6 +37,5 @@ public void setImgUrl(String imgUrl) {
     public void setNomTable(String nomTable) {
         this.nomTable = nomTable;
     }
-
 
 }

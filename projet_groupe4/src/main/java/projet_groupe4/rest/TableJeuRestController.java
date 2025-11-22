@@ -14,15 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.annotation.JsonView;
-
 import jakarta.validation.Valid;
 import projet_groupe4.dto.request.TableRequest;
 import projet_groupe4.dto.response.TableResponse;
 import projet_groupe4.exception.IdNotFoundException;
 import projet_groupe4.model.TableJeu;
 import projet_groupe4.service.TableJeuService;
-import projet_groupe4.view.Views;
 
 @RestController
 @RequestMapping("/api/tableJeu")
@@ -33,19 +30,16 @@ public class TableJeuRestController {
 	private TableJeuService srv;
 
 	@GetMapping
-	@JsonView(Views.TableJeu.class)
 	public List<TableResponse> allTableJeus() {
 		return this.srv.getAll().stream().map(TableResponse::convert).toList();
 	}
 
 	@GetMapping("/{id}")
-	@JsonView(Views.TableJeu.class)
 	public TableResponse ficheTableJeu(@PathVariable int id) {
 		return this.srv.getById(id).map(TableResponse::convert).orElseThrow(IdNotFoundException::new);
 	}
 
 	@PostMapping
-	@JsonView(Views.TableJeu.class)
 	@PreAuthorize("hasAnyRole('EMPLOYE')")
 	public TableResponse ajouterTableJeu(@Valid @RequestBody TableRequest request) {
 		TableJeu tableJeu = new TableJeu();
@@ -57,7 +51,6 @@ public class TableJeuRestController {
 	}
 
 	@PutMapping("/{id}")
-	@JsonView(Views.TableJeu.class)
 	@PreAuthorize("hasAnyRole('EMPLOYE')")
 	public TableResponse modifierTableJeu(@PathVariable int id, @Valid @RequestBody TableRequest request) {
 		TableJeu tableJeu = this.srv.getById(id).orElseThrow(IdNotFoundException::new);

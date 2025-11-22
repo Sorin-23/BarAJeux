@@ -32,7 +32,8 @@ public class TableJeuRestControllerTest {
     private static final int TABLEJEU_ID = 1;
     private static final String TABLEJEU_NOM = "Nom";
     private static final int TABLEJEU_CAPA = 5;
-    private static final String API_URL = "/api/tablejeu";
+    private static final String TABLEJEU_IMG = "image";
+    private static final String API_URL = "/api/tableJeu";
     private static final String API_URL_BY_ID = API_URL + "/" + TABLEJEU_ID;
 
     @Autowired
@@ -89,6 +90,7 @@ public class TableJeuRestControllerTest {
         t1.setId(TABLEJEU_ID);
         t1.setNomTable(TABLEJEU_NOM);
         t1.setCapacite(TABLEJEU_CAPA);
+        t1.setImgUrl(TABLEJEU_IMG);
 
         // On retourne la liste de TABLEJEU
         Mockito.when(srv.getAll()).thenReturn(List.of(t1));
@@ -101,7 +103,8 @@ public class TableJeuRestControllerTest {
 
         result.andExpect(MockMvcResultMatchers.jsonPath("$[0].id").exists())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].nomTable").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].capacite").exists());
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].capacite").exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].imgUrl").exists());
 
     }
 
@@ -161,6 +164,7 @@ public class TableJeuRestControllerTest {
         t1.setId(TABLEJEU_ID);
         t1.setNomTable(TABLEJEU_NOM);
         t1.setCapacite(TABLEJEU_CAPA);
+        t1.setImgUrl(TABLEJEU_IMG);
 
         Mockito.when(this.srv.getById(TABLEJEU_ID)).thenReturn(Optional.of(t1));
 
@@ -170,7 +174,8 @@ public class TableJeuRestControllerTest {
         // then
         result.andExpect(MockMvcResultMatchers.jsonPath("$.id").exists())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.nomTable").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.capacite").exists());
+                .andExpect(MockMvcResultMatchers.jsonPath("$.capacite").exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.imgUrl").exists());
 
     }
 
@@ -179,7 +184,7 @@ public class TableJeuRestControllerTest {
         // given
 
         // when
-        ResultActions result = this.createAndPost(TABLEJEU_NOM, TABLEJEU_CAPA);
+        ResultActions result = this.createAndPost(TABLEJEU_NOM, TABLEJEU_CAPA, TABLEJEU_IMG);
 
         // then
         result.andExpect(MockMvcResultMatchers.status().isUnauthorized());
@@ -191,7 +196,7 @@ public class TableJeuRestControllerTest {
         // given
 
         // when
-        ResultActions result = this.createAndPost(TABLEJEU_NOM, TABLEJEU_CAPA);
+        ResultActions result = this.createAndPost(TABLEJEU_NOM, TABLEJEU_CAPA, TABLEJEU_IMG);
 
         // then
         result.andExpect(MockMvcResultMatchers.status().isOk());
@@ -203,7 +208,7 @@ public class TableJeuRestControllerTest {
         // given
 
         // when
-        ResultActions result = this.createAndPost(TABLEJEU_NOM, TABLEJEU_CAPA);
+        ResultActions result = this.createAndPost(TABLEJEU_NOM, TABLEJEU_CAPA, TABLEJEU_IMG);
 
         // then
         result.andExpect(MockMvcResultMatchers.status().isOk());
@@ -216,7 +221,7 @@ public class TableJeuRestControllerTest {
         ArgumentCaptor<TableJeu> tableJeuCaptor = ArgumentCaptor.captor();
 
         // when
-        this.createAndPost(TABLEJEU_NOM, TABLEJEU_CAPA);
+        this.createAndPost(TABLEJEU_NOM, TABLEJEU_CAPA, TABLEJEU_IMG);
         // then
         Mockito.verify(this.srv).create(tableJeuCaptor.capture());
 
@@ -224,20 +229,21 @@ public class TableJeuRestControllerTest {
 
         Assertions.assertEquals(TABLEJEU_NOM, tableJeu.getNomTable());
         Assertions.assertEquals(TABLEJEU_CAPA, tableJeu.getCapacite());
+        Assertions.assertEquals(TABLEJEU_IMG, tableJeu.getImgUrl());
     }
 
     @ParameterizedTest
     @CsvSource({
-            "nom, 0",
-            "nom, 0",
+            "nom, 0,",
+            "nom, 0, ''"
     })
     @WithMockUser(roles = "EMPLOYE")
-    void shouldCreateStatusBadRequest(String nom, int capacite)
+    void shouldCreateStatusBadRequest(String nom, int capacite, String imgUrl)
             throws Exception {
         // given
 
         // when
-        ResultActions result = this.createAndPost(nom, capacite);
+        ResultActions result = this.createAndPost(nom, capacite, imgUrl);
 
         // then
         result.andExpect(MockMvcResultMatchers.status().isBadRequest());
@@ -245,12 +251,13 @@ public class TableJeuRestControllerTest {
         Mockito.verify(this.srv, Mockito.never()).create(Mockito.any());
     }
 
-    private ResultActions createAndPost(String nom, int capacite) throws Exception {
+    private ResultActions createAndPost(String nom, int capacite, String imgUrl) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         TableRequest request = new TableRequest();
 
         request.setNomTable(nom);
         request.setCapacite(capacite);
+        request.setImgUrl(imgUrl);
 
         return this.mockMvc.perform(MockMvcRequestBuilders
                 .post(API_URL)
@@ -264,7 +271,7 @@ public class TableJeuRestControllerTest {
         // given
 
         // when
-        ResultActions result = this.updateAndPut(TABLEJEU_NOM, TABLEJEU_CAPA);
+        ResultActions result = this.updateAndPut(TABLEJEU_NOM, TABLEJEU_CAPA, TABLEJEU_IMG);
 
         // then
         result.andExpect(MockMvcResultMatchers.status().isUnauthorized());
@@ -275,7 +282,7 @@ public class TableJeuRestControllerTest {
         // given
 
         // when
-        ResultActions result = this.updateAndPut(TABLEJEU_NOM, TABLEJEU_CAPA);
+        ResultActions result = this.updateAndPut(TABLEJEU_NOM, TABLEJEU_CAPA, TABLEJEU_IMG);
 
         // then
         result.andExpect(MockMvcResultMatchers.status().isUnauthorized());
@@ -288,7 +295,7 @@ public class TableJeuRestControllerTest {
         Mockito.when(srv.getById(TABLEJEU_ID)).thenReturn(Optional.of(new TableJeu()));
 
         // when
-        ResultActions result = this.updateAndPut(TABLEJEU_NOM, TABLEJEU_CAPA);
+        ResultActions result = this.updateAndPut(TABLEJEU_NOM, TABLEJEU_CAPA, TABLEJEU_IMG);
 
         // then
         result.andExpect(MockMvcResultMatchers.status().isOk());
@@ -305,7 +312,7 @@ public class TableJeuRestControllerTest {
         ArgumentCaptor<TableJeu> tableJeuCaptor = ArgumentCaptor.captor();
 
         // when
-        this.updateAndPut(TABLEJEU_NOM, TABLEJEU_CAPA);
+        this.updateAndPut(TABLEJEU_NOM, TABLEJEU_CAPA, TABLEJEU_IMG);
 
         // then
         Mockito.verify(this.srv).update(tableJeuCaptor.capture());
@@ -314,19 +321,20 @@ public class TableJeuRestControllerTest {
 
         Assertions.assertEquals(TABLEJEU_NOM, tableJeu.getNomTable());
         Assertions.assertEquals(TABLEJEU_CAPA, tableJeu.getCapacite());
+        Assertions.assertEquals(TABLEJEU_IMG, tableJeu.getImgUrl());
     }
 
     @ParameterizedTest
     @CsvSource({
-            "nom, 0",
-            "nom, 0",
+            "nom, 0,",
+            "nom, 0, ''",
     })
     @WithMockUser(roles = "EMPLOYE")
-    void shouldUpdateStatusBadRequest(String nom, int capacite)
+    void shouldUpdateStatusBadRequest(String nom, int capacite, String imgUrl)
             throws Exception {
         // given
         // when
-        ResultActions result = this.updateAndPut(nom, capacite);
+        ResultActions result = this.updateAndPut(nom, capacite, imgUrl);
 
         // then
         result.andExpect(MockMvcResultMatchers.status().isBadRequest());
@@ -334,12 +342,13 @@ public class TableJeuRestControllerTest {
         Mockito.verify(this.srv, Mockito.never()).update(Mockito.any());
     }
 
-    private ResultActions updateAndPut(String nom, int capacite) throws Exception {
+    private ResultActions updateAndPut(String nom, int capacite, String imgUrl) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         TableRequest request = new TableRequest();
 
         request.setNomTable(nom);
         request.setCapacite(capacite);
+        request.setImgUrl(imgUrl);
 
         return this.mockMvc.perform(MockMvcRequestBuilders
                 .put(API_URL_BY_ID)
