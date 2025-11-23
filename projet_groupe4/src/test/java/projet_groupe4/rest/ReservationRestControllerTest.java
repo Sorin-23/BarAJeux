@@ -254,66 +254,63 @@ public class ReservationRestControllerTest {
     @WithMockUser
     void shouldCreateStatusForbidden() throws Exception {
         // given
+        Reservation resaMock = new Reservation();
+        resaMock.setId(JEU_ID); // ID simulé pour éviter le NPE
 
+        // On simule le comportement du service
+        Mockito.when(srv.create(Mockito.any(ReservationRequest.class))).thenReturn(resaMock);
         // when
         ResultActions result = this.createAndPost(RESA_DEBUT, RESA_FIN, RESA_NBJ, RESA_STATUT, TABLE_ID, JEU_ID,
                 CLIENT_ID, GM_ID);
 
         // then
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
     @WithMockUser(roles = "EMPLOYE")
     void shouldCreateStatusOk() throws Exception {
         // given
+        Reservation resaMock = new Reservation();
+        resaMock.setId(JEU_ID); // ID simulé pour éviter le NPE
 
+        // On simule le comportement du service
+        Mockito.when(srv.create(Mockito.any(ReservationRequest.class))).thenReturn(resaMock);
         // when
         ResultActions result = this.createAndPost(RESA_DEBUT, RESA_FIN, RESA_NBJ, RESA_STATUT, TABLE_ID, JEU_ID,
                 CLIENT_ID, GM_ID);
 
         // then
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
     @WithMockUser(roles = "EMPLOYE")
     void shouldCreateUseDaoSave() throws Exception {
         // given
-        ArgumentCaptor<Reservation> reservationCaptor = ArgumentCaptor.captor();
+        ArgumentCaptor<ReservationRequest> reservationCaptor = ArgumentCaptor.captor();
 
+        Reservation resaMock = new Reservation();
+        resaMock.setId(JEU_ID); // ID simulé pour éviter le NPE
+
+        // On simule le comportement du service
+        Mockito.when(srv.create(Mockito.any(ReservationRequest.class))).thenReturn(resaMock);
         // when
         this.createAndPost(RESA_DEBUT, RESA_FIN, RESA_NBJ, RESA_STATUT, TABLE_ID, JEU_ID,
                 CLIENT_ID, GM_ID);
         // then
         Mockito.verify(this.srv).create(reservationCaptor.capture());
 
-        Reservation reservation = reservationCaptor.getValue();
-
-        Jeu j = new Jeu();
-        j.setId(JEU_ID);
-        reservation.setJeu(j);
-
-        Client c = new Client();
-        c.setId(CLIENT_ID);
-        reservation.setClient(c);
-
-        TableJeu tj = new TableJeu();
-        tj.setId(TABLE_ID);
-        reservation.setTableJeu(tj);
-
-        Employe e = new Employe();
-        e.setId(GM_ID);
-        reservation.setGameMaster(e);
+        ReservationRequest reservation = reservationCaptor.getValue();
 
         Assertions.assertEquals(RESA_DEBUT, reservation.getDatetimeDebut());
         Assertions.assertEquals(RESA_FIN, reservation.getDatetimeFin());
         Assertions.assertEquals(RESA_NBJ, reservation.getNbJoueur());
         Assertions.assertEquals(StatutReservation.valueOf(RESA_STATUT), reservation.getStatutReservation());
-        Assertions.assertEquals(JEU_ID, reservation.getJeu().getId());
-        Assertions.assertEquals(CLIENT_ID, reservation.getClient().getId());
-        Assertions.assertEquals(TABLE_ID, reservation.getTableJeu().getId());
-        Assertions.assertEquals(GM_ID, reservation.getGameMaster().getId());
+        Assertions.assertEquals(JEU_ID, reservation.getJeuId());
+        Assertions.assertEquals(CLIENT_ID, reservation.getClientId());
+        Assertions.assertEquals(TABLE_ID, reservation.getTableJeuId());
+        Assertions.assertEquals(GM_ID, reservation.getGameMasterId());
 
     }
 
@@ -429,41 +426,25 @@ public class ReservationRestControllerTest {
         r.setId(RESA_ID);
 
         Mockito.when(srv.getById(RESA_ID)).thenReturn(Optional.of(r));
-        ArgumentCaptor<Reservation> resaCaptor = ArgumentCaptor.captor();
+        ArgumentCaptor<ReservationRequest> resaCaptor = ArgumentCaptor.captor();
 
         // when
         this.updateAndPut(RESA_DEBUT, RESA_FIN, RESA_NBJ, RESA_STATUT, TABLE_ID, JEU_ID,
                 CLIENT_ID, GM_ID);
 
         // then
-        Mockito.verify(this.srv).update(resaCaptor.capture());
+        Mockito.verify(this.srv).update(Mockito.eq(RESA_ID), resaCaptor.capture());
 
-        Reservation reservation = resaCaptor.getValue();
-
-        Jeu j = new Jeu();
-        j.setId(JEU_ID);
-        reservation.setJeu(j);
-
-        Client c = new Client();
-        c.setId(CLIENT_ID);
-        reservation.setClient(c);
-
-        TableJeu tj = new TableJeu();
-        tj.setId(TABLE_ID);
-        reservation.setTableJeu(tj);
-
-        Employe e = new Employe();
-        e.setId(GM_ID);
-        reservation.setGameMaster(e);
+        ReservationRequest reservation = resaCaptor.getValue();
 
         Assertions.assertEquals(RESA_DEBUT, reservation.getDatetimeDebut());
         Assertions.assertEquals(RESA_FIN, reservation.getDatetimeFin());
         Assertions.assertEquals(RESA_NBJ, reservation.getNbJoueur());
         Assertions.assertEquals(StatutReservation.valueOf(RESA_STATUT), reservation.getStatutReservation());
-        Assertions.assertEquals(JEU_ID, reservation.getJeu().getId());
-        Assertions.assertEquals(CLIENT_ID, reservation.getClient().getId());
-        Assertions.assertEquals(TABLE_ID, reservation.getTableJeu().getId());
-        Assertions.assertEquals(GM_ID, reservation.getGameMaster().getId());
+        Assertions.assertEquals(JEU_ID, reservation.getJeuId());
+        Assertions.assertEquals(CLIENT_ID, reservation.getClientId());
+        Assertions.assertEquals(TABLE_ID, reservation.getTableJeuId());
+        Assertions.assertEquals(GM_ID, reservation.getGameMasterId());
     }
 
     @ParameterizedTest
@@ -499,7 +480,7 @@ public class ReservationRestControllerTest {
         // then
         result.andExpect(MockMvcResultMatchers.status().isBadRequest());
 
-        Mockito.verify(this.srv, Mockito.never()).update(Mockito.any());
+        Mockito.verify(this.srv, Mockito.never()).update(Mockito.eq(RESA_ID), Mockito.any());
     }
 
     private ResultActions updateAndPut(LocalDateTime dateDebut, LocalDateTime dateFin, int nbJoueur, String statut,
@@ -546,7 +527,7 @@ public class ReservationRestControllerTest {
                 MockMvcRequestBuilders.delete(API_URL_BY_ID)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()));
 
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test
@@ -557,7 +538,7 @@ public class ReservationRestControllerTest {
                 MockMvcRequestBuilders.delete(API_URL_BY_ID)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()));
 
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test

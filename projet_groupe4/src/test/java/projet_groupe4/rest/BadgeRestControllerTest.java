@@ -189,43 +189,58 @@ public class BadgeRestControllerTest {
     @WithMockUser
     void shouldCreateStatusForbidden() throws Exception {
         // given
+        Badge badgeMock = new Badge();
+        badgeMock.setId(BADGE_ID); // ID simulé pour éviter le NPE
 
+        // On simule le comportement du service
+        Mockito.when(srv.create(Mockito.any(BadgeRequest.class))).thenReturn(badgeMock);
         // when
         ResultActions result = this.createAndPost(BADGE_NOM, BADGE_POINT_MIN, BADGE_IMG);
 
         // then
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
     @WithMockUser(roles = "EMPLOYE")
     void shouldCreateStatusOk() throws Exception {
         // given
+        Badge badgeMock = new Badge();
+        badgeMock.setId(BADGE_ID); // ID simulé pour éviter le NPE
 
+        // On simule le comportement du service
+        Mockito.when(srv.create(Mockito.any(BadgeRequest.class))).thenReturn(badgeMock);
         // when
         ResultActions result = this.createAndPost(BADGE_NOM, BADGE_POINT_MIN, BADGE_IMG);
 
         // then
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
     @WithMockUser(roles = "EMPLOYE")
     void shouldCreateUseDaoSave() throws Exception {
         // given
-        ArgumentCaptor<Badge> badgeCaptor = ArgumentCaptor.captor();
+        ArgumentCaptor<BadgeRequest
 
+        > badgeCaptor = ArgumentCaptor.captor();
+
+        Badge badgeMock = new Badge();
+        badgeMock.setId(BADGE_ID); // ID simulé pour éviter le NPE
+
+        // On simule le comportement du service
+        Mockito.when(srv.create(Mockito.any(BadgeRequest.class))).thenReturn(badgeMock);
         // when
         this.createAndPost(BADGE_NOM, BADGE_POINT_MIN, BADGE_IMG);
 
         // then
         Mockito.verify(this.srv).create(badgeCaptor.capture());
 
-        Badge badge = badgeCaptor.getValue();
+        BadgeRequest request = badgeCaptor.getValue();
 
-        Assertions.assertEquals(BADGE_NOM, badge.getNomBadge());
-        Assertions.assertEquals(BADGE_POINT_MIN, badge.getPointMin());
-        Assertions.assertEquals(BADGE_IMG, badge.getImgURL());
+        Assertions.assertEquals(BADGE_NOM, request.getNomBadge());
+        Assertions.assertEquals(BADGE_POINT_MIN, request.getPointMin());
+        Assertions.assertEquals(BADGE_IMG, request.getImgURL());
     }
 
     @ParameterizedTest
@@ -308,19 +323,19 @@ public class BadgeRestControllerTest {
         b.setId(BADGE_ID);
 
         Mockito.when(srv.getById(BADGE_ID)).thenReturn(Optional.of(b));
-        ArgumentCaptor<Badge> badgeCaptor = ArgumentCaptor.captor();
+        ArgumentCaptor<BadgeRequest> badgeCaptor = ArgumentCaptor.captor();
 
         // when
         this.updateAndPut(BADGE_NOM, BADGE_POINT_MIN, BADGE_IMG);
 
         // then
-        Mockito.verify(this.srv).update(badgeCaptor.capture());
+        Mockito.verify(this.srv).update(Mockito.eq(BADGE_ID), badgeCaptor.capture());
 
-        Badge badge = badgeCaptor.getValue();
+        BadgeRequest request = badgeCaptor.getValue();
 
-        Assertions.assertEquals(BADGE_NOM, badge.getNomBadge());
-        Assertions.assertEquals(BADGE_POINT_MIN, badge.getPointMin());
-        Assertions.assertEquals(BADGE_IMG, badge.getImgURL());
+        Assertions.assertEquals(BADGE_NOM, request.getNomBadge());
+        Assertions.assertEquals(BADGE_POINT_MIN, request.getPointMin());
+        Assertions.assertEquals(BADGE_IMG, request.getImgURL());
     }
 
     @ParameterizedTest
@@ -342,7 +357,7 @@ public class BadgeRestControllerTest {
         // then
         result.andExpect(MockMvcResultMatchers.status().isBadRequest());
 
-        Mockito.verify(this.srv, Mockito.never()).update(Mockito.any());
+        Mockito.verify(this.srv, Mockito.never()).update(Mockito.eq(BADGE_ID), Mockito.any());
     }
 
     private ResultActions updateAndPut(String nom, int pointMin, String imgUrl) throws Exception {
@@ -376,7 +391,7 @@ public class BadgeRestControllerTest {
                 MockMvcRequestBuilders.delete(API_URL_BY_ID)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()));
 
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test
@@ -387,7 +402,7 @@ public class BadgeRestControllerTest {
                 MockMvcRequestBuilders.delete(API_URL_BY_ID)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()));
 
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test

@@ -194,38 +194,52 @@ public class TableJeuRestControllerTest {
     @WithMockUser
     void shouldCreateStatusForbidden() throws Exception {
         // given
+        TableJeu tableMock = new TableJeu();
+        tableMock.setId(TABLEJEU_ID); // ID simulé pour éviter le NPE
 
+        // On simule le comportement du service
+        Mockito.when(srv.create(Mockito.any(TableRequest.class))).thenReturn(tableMock);
         // when
         ResultActions result = this.createAndPost(TABLEJEU_NOM, TABLEJEU_CAPA, TABLEJEU_IMG);
 
         // then
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
     @WithMockUser(roles = "EMPLOYE")
     void shouldCreateStatusOk() throws Exception {
         // given
+        TableJeu tableMock = new TableJeu();
+        tableMock.setId(TABLEJEU_ID); // ID simulé pour éviter le NPE
 
+        // On simule le comportement du service
+        Mockito.when(srv.create(Mockito.any(TableRequest.class))).thenReturn(tableMock);
         // when
         ResultActions result = this.createAndPost(TABLEJEU_NOM, TABLEJEU_CAPA, TABLEJEU_IMG);
 
         // then
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
     @WithMockUser(roles = "EMPLOYE")
     void shouldCreateUseDaoSave() throws Exception {
         // given
-        ArgumentCaptor<TableJeu> tableJeuCaptor = ArgumentCaptor.captor();
+        ArgumentCaptor<TableRequest> tableJeuCaptor = ArgumentCaptor.captor();
+
+        TableJeu tableMock = new TableJeu();
+        tableMock.setId(TABLEJEU_ID); // ID simulé pour éviter le NPE
+
+        // On simule le comportement du service
+        Mockito.when(srv.create(Mockito.any(TableRequest.class))).thenReturn(tableMock);
 
         // when
         this.createAndPost(TABLEJEU_NOM, TABLEJEU_CAPA, TABLEJEU_IMG);
         // then
         Mockito.verify(this.srv).create(tableJeuCaptor.capture());
 
-        TableJeu tableJeu = tableJeuCaptor.getValue();
+        TableRequest tableJeu = tableJeuCaptor.getValue();
 
         Assertions.assertEquals(TABLEJEU_NOM, tableJeu.getNomTable());
         Assertions.assertEquals(TABLEJEU_CAPA, tableJeu.getCapacite());
@@ -309,15 +323,15 @@ public class TableJeuRestControllerTest {
         t.setId(TABLEJEU_ID);
 
         Mockito.when(srv.getById(TABLEJEU_ID)).thenReturn(Optional.of(t));
-        ArgumentCaptor<TableJeu> tableJeuCaptor = ArgumentCaptor.captor();
+        ArgumentCaptor<TableRequest> tableJeuCaptor = ArgumentCaptor.captor();
 
         // when
         this.updateAndPut(TABLEJEU_NOM, TABLEJEU_CAPA, TABLEJEU_IMG);
 
         // then
-        Mockito.verify(this.srv).update(tableJeuCaptor.capture());
+        Mockito.verify(this.srv).update(Mockito.eq(TABLEJEU_ID), tableJeuCaptor.capture());
 
-        TableJeu tableJeu = tableJeuCaptor.getValue();
+        TableRequest tableJeu = tableJeuCaptor.getValue();
 
         Assertions.assertEquals(TABLEJEU_NOM, tableJeu.getNomTable());
         Assertions.assertEquals(TABLEJEU_CAPA, tableJeu.getCapacite());
@@ -339,7 +353,7 @@ public class TableJeuRestControllerTest {
         // then
         result.andExpect(MockMvcResultMatchers.status().isBadRequest());
 
-        Mockito.verify(this.srv, Mockito.never()).update(Mockito.any());
+        Mockito.verify(this.srv, Mockito.never()).update(Mockito.eq(TABLEJEU_ID), Mockito.any());
     }
 
     private ResultActions updateAndPut(String nom, int capacite, String imgUrl) throws Exception {
@@ -373,7 +387,7 @@ public class TableJeuRestControllerTest {
                 MockMvcRequestBuilders.delete(API_URL_BY_ID)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()));
 
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test
@@ -384,7 +398,7 @@ public class TableJeuRestControllerTest {
                 MockMvcRequestBuilders.delete(API_URL_BY_ID)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()));
 
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test

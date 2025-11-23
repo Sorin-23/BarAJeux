@@ -21,7 +21,7 @@ public class SubscribeEmployeRequest {
     @NotBlank
     private String job;
 
-    private boolean gameMaster;
+    private Boolean gameMaster;
 
     public String getNom() {
         return nom;
@@ -71,11 +71,11 @@ public class SubscribeEmployeRequest {
         this.job = job;
     }
 
-    public boolean isGameMaster() {
+    public Boolean isGameMaster() {
         return gameMaster;
     }
 
-    public void setGameMaster(boolean gameMaster) {
+    public void setGameMaster(Boolean gameMaster) {
         this.gameMaster = gameMaster;
     }
 

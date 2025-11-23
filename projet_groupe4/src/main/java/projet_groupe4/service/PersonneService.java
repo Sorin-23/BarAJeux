@@ -3,12 +3,14 @@ package projet_groupe4.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import projet_groupe4.dao.IDAOPersonne;
+import projet_groupe4.dto.request.SubscribeClientRequest;
+import projet_groupe4.dto.request.SubscribeEmployeRequest;
+import projet_groupe4.exception.IdNotFoundException;
 import projet_groupe4.exception.ResourceNotFoundException;
 import projet_groupe4.model.Client;
 import projet_groupe4.model.Employe;
@@ -16,112 +18,133 @@ import projet_groupe4.model.Personne;
 
 @Service
 public class PersonneService {
-	@Autowired
-	private IDAOPersonne dao;
-	
-	@Autowired
-	PasswordEncoder passwordEncoder;
+	private final IDAOPersonne dao;
+	private final PasswordEncoder passwordEncoder;
 
-	
-	public List<Personne> getAll(){
+	public PersonneService(IDAOPersonne dao, PasswordEncoder passwordEncoder) {
+		this.dao = dao;
+		this.passwordEncoder = passwordEncoder;
+	}
+
+	public List<Personne> getAll() {
 		return this.dao.findAll();
 	}
-	
-	public List<Client> getAllClients(){
+
+	public List<Client> getAllClients() {
 		return this.dao.findAllClient();
 	}
-	public List<Employe> getAllEmployes(){
+
+	public List<Employe> getAllEmployes() {
 		return this.dao.findAllEmploye();
 	}
+
 	public Personne getById(Integer id) {
 		return this.dao.findById(id).orElseThrow(() -> new ResourceNotFoundException());
 	}
-	
+
 	public Optional<Client> getClientById(Integer clientId) {
-        return dao.findById(clientId)
+		return dao.findById(clientId)
 				.filter(p -> p instanceof Client) // garde uniquement si c’est un Client
 				.map(p -> (Client) p);
 	}
-	
+
 	public Optional<Employe> getEmployeById(Integer empId) {
-       	return dao.findById(empId)
+		return dao.findById(empId)
 				.filter(p -> p instanceof Employe) // garde uniquement si c’est un Client
 				.map(p -> (Employe) p);
 	}
-	
-	public Optional<Personne> getByMail(String mail)
-	{
+
+	public Optional<Personne> getByMail(String mail) {
 		return this.dao.findByMail(mail);
 	}
-	
-	public Personne create(Personne personne)
-	{
-		if(personne.getId()!=null)
-		{
-			throw new RuntimeException("Comment ca une personne en insert a deja un id ?!");
-		}
 
-		personne.setMdp(this.passwordEncoder.encode(personne.getMdp()));
-		return this.dao.save(personne);
+	public Personne create(Object request) {
+		if (request instanceof SubscribeClientRequest clientRequest) {
+			return saveClient(new Client(), clientRequest);
+		} else if (request instanceof SubscribeEmployeRequest employeRequest) {
+			return saveEmploye(new Employe(), employeRequest);
+		} else {
+			throw new IllegalArgumentException("Type de requête inconnu pour la création d'une personne");
+		}
 	}
 
-	public Personne update(Personne personne)
-	{
-		if(personne.getId()==null)
-		{
-			throw new RuntimeException("Comment ca une personne en update a sans un id ?!");
+	public Personne update(Integer id, Object request) {
+		if (request instanceof SubscribeClientRequest clientRequest) {
+			Client client = this.getClientById(id).orElseThrow(IdNotFoundException::new);
+			return saveClient(client, clientRequest);
 		}
 
-		if (personne.getMdp() != null) {
-			personne.setMdp(this.passwordEncoder.encode(personne.getMdp()));
-		}
+		else if (request instanceof SubscribeEmployeRequest employeRequest) {
+			Employe employe = this.getEmployeById(id).orElseThrow(IdNotFoundException::new);
+			return saveEmploye(employe, employeRequest);
+		} else {
 
-		return this.dao.save(personne);
+			throw new IllegalArgumentException("Type de requête non supporté pour l'update");
+		}
 	}
 
-	public Personne updateInfosConnect(Integer id,String login,String password)
-	{
-		Personne personne = this.dao.findById(id).get();
+	public Personne updateInfosConnect(Integer id, String login, String password) {
+		Personne personne = this.dao.findById(id).orElseThrow(IdNotFoundException::new);
 		personne.setMail(login);
 		if (password != null) {
-		personne.setMdp(this.passwordEncoder.encode(password)); 
+			personne.setMdp(this.passwordEncoder.encode(password));
 		}
 		return this.dao.save(personne);
 	}
 
-	public void deleteById(Integer id)
-	{
+	public void deleteById(Integer id) {
 		this.dao.deleteById(id);
 	}
 
-	public void delete(Personne personne)
-	{
+	public void delete(Personne personne) {
 		this.dao.delete(personne);
 	}
-	
-	public List<Personne> getByNomContaining(String nom){
+
+	public List<Personne> getByNomContaining(String nom) {
 		if (nom == null || nom.trim().isEmpty()) {
-	        return getAll();
-	    }
+			return getAll();
+		}
 		return this.dao.findByNomContaining(nom);
 	}
-	
-	public List<Personne> getByPrenomContaining(String prenom){
+
+	public List<Personne> getByPrenomContaining(String prenom) {
 		if (prenom == null || prenom.trim().isEmpty()) {
-	        return getAll();
-	    }
+			return getAll();
+		}
 		return this.dao.findByPrenomContaining(prenom);
 	}
-	
-	
-    public Optional<Client> findByIdWithEmprunts(@Param("id") Integer id) {
-    	return this.dao.findByIdWithEmprunts(id);
-    }
-	
-	
-    public Optional<Client> findByIdWithReservations(@Param("id") Integer id) {
-    	return this.dao.findByIdWithReservations(id);
-    }
-	
-	
+
+	public Optional<Client> getByIdWithEmprunts(@Param("id") Integer id) {
+		return this.dao.findByIdWithEmprunts(id);
+	}
+
+	public Optional<Client> getByIdWithReservations(@Param("id") Integer id) {
+		return this.dao.findByIdWithReservations(id);
+	}
+
+	private Client saveClient(Client client, SubscribeClientRequest request) {
+		client.setNom(request.getNom());
+		client.setPrenom(request.getPrenom());
+		client.setMail(request.getMail());
+		client.setMdp(this.passwordEncoder.encode(request.getMdp()));
+		client.setTelephone(request.getTelephone());
+		client.setVille(request.getVille());
+		client.setCodePostale(request.getCodePostale());
+		client.setAdresse(request.getAdresse());
+
+		return this.dao.save(client);
+	}
+
+	private Employe saveEmploye(Employe employe, SubscribeEmployeRequest request) {
+		employe.setNom(request.getNom());
+		employe.setPrenom(request.getPrenom());
+		employe.setMail(request.getMail());
+		employe.setMdp(this.passwordEncoder.encode(request.getMdp()));
+		employe.setTelephone(request.getTelephone());
+		employe.setJob(request.getJob());
+		employe.setGameMaster(request.isGameMaster());
+
+		return this.dao.save(employe);
+	}
+
 }

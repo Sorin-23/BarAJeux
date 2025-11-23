@@ -29,22 +29,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(AvisRestController.class)
 public class AvisRestControllerTest {
-	private static final int AVIS_ID = 1;
+    private static final int AVIS_ID = 1;
     private static final int AVIS_NOTE = 5;
     private static final String AVIS_TITRE = "Titre";
     private static final String AVIS_COMMENTAIRE = "commentaire";
     private static final String API_URL = "/api/avis";
     private static final String API_URL_BY_ID = API_URL + "/" + AVIS_ID;
-    
+
     @MockitoBean
     private AvisService srv;
-    
+
     @Autowired
     private MockMvc mockMvc;
 
     @MockitoBean
     private IDAOPersonne dao;
-    
+
     @Test
     void shouldGetAllStatusUnauthorized() throws Exception {
         // given
@@ -55,7 +55,7 @@ public class AvisRestControllerTest {
         // then
         result.andExpect(MockMvcResultMatchers.status().isUnauthorized());
     }
-    
+
     @Test
     @WithMockUser
     void shouldGetAllStatusOk() throws Exception {
@@ -79,7 +79,7 @@ public class AvisRestControllerTest {
         // then
         Mockito.verify(this.srv).getAll();
     }
-    
+
     @Test
     @WithMockUser
     void shouldGetAllReturnAttributes() throws Exception {
@@ -96,17 +96,16 @@ public class AvisRestControllerTest {
 
         // --- WHEN ---
         ResultActions result = this.mockMvc.perform(
-                MockMvcRequestBuilders.get(API_URL)
-        );
+                MockMvcRequestBuilders.get(API_URL));
 
         // --- THEN ---
-        
+
         result.andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(AVIS_ID))
-              .andExpect(MockMvcResultMatchers.jsonPath("$[0].note").value(AVIS_NOTE))
-              .andExpect(MockMvcResultMatchers.jsonPath("$[0].titre").value(AVIS_TITRE))
-              .andExpect(MockMvcResultMatchers.jsonPath("$[0].commentaire").value(AVIS_COMMENTAIRE));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].note").value(AVIS_NOTE))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].titre").value(AVIS_TITRE))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].commentaire").value(AVIS_COMMENTAIRE));
     }
-    
+
     @Test
     void shouldGetByIdStatusUnauthorized() throws Exception {
         // given
@@ -117,12 +116,12 @@ public class AvisRestControllerTest {
         // then
         result.andExpect(MockMvcResultMatchers.status().isUnauthorized());
     }
-    
+
     @Test
     @WithMockUser
     void shouldGetByIdStatusOk() throws Exception {
         // given
-    	Mockito.when(this.srv.getById(AVIS_ID)).thenReturn(Optional.of(new Avis()));
+        Mockito.when(this.srv.getById(AVIS_ID)).thenReturn(Optional.of(new Avis()));
         // when
         ResultActions result = this.mockMvc.perform(MockMvcRequestBuilders.get(API_URL_BY_ID));
 
@@ -158,7 +157,7 @@ public class AvisRestControllerTest {
     @WithMockUser
     void shouldGetByIdReturnAttributes() throws Exception {
         // given
-    	Avis a1 = new Avis();
+        Avis a1 = new Avis();
         a1.setId(AVIS_ID);
         a1.setNote(AVIS_NOTE);
         a1.setTitre(AVIS_TITRE);
@@ -174,8 +173,7 @@ public class AvisRestControllerTest {
         result.andExpect(MockMvcResultMatchers.jsonPath("$.titre").exists());
         result.andExpect(MockMvcResultMatchers.jsonPath("$.commentaire").exists());
     }
-    
-    
+
     @Test
     void shouldCreateStatusUnauthorized() throws Exception {
         // given
@@ -191,31 +189,45 @@ public class AvisRestControllerTest {
     @WithMockUser
     void shouldCreateStatusForbidden() throws Exception {
         // given
+        Avis avisMock = new Avis();
+        avisMock.setId(AVIS_ID); // ID simulé pour éviter le NPE
 
+        // On simule le comportement du service
+        Mockito.when(srv.create(Mockito.any(AvisRequest.class))).thenReturn(avisMock);
         // when
         ResultActions result = this.createAndPost(AVIS_NOTE, AVIS_TITRE, AVIS_COMMENTAIRE);
 
         // then
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
     @WithMockUser(roles = "EMPLOYE")
     void shouldCreateStatusOk() throws Exception {
         // given
+        Avis avisMock = new Avis();
+        avisMock.setId(AVIS_ID); // ID simulé pour éviter le NPE
 
+        // On simule le comportement du service
+        Mockito.when(srv.create(Mockito.any(AvisRequest.class))).thenReturn(avisMock);
         // when
         ResultActions result = this.createAndPost(AVIS_NOTE, AVIS_TITRE, AVIS_COMMENTAIRE);
 
         // then
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
     @WithMockUser(roles = "EMPLOYE")
     void shouldCreateUseDaoSave() throws Exception {
         // given
-        ArgumentCaptor<Avis> avisCaptor = ArgumentCaptor.captor();
+        ArgumentCaptor<AvisRequest> avisCaptor = ArgumentCaptor.captor();
+
+        Avis avisMock = new Avis();
+        avisMock.setId(AVIS_ID); // ID simulé pour éviter le NPE
+
+        // On simule le comportement du service
+        Mockito.when(srv.create(Mockito.any(AvisRequest.class))).thenReturn(avisMock);
 
         // when
         this.createAndPost(AVIS_NOTE, AVIS_TITRE, AVIS_COMMENTAIRE);
@@ -223,21 +235,21 @@ public class AvisRestControllerTest {
         // then
         Mockito.verify(this.srv).create(avisCaptor.capture());
 
-        Avis avis = avisCaptor.getValue();
+        AvisRequest request = avisCaptor.getValue();
 
-        Assertions.assertEquals(AVIS_NOTE, avis.getNote());
-        Assertions.assertEquals(AVIS_TITRE, avis.getTitre());
-        Assertions.assertEquals(AVIS_COMMENTAIRE, avis.getCommentaire());
+        Assertions.assertEquals(AVIS_NOTE, request.getNote());
+        Assertions.assertEquals(AVIS_TITRE, request.getTitre());
+        Assertions.assertEquals(AVIS_COMMENTAIRE, request.getCommentaire());
     }
 
     @ParameterizedTest
     @CsvSource({
-        "0,'',''",
-        "0,'   ', '   '",
-        "0,,",
-        "0,'',commentaire",
-        "0,'    ',commentaire",
-        "0,,commentaire"
+            "0,'',''",
+            "0,'   ', '   '",
+            "0,,",
+            "0,'',commentaire",
+            "0,'    ',commentaire",
+            "0,,commentaire"
     })
     @WithMockUser(roles = "EMPLOYE")
     void shouldCreateStatusBadRequest(int note, String titre, String commentaire) throws Exception {
@@ -261,14 +273,12 @@ public class AvisRestControllerTest {
         request.setCommentaire(commentaire);
 
         return this.mockMvc.perform(MockMvcRequestBuilders
-            .post(API_URL)
-            .with(SecurityMockMvcRequestPostProcessors.csrf())
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-            .content(mapper.writeValueAsString(request))
-        );
+                .post(API_URL)
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(mapper.writeValueAsString(request)));
     }
-    
-    
+
     @Test
     void shouldUpdateStatusUnauthorized() throws Exception {
         // given
@@ -295,7 +305,7 @@ public class AvisRestControllerTest {
     @WithMockUser(roles = "EMPLOYE")
     void shouldUpdateStatusOk() throws Exception {
         // given
-    	Mockito.when(srv.getById(AVIS_ID)).thenReturn(Optional.of(new Avis()));
+        Mockito.when(srv.getById(AVIS_ID)).thenReturn(Optional.of(new Avis()));
 
         // when
         ResultActions result = this.updateAndPut(AVIS_NOTE, AVIS_TITRE, AVIS_COMMENTAIRE);
@@ -308,33 +318,33 @@ public class AvisRestControllerTest {
     @WithMockUser(roles = "EMPLOYE")
     void shouldUpdateUseSrvUpdate() throws Exception {
         // given
-    	Avis a = new Avis();
+        Avis a = new Avis();
         a.setId(AVIS_ID);
 
         Mockito.when(srv.getById(AVIS_ID)).thenReturn(Optional.of(a));
-        ArgumentCaptor<Avis> avisCaptor = ArgumentCaptor.captor();
+        ArgumentCaptor<AvisRequest> avisCaptor = ArgumentCaptor.captor();
 
         // when
         this.updateAndPut(AVIS_NOTE, AVIS_TITRE, AVIS_COMMENTAIRE);
 
         // then
-        Mockito.verify(this.srv).update(avisCaptor.capture());
+        Mockito.verify(this.srv).update(Mockito.eq(AVIS_ID), avisCaptor.capture());
 
-        Avis avis = avisCaptor.getValue();
+        AvisRequest request = avisCaptor.getValue();
 
-        Assertions.assertEquals(AVIS_NOTE, avis.getNote());
-        Assertions.assertEquals(AVIS_TITRE, avis.getTitre());
-        Assertions.assertEquals(AVIS_COMMENTAIRE, avis.getCommentaire());
+        Assertions.assertEquals(AVIS_NOTE, request.getNote());
+        Assertions.assertEquals(AVIS_TITRE, request.getTitre());
+        Assertions.assertEquals(AVIS_COMMENTAIRE, request.getCommentaire());
     }
 
     @ParameterizedTest
     @CsvSource({
-        "0,'',''",
-        "0,'   ', '   '",
-        "0,,",
-        "0,'',commentaire",
-        "0,'    ',commentaire",
-        "0,,commentaire"
+            "0,'',''",
+            "0,'   ', '   '",
+            "0,,",
+            "0,'',commentaire",
+            "0,'    ',commentaire",
+            "0,,commentaire"
     })
     @WithMockUser(roles = "EMPLOYE")
     void shouldUpdateStatusBadRequest(int note, String titre, String commentaire) throws Exception {
@@ -346,7 +356,7 @@ public class AvisRestControllerTest {
         // then
         result.andExpect(MockMvcResultMatchers.status().isBadRequest());
 
-        Mockito.verify(this.srv, Mockito.never()).update(Mockito.any());
+        Mockito.verify(this.srv, Mockito.never()).update(Mockito.eq(AVIS_ID), Mockito.any());
     }
 
     private ResultActions updateAndPut(int note, String titre, String commentaire) throws Exception {
@@ -358,19 +368,17 @@ public class AvisRestControllerTest {
         request.setCommentaire(commentaire);
 
         return this.mockMvc.perform(MockMvcRequestBuilders
-            .put(API_URL_BY_ID)
-            .with(SecurityMockMvcRequestPostProcessors.csrf())
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-            .content(mapper.writeValueAsString(request))
-        );
+                .put(API_URL_BY_ID)
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(mapper.writeValueAsString(request)));
     }
-    
+
     @Test
     void shouldDeleteStatusUnauthorized() throws Exception {
         ResultActions result = this.mockMvc.perform(
                 MockMvcRequestBuilders.delete(API_URL_BY_ID)
-                        .with(SecurityMockMvcRequestPostProcessors.csrf())
-        );
+                        .with(SecurityMockMvcRequestPostProcessors.csrf()));
 
         result.andExpect(MockMvcResultMatchers.status().isUnauthorized());
     }
@@ -380,10 +388,9 @@ public class AvisRestControllerTest {
     void shouldDeleteStatusForbidden() throws Exception {
         ResultActions result = this.mockMvc.perform(
                 MockMvcRequestBuilders.delete(API_URL_BY_ID)
-                        .with(SecurityMockMvcRequestPostProcessors.csrf())
-        );
+                        .with(SecurityMockMvcRequestPostProcessors.csrf()));
 
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test
@@ -392,10 +399,9 @@ public class AvisRestControllerTest {
 
         ResultActions result = this.mockMvc.perform(
                 MockMvcRequestBuilders.delete(API_URL_BY_ID)
-                        .with(SecurityMockMvcRequestPostProcessors.csrf())
-        );
+                        .with(SecurityMockMvcRequestPostProcessors.csrf()));
 
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test
@@ -404,11 +410,9 @@ public class AvisRestControllerTest {
 
         this.mockMvc.perform(
                 MockMvcRequestBuilders.delete(API_URL_BY_ID)
-                        .with(SecurityMockMvcRequestPostProcessors.csrf())
-        );
+                        .with(SecurityMockMvcRequestPostProcessors.csrf()));
 
         Mockito.verify(this.srv).deleteById(AVIS_ID);
     }
-    
 
 }

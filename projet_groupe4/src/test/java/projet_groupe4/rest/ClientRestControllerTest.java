@@ -371,34 +371,47 @@ public class ClientRestControllerTest {
     @WithMockUser
     void shouldCreateStatusForbidden() throws Exception {
         // given
+        Client clientMock = new Client();
+        clientMock.setId(CLIENT_ID); // ID simulé pour éviter le NPE
 
+        // On simule le comportement du service
+        Mockito.when(srv.create(Mockito.any(SubscribeClientRequest.class))).thenReturn(clientMock);
         // when
         ResultActions result = this.createAndPost(CLIENT_NOM, CLIENT_PRENOM, CLIENT_MAIL, CLIENT_TEL,
                 CLIENT_POINT_FDT, CLIENT_CREATION, CLIENT_LAST_CONNEX, CLIENT_VILLE, CLIENT_CP, CLIENT_ADRESSE);
 
         // then
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
     @WithMockUser(roles = "EMPLOYE")
     void shouldCreateStatusOk() throws Exception {
         // given
+        Client clientMock = new Client();
+        clientMock.setId(CLIENT_ID); // ID simulé pour éviter le NPE
 
+        // On simule le comportement du service
+        Mockito.when(srv.create(Mockito.any(SubscribeClientRequest.class))).thenReturn(clientMock);
         // when
         ResultActions result = this.createAndPost(CLIENT_NOM, CLIENT_PRENOM, CLIENT_MAIL, CLIENT_TEL,
                 CLIENT_POINT_FDT, CLIENT_CREATION, CLIENT_LAST_CONNEX, CLIENT_VILLE, CLIENT_CP, CLIENT_ADRESSE);
 
         // then
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
     @WithMockUser(roles = "EMPLOYE")
     void shouldCreateUseDaoSave() throws Exception {
         // given
-        ArgumentCaptor<Client> clientCaptor = ArgumentCaptor.captor();
+        ArgumentCaptor<SubscribeClientRequest> clientCaptor = ArgumentCaptor.captor();
 
+        Client clientMock = new Client();
+        clientMock.setId(CLIENT_ID); // ID simulé pour éviter le NPE
+
+        // On simule le comportement du service
+        Mockito.when(srv.create(Mockito.any(SubscribeClientRequest.class))).thenReturn(clientMock);
         // when
         this.createAndPost(CLIENT_NOM, CLIENT_PRENOM, CLIENT_MAIL, CLIENT_TEL,
                 CLIENT_POINT_FDT, CLIENT_CREATION, CLIENT_LAST_CONNEX, CLIENT_VILLE, CLIENT_CP, CLIENT_ADRESSE);
@@ -406,7 +419,7 @@ public class ClientRestControllerTest {
         // then
         Mockito.verify(this.srv).create(clientCaptor.capture());
 
-        Client client = clientCaptor.getValue();
+        SubscribeClientRequest client = clientCaptor.getValue();
 
         Assertions.assertEquals(CLIENT_NOM, client.getNom());
         Assertions.assertEquals(CLIENT_PRENOM, client.getPrenom());
@@ -537,28 +550,28 @@ public class ClientRestControllerTest {
         c.setId(CLIENT_ID);
 
         Mockito.when(srv.getClientById(CLIENT_ID)).thenReturn(Optional.of(c));
-        ArgumentCaptor<Client> clientCaptor = ArgumentCaptor.captor();
+        ArgumentCaptor<SubscribeClientRequest> clientCaptor = ArgumentCaptor.captor();
 
         // when
         this.updateAndPut(CLIENT_NOM, CLIENT_PRENOM, CLIENT_MAIL, CLIENT_TEL,
                 CLIENT_POINT_FDT, CLIENT_CREATION, CLIENT_LAST_CONNEX, CLIENT_VILLE, CLIENT_CP, CLIENT_ADRESSE);
 
         // then
-        Mockito.verify(this.srv).update(clientCaptor.capture());
+        Mockito.verify(this.srv).update(Mockito.eq(CLIENT_ID), clientCaptor.capture());
 
-        Client client = clientCaptor.getValue();
+        SubscribeClientRequest request = clientCaptor.getValue();
 
-        Assertions.assertEquals(CLIENT_NOM, client.getNom());
-        Assertions.assertEquals(CLIENT_PRENOM, client.getPrenom());
-        Assertions.assertEquals(CLIENT_MAIL, client.getMail());
-        Assertions.assertEquals(CLIENT_MDP, client.getMdp());
-        Assertions.assertEquals(CLIENT_TEL, client.getTelephone());
-        Assertions.assertEquals(CLIENT_POINT_FDT, client.getPointFidelite());
-        Assertions.assertEquals(CLIENT_CREATION, client.getDateCreation());
-        Assertions.assertEquals(CLIENT_LAST_CONNEX, client.getDateLastConnexion());
-        Assertions.assertEquals(CLIENT_VILLE, client.getVille());
-        Assertions.assertEquals(CLIENT_CP, client.getCodePostale());
-        Assertions.assertEquals(CLIENT_ADRESSE, client.getAdresse());
+        Assertions.assertEquals(CLIENT_NOM, request.getNom());
+        Assertions.assertEquals(CLIENT_PRENOM, request.getPrenom());
+        Assertions.assertEquals(CLIENT_MAIL, request.getMail());
+        Assertions.assertEquals(CLIENT_MDP, request.getMdp());
+        Assertions.assertEquals(CLIENT_TEL, request.getTelephone());
+        Assertions.assertEquals(CLIENT_POINT_FDT, request.getPointFidelite());
+        Assertions.assertEquals(CLIENT_CREATION, request.getDateCreation());
+        Assertions.assertEquals(CLIENT_LAST_CONNEX, request.getDateLastConnexion());
+        Assertions.assertEquals(CLIENT_VILLE, request.getVille());
+        Assertions.assertEquals(CLIENT_CP, request.getCodePostale());
+        Assertions.assertEquals(CLIENT_ADRESSE, request.getAdresse());
     }
 
     @ParameterizedTest
@@ -601,7 +614,7 @@ public class ClientRestControllerTest {
         // then
         result.andExpect(MockMvcResultMatchers.status().isBadRequest());
 
-        Mockito.verify(this.srv, Mockito.never()).update(Mockito.any());
+        Mockito.verify(this.srv, Mockito.never()).update(Mockito.eq(CLIENT_ID), Mockito.any());
     }
 
     private ResultActions updateAndPut(String nom, String prenom, String mail, String tel,
@@ -647,7 +660,7 @@ public class ClientRestControllerTest {
                 MockMvcRequestBuilders.delete(API_URL_BY_ID)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()));
 
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test
@@ -658,7 +671,7 @@ public class ClientRestControllerTest {
                 MockMvcRequestBuilders.delete(API_URL_BY_ID)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()));
 
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test

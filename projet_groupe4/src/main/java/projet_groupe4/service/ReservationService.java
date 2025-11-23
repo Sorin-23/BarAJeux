@@ -3,39 +3,68 @@ package projet_groupe4.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import projet_groupe4.dao.IDAOJeu;
+import projet_groupe4.dao.IDAOPersonne;
 import projet_groupe4.dao.IDAOReservation;
+import projet_groupe4.dao.IDAOTableJeu;
+import projet_groupe4.dto.request.ReservationRequest;
+import projet_groupe4.exception.IdNotFoundException;
+import projet_groupe4.model.Client;
+import projet_groupe4.model.Employe;
 import projet_groupe4.model.Reservation;
 
 @Service
 public class ReservationService {
-	@Autowired
-	private IDAOReservation dao;
-	
-	public List<Reservation> getAll(){
+	private final IDAOReservation dao;
+	private final IDAOJeu jeuDao;
+	private final IDAOTableJeu tableJeuDao;
+	private final IDAOPersonne personneDao;
+
+	public ReservationService(IDAOReservation dao, IDAOJeu jeuDao, IDAOTableJeu tableJeuDao, IDAOPersonne personneDao) {
+		this.dao = dao;
+		this.jeuDao = jeuDao;
+		this.tableJeuDao = tableJeuDao;
+		this.personneDao = personneDao;
+	}
+
+	public List<Reservation> getAll() {
 		return this.dao.findAll();
 	}
-	
+
 	public Optional<Reservation> getById(Integer id) {
 		return this.dao.findById(id);
 	}
-	
-	public Reservation create(Reservation reservation) {
-		return this.dao.save(reservation);
+
+	public Reservation create(ReservationRequest request) {
+		return this.save(new Reservation(), request);
 	}
-	
-	public Reservation update(Reservation reservation) {
-		return this.dao.save(reservation);
+
+	public Reservation update(Integer id, ReservationRequest request) {
+		Reservation reservation = this.getById(id).orElseThrow(IdNotFoundException::new);
+		return this.save(reservation, request);
 	}
-	
+
 	public void deleteById(Integer id) {
 		this.dao.deleteById(id);
 	}
-	
+
 	public void delete(Reservation reservation) {
 		this.dao.delete(reservation);
 	}
-	
+
+	private Reservation save(Reservation reservation, ReservationRequest request) {
+		reservation.setDatetimeDebut(request.getDatetimeDebut());
+		reservation.setDatetimeFin(request.getDatetimeFin());
+		reservation.setNbJoueur(request.getNbJoueur());
+		reservation.setTableJeu(this.tableJeuDao.getReferenceById(request.getTableJeuId()));
+		reservation.setJeu(this.jeuDao.getReferenceById(request.getJeuId()));
+		reservation.setClient((Client) this.personneDao.getReferenceById(request.getClientId()));
+		reservation.setGameMaster((Employe) this.personneDao.getReferenceById(request.getGameMasterId()));
+		reservation.setStatutReservation(request.getStatutReservation());
+
+		return this.dao.save(reservation);
+	}
+
 }

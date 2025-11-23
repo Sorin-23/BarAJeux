@@ -2,8 +2,7 @@ package projet_groupe4.rest;
 
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,13 +11,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import projet_groupe4.dto.request.SubscribeEmployeRequest;
 import projet_groupe4.dto.response.EmployeResponse;
+import projet_groupe4.dto.response.EntityCreatedResponse;
+import projet_groupe4.dto.response.EntityUpdatedResponse;
 import projet_groupe4.exception.IdNotFoundException;
-import projet_groupe4.model.Employe;
 import projet_groupe4.service.PersonneService;
 
 @RestController
@@ -26,8 +27,11 @@ import projet_groupe4.service.PersonneService;
 @PreAuthorize("hasAnyRole('EMPLOYE', 'CLIENT')")
 public class EmployeRestController {
 
-    @Autowired
-    private PersonneService srv;
+    private final PersonneService srv;
+
+    public EmployeRestController(PersonneService srv) {
+        this.srv = srv;
+    }
 
     @GetMapping
     public List<EmployeResponse> allEmployes() {
@@ -42,29 +46,24 @@ public class EmployeRestController {
 
     @PostMapping
     @PreAuthorize("hasRole('EMPLOYE')")
-    public EmployeResponse ajouterEmploye(@Valid @RequestBody SubscribeEmployeRequest request) {
-        Employe employe = new Employe();
-        BeanUtils.copyProperties(request, employe);
-
-        this.srv.create(employe);
-
-        return EmployeResponse.convert(employe);
+    @ResponseStatus(HttpStatus.CREATED)
+    public EntityCreatedResponse ajouterEmploye(@Valid @RequestBody SubscribeEmployeRequest request) {
+        return new EntityCreatedResponse(this.srv.create(request).getId());
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('EMPLOYE')")
-    public EmployeResponse modifierEmploye(@PathVariable Integer id,
+    public EntityUpdatedResponse modifierEmploye(@PathVariable Integer id,
             @Valid @RequestBody SubscribeEmployeRequest request) {
-        Employe employe = this.srv.getEmployeById(id).orElseThrow(IdNotFoundException::new);
-        BeanUtils.copyProperties(request, employe);
 
-        this.srv.update(employe);
+        this.srv.update(id, request);
 
-        return EmployeResponse.convert(employe);
+        return new EntityUpdatedResponse(id, true);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('EMPLOYE')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteEmploye(@PathVariable Integer id) {
         this.srv.deleteById(id);
     }

@@ -203,38 +203,51 @@ public class EmpruntRestControllerTest {
     @WithMockUser
     void shouldCreateStatusForbidden() throws Exception {
         // given
+        Emprunt empruntMock = new Emprunt();
+        empruntMock.setId(EMPRUNT_ID); // ID simulé pour éviter le NPE
 
+        // On simule le comportement du service
+        Mockito.when(srv.create(Mockito.any(EmpruntRequest.class))).thenReturn(empruntMock);
         // when
         ResultActions result = this.createAndPost(EMPRUNT_EMPRUNT, EMPRUNT_RETOUR, EMPRUNT_STATUT, EMPRUNT_RETOUR_REEL);
 
         // then
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
     @WithMockUser(roles = "EMPLOYE")
     void shouldCreateStatusOk() throws Exception {
         // given
+        Emprunt empruntMock = new Emprunt();
+        empruntMock.setId(EMPRUNT_ID); // ID simulé pour éviter le NPE
 
+        // On simule le comportement du service
+        Mockito.when(srv.create(Mockito.any(EmpruntRequest.class))).thenReturn(empruntMock);
         // when
         ResultActions result = this.createAndPost(EMPRUNT_EMPRUNT, EMPRUNT_RETOUR, EMPRUNT_STATUT, EMPRUNT_RETOUR_REEL);
 
         // then
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
     @WithMockUser(roles = "EMPLOYE")
     void shouldCreateUseDaoSave() throws Exception {
         // given
-        ArgumentCaptor<Emprunt> empruntCaptor = ArgumentCaptor.captor();
+        ArgumentCaptor<EmpruntRequest> empruntCaptor = ArgumentCaptor.captor();
+        Emprunt empruntMock = new Emprunt();
+        empruntMock.setId(EMPRUNT_ID); // ID simulé pour éviter le NPE
+
+        // On simule le comportement du service
+        Mockito.when(srv.create(Mockito.any(EmpruntRequest.class))).thenReturn(empruntMock);
 
         // when
         this.createAndPost(EMPRUNT_EMPRUNT, EMPRUNT_RETOUR, EMPRUNT_STATUT, EMPRUNT_RETOUR_REEL);
         // then
         Mockito.verify(this.srv).create(empruntCaptor.capture());
 
-        Emprunt emprunt = empruntCaptor.getValue();
+        EmpruntRequest emprunt = empruntCaptor.getValue();
 
         Assertions.assertEquals(EMPRUNT_EMPRUNT, emprunt.getDateEmprunt());
         Assertions.assertEquals(EMPRUNT_RETOUR, emprunt.getDateRetour());
@@ -351,15 +364,15 @@ public class EmpruntRestControllerTest {
         e.setId(EMPRUNT_ID);
 
         Mockito.when(srv.getById(EMPRUNT_ID)).thenReturn(Optional.of(e));
-        ArgumentCaptor<Emprunt> empruntCaptor = ArgumentCaptor.captor();
+        ArgumentCaptor<EmpruntRequest> empruntCaptor = ArgumentCaptor.captor();
 
         // when
         this.updateAndPut(EMPRUNT_EMPRUNT, EMPRUNT_RETOUR, EMPRUNT_STATUT, EMPRUNT_RETOUR_REEL);
 
         // then
-        Mockito.verify(this.srv).update(empruntCaptor.capture());
+        Mockito.verify(this.srv).update(Mockito.eq(EMPRUNT_ID), empruntCaptor.capture());
 
-        Emprunt emprunt = empruntCaptor.getValue();
+        EmpruntRequest emprunt = empruntCaptor.getValue();
 
         Assertions.assertEquals(EMPRUNT_EMPRUNT, emprunt.getDateEmprunt());
         Assertions.assertEquals(EMPRUNT_RETOUR, emprunt.getDateRetour());
@@ -407,7 +420,7 @@ public class EmpruntRestControllerTest {
         // then
         result.andExpect(MockMvcResultMatchers.status().isBadRequest());
 
-        Mockito.verify(this.srv, Mockito.never()).update(Mockito.any());
+        Mockito.verify(this.srv, Mockito.never()).update(Mockito.eq(EMPRUNT_ID), Mockito.any());
     }
 
     private ResultActions updateAndPut(LocalDate dateEmprunt, LocalDate dateRetour, String statut,
@@ -450,7 +463,7 @@ public class EmpruntRestControllerTest {
                 MockMvcRequestBuilders.delete(API_URL_BY_ID)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()));
 
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test
@@ -461,7 +474,7 @@ public class EmpruntRestControllerTest {
                 MockMvcRequestBuilders.delete(API_URL_BY_ID)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()));
 
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test

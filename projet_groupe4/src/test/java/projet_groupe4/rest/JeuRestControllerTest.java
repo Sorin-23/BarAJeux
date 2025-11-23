@@ -227,7 +227,11 @@ public class JeuRestControllerTest {
     @Test
     void shouldCreateStatusForbidden() throws Exception {
         // given
+        Jeu jeuMock = new Jeu();
+        jeuMock.setId(JEU_ID); // ID simulé pour éviter le NPE
 
+        // On simule le comportement du service
+        Mockito.when(srv.create(Mockito.any(JeuRequest.class))).thenReturn(jeuMock);
         // when
         ResultActions result = this.createAndPost(JEU_NOM, JEU_AGE, JEU_NBJ_MIN, JEU_NBJ_MAX,
                 JEU_DUREE, JEU_EXEMP, JEU_NOTE, JEU_IMG, JEU_GAME_MASTER);
@@ -240,28 +244,37 @@ public class JeuRestControllerTest {
     @WithMockUser(roles = "EMPLOYE")
     void shouldCreateStatusOk() throws Exception {
         // given
+        Jeu jeuMock = new Jeu();
+        jeuMock.setId(JEU_ID); // ID simulé pour éviter le NPE
 
+        // On simule le comportement du service
+        Mockito.when(srv.create(Mockito.any(JeuRequest.class))).thenReturn(jeuMock);
         // when
         ResultActions result = this.createAndPost(JEU_NOM, JEU_AGE, JEU_NBJ_MIN, JEU_NBJ_MAX,
                 JEU_DUREE, JEU_EXEMP, JEU_NOTE, JEU_IMG, JEU_GAME_MASTER);
 
         // then
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
     @WithMockUser(roles = "EMPLOYE")
     void shouldCreateUseDaoSave() throws Exception {
         // given
-        ArgumentCaptor<Jeu> jeuCaptor = ArgumentCaptor.captor();
+        ArgumentCaptor<JeuRequest> jeuCaptor = ArgumentCaptor.captor();
 
+        Jeu jeuMock = new Jeu();
+        jeuMock.setId(JEU_ID); // ID simulé pour éviter le NPE
+
+        // On simule le comportement du service
+        Mockito.when(srv.create(Mockito.any(JeuRequest.class))).thenReturn(jeuMock);
         // when
         this.createAndPost(JEU_NOM, JEU_AGE, JEU_NBJ_MIN, JEU_NBJ_MAX,
                 JEU_DUREE, JEU_EXEMP, JEU_NOTE, JEU_IMG, JEU_GAME_MASTER);
         // then
         Mockito.verify(this.srv).create(jeuCaptor.capture());
 
-        Jeu jeu = jeuCaptor.getValue();
+        JeuRequest jeu = jeuCaptor.getValue();
 
         Assertions.assertEquals(JEU_NOM, jeu.getNom());
         Assertions.assertEquals(JEU_AGE, jeu.getAgeMinimum());
@@ -387,16 +400,16 @@ public class JeuRestControllerTest {
         j.setId(JEU_ID);
 
         Mockito.when(srv.getById(JEU_ID)).thenReturn(Optional.of(j));
-        ArgumentCaptor<Jeu> jeuCaptor = ArgumentCaptor.captor();
+        ArgumentCaptor<JeuRequest> jeuCaptor = ArgumentCaptor.captor();
 
         // when
         this.updateAndPut(JEU_NOM, JEU_AGE, JEU_NBJ_MIN, JEU_NBJ_MAX,
                 JEU_DUREE, JEU_EXEMP, JEU_NOTE, JEU_IMG, JEU_GAME_MASTER);
 
         // then
-        Mockito.verify(this.srv).update(jeuCaptor.capture());
+        Mockito.verify(this.srv).update(Mockito.eq(JEU_ID), jeuCaptor.capture());
 
-        Jeu jeu = jeuCaptor.getValue();
+        JeuRequest jeu = jeuCaptor.getValue();
 
         Assertions.assertEquals(JEU_NOM, jeu.getNom());
         Assertions.assertEquals(JEU_AGE, jeu.getAgeMinimum());
@@ -449,7 +462,7 @@ public class JeuRestControllerTest {
         // then
         result.andExpect(MockMvcResultMatchers.status().isBadRequest());
 
-        Mockito.verify(this.srv, Mockito.never()).update(Mockito.any());
+        Mockito.verify(this.srv, Mockito.never()).update(Mockito.eq(JEU_ID), Mockito.any());
     }
 
     private ResultActions updateAndPut(String nom, int age, int nbjMin, int nbjMax, int duree,
@@ -492,7 +505,7 @@ public class JeuRestControllerTest {
                 MockMvcRequestBuilders.delete(API_URL_BY_ID)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()));
 
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test
@@ -503,7 +516,7 @@ public class JeuRestControllerTest {
                 MockMvcRequestBuilders.delete(API_URL_BY_ID)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()));
 
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test

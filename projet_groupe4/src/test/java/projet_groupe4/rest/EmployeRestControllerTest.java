@@ -215,41 +215,54 @@ public class EmployeRestControllerTest {
     @WithMockUser
     void shouldCreateStatusForbidden() throws Exception {
         // given
+        Employe employeMock = new Employe();
+        employeMock.setId(EMPLOYE_ID); // ID simulé pour éviter le NPE
 
+        // On simule le comportement du service
+        Mockito.when(srv.create(Mockito.any(SubscribeEmployeRequest.class))).thenReturn(employeMock);
         // when
         ResultActions result = this.createAndPost(EMPLOYE_NOM, EMPLOYE_PRENOM, EMPLOYE_MAIL, EMPLOYE_MDP, EMPLOYE_TEL,
                 EMPLOYE_JOB, EMPLOYE_GAME_MASTER);
 
         // then
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
     @WithMockUser(roles = "EMPLOYE")
     void shouldCreateStatusOk() throws Exception {
         // given
+        Employe employeMock = new Employe();
+        employeMock.setId(EMPLOYE_ID); // ID simulé pour éviter le NPE
 
+        // On simule le comportement du service
+        Mockito.when(srv.create(Mockito.any(SubscribeEmployeRequest.class))).thenReturn(employeMock);
         // when
         ResultActions result = this.createAndPost(EMPLOYE_NOM, EMPLOYE_PRENOM, EMPLOYE_MAIL, EMPLOYE_MDP, EMPLOYE_TEL,
                 EMPLOYE_JOB, EMPLOYE_GAME_MASTER);
 
         // then
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
     @WithMockUser(roles = "EMPLOYE")
     void shouldCreateUseDaoSave() throws Exception {
         // given
-        ArgumentCaptor<Employe> employeCaptor = ArgumentCaptor.captor();
+        ArgumentCaptor<SubscribeEmployeRequest> employeCaptor = ArgumentCaptor.captor();
 
+        Employe employeMock = new Employe();
+        employeMock.setId(EMPLOYE_ID); // ID simulé pour éviter le NPE
+
+        // On simule le comportement du service
+        Mockito.when(srv.create(Mockito.any(SubscribeEmployeRequest.class))).thenReturn(employeMock);
         // when
         this.createAndPost(EMPLOYE_NOM, EMPLOYE_PRENOM, EMPLOYE_MAIL, EMPLOYE_MDP, EMPLOYE_TEL, EMPLOYE_JOB,
                 EMPLOYE_GAME_MASTER);
         // then
         Mockito.verify(this.srv).create(employeCaptor.capture());
 
-        Employe employe = employeCaptor.getValue();
+        SubscribeEmployeRequest employe = employeCaptor.getValue();
 
         Assertions.assertEquals(EMPLOYE_NOM, employe.getNom());
         Assertions.assertEquals(EMPLOYE_PRENOM, employe.getPrenom());
@@ -375,16 +388,16 @@ public class EmployeRestControllerTest {
         e.setId(EMPLOYE_ID);
 
         Mockito.when(srv.getEmployeById(EMPLOYE_ID)).thenReturn(Optional.of(e));
-        ArgumentCaptor<Employe> employeCaptor = ArgumentCaptor.captor();
+        ArgumentCaptor<SubscribeEmployeRequest> employeCaptor = ArgumentCaptor.captor();
 
         // when
         this.updateAndPut(EMPLOYE_NOM, EMPLOYE_PRENOM, EMPLOYE_MAIL, EMPLOYE_MDP, EMPLOYE_TEL, EMPLOYE_JOB,
                 EMPLOYE_GAME_MASTER);
 
         // then
-        Mockito.verify(this.srv).update(employeCaptor.capture());
+        Mockito.verify(this.srv).update(Mockito.eq(EMPLOYE_ID), employeCaptor.capture());
 
-        Employe employe = employeCaptor.getValue();
+        SubscribeEmployeRequest employe = employeCaptor.getValue();
 
         Assertions.assertEquals(EMPLOYE_NOM, employe.getNom());
         Assertions.assertEquals(EMPLOYE_PRENOM, employe.getPrenom());
@@ -438,7 +451,7 @@ public class EmployeRestControllerTest {
         // then
         result.andExpect(MockMvcResultMatchers.status().isBadRequest());
 
-        Mockito.verify(this.srv, Mockito.never()).update(Mockito.any());
+        Mockito.verify(this.srv, Mockito.never()).update(Mockito.eq(EMPLOYE_ID), Mockito.any());
     }
 
     private ResultActions updateAndPut(String nom, String prenom, String mail, String mdp, String tel, String job,
@@ -477,7 +490,7 @@ public class EmployeRestControllerTest {
                 MockMvcRequestBuilders.delete(API_URL_BY_ID)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()));
 
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test
@@ -488,7 +501,7 @@ public class EmployeRestControllerTest {
                 MockMvcRequestBuilders.delete(API_URL_BY_ID)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()));
 
-        result.andExpect(MockMvcResultMatchers.status().isOk());
+        result.andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test
