@@ -4,44 +4,41 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonView;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
-import projet_groupe4.view.Views;
 
 @Entity
 @DiscriminatorValue("Client")
 public class Client extends Personne {
-	@Column(name="point_fidelite")
-	@JsonView(Views.Common.class)
+	@Column(name = "point_fidelite")
+
 	private int pointFidelite;
-	@Column(name="date_creation")
-	@JsonView(Views.Common.class)
+	@Column(name = "date_creation")
+
 	private LocalDate dateCreation;
-	@Column(name="date_derniere_connexion")
-	@JsonView(Views.Common.class)
+	@Column(name = "date_derniere_connexion")
+
 	private LocalDate dateLastConnexion;
-	
-	@OneToMany(mappedBy="client")
-	@JsonView(Views.ClientWithReservation.class)
-	private List<Reservation> reservations = new ArrayList();
-	
-	@OneToMany(mappedBy="client")
-	@JsonView(Views.ClientWithEmprunt.class)
-	private List<Emprunt> emprunts = new ArrayList(); 
-	@JsonView(Views.Common.class)
+
+	@OneToMany(mappedBy = "client")
+	private List<Reservation> reservations = new ArrayList<Reservation>();
+
+	@OneToMany(mappedBy = "client")
+	private List<Emprunt> emprunts = new ArrayList<Emprunt>();
+
 	private String ville;
-	@Column(name="code_postale")
-	@JsonView(Views.Common.class)
+	@Column(name = "code_postale")
+
 	private String codePostale;
-	@JsonView(Views.Common.class)
+
 	private String adresse;
 
 	// Constructor
-	public Client() {}
+	public Client() {
+	}
+
 	public Client(Integer id, String nom, String prenom, String mail, String mdp, String telephone, int pointFidelite,
 			LocalDate dateCreation, LocalDate dateLastConnexion, String ville, String codePostale, String adresse) {
 		super(id, nom, prenom, mail, mdp, telephone);
@@ -52,18 +49,18 @@ public class Client extends Personne {
 		this.codePostale = codePostale;
 		this.adresse = adresse;
 	}
-	public Client(String nom, String prenom, String mail, String mdp, String telephone, String ville, String codePostale, String adresse) {
-	    super(nom, prenom, mail, mdp, telephone);
-	    this.pointFidelite = 0;
-	    this.dateCreation = LocalDate.now();
-	    this.dateLastConnexion = LocalDate.now();
+
+	public Client(String nom, String prenom, String mail, String mdp, String telephone, String ville,
+			String codePostale, String adresse) {
+		super(nom, prenom, mail, mdp, telephone);
+		this.pointFidelite = 0;
+		this.dateCreation = LocalDate.now();
+		this.dateLastConnexion = LocalDate.now();
 		this.ville = ville;
 		this.codePostale = codePostale;
 		this.adresse = adresse;
 	}
-	
 
-	
 	// Getters & setters
 	public int getPointFidelite() {
 		return pointFidelite;
@@ -89,7 +86,6 @@ public class Client extends Personne {
 		this.dateLastConnexion = dateLastConnexion;
 	}
 
-
 	public List<Reservation> getReservations() {
 		return reservations;
 	}
@@ -101,24 +97,31 @@ public class Client extends Personne {
 	public List<Emprunt> getEmprunts() {
 		return emprunts;
 	}
+
 	public void setEmprunts(List<Emprunt> emprunts) {
 		this.emprunts = emprunts;
 	}
+
 	public String getVille() {
 		return ville;
 	}
+
 	public void setVille(String ville) {
 		this.ville = ville;
 	}
+
 	public String getCodePostale() {
 		return codePostale;
 	}
+
 	public void setCodePostale(String codePostale) {
 		this.codePostale = codePostale;
 	}
+
 	public String getAdresse() {
 		return adresse;
 	}
+
 	public void setAdresse(String adresse) {
 		this.adresse = adresse;
 	}
@@ -130,89 +133,87 @@ public class Client extends Personne {
 	}
 
 	public void annulerReservation(Reservation r) {
-        if(reservations.contains(r)) {
-            r.setStatutReservation(StatutReservation.annulée);
-        }
-    }
-	
+		if (reservations.contains(r)) {
+			r.setStatutReservation(StatutReservation.annulée);
+		}
+	}
+
 	public void addEmprunt(Emprunt e) {
-	    emprunts.add(e);
-	    e.setClient(this);
+		emprunts.add(e);
+		e.setClient(this);
 	}
 
 	public void annulerEmprunt(Emprunt e) {
-        if(emprunts.contains(e)) {
-            e.setStatutLocation(StatutLocation.annulé); 
-        }
-    }
+		if (emprunts.contains(e)) {
+			e.setStatutLocation(StatutLocation.annulé);
+		}
+	}
 
-	
 	public void mettreAJourConnexion() {
-	    this.dateLastConnexion = LocalDate.now();
+		this.dateLastConnexion = LocalDate.now();
 	}
-	
-	
+
 	public int calculerPointsFidelite() {
-	    int points = 0;
-	    // Chaque réservation vaut 1 point par heure de jeu 
-	    for (Reservation r : reservations) {
-	        long heures = java.time.Duration.between(r.getDatetimeDebut(), r.getDatetimeFin()).toHours();
-	        points += heures;
-	    }
-	    // Chaque emprunt vaut 2 points par jeu emprunté
-	    if(emprunts != null) {
-	    	points += emprunts.size()*2;
-	    }
-	    this.pointFidelite = points;
-	    return points;
+		int points = 0;
+		// Chaque réservation vaut 1 point par heure de jeu
+		for (Reservation r : reservations) {
+			long heures = java.time.Duration.between(r.getDatetimeDebut(), r.getDatetimeFin()).toHours();
+			points += heures;
+		}
+		// Chaque emprunt vaut 2 points par jeu emprunté
+		if (emprunts != null) {
+			points += emprunts.size() * 2;
+		}
+		this.pointFidelite = points;
+		return points;
 	}
-	
+
 	public Badge getBadgeActuel(List<Badge> badges) {
-        Badge current = null;
-        for (Badge b : badges) {
-            if (this.pointFidelite >= b.getPointMin()) {
-                current = b; // garde le dernier badge atteint
-            } else break;
-        }
-        return current;
-    }
+		Badge current = null;
+		for (Badge b : badges) {
+			if (this.pointFidelite >= b.getPointMin()) {
+				current = b; // garde le dernier badge atteint
+			} else
+				break;
+		}
+		return current;
+	}
 
 	public int pointsAvantProchainBadge(List<Badge> badges) {
-	    // badges triés par pointMin croissant
-	    for (Badge b : badges) {
-	        if (this.pointFidelite < b.getPointMin()) {
-	            return b.getPointMin() - this.pointFidelite;
-	        }
-	    }
-	    return 0; // déjà tous les badges obtenus
-	}
-	
-	public List<Reservation> getReservationsActives(StatutReservation statut) {
-	    List<Reservation> actives = new ArrayList();
-	    for (Reservation r : reservations) {
-	        if (r.getStatutReservation() == statut) {
-	            actives.add(r);
-	        }
-	    }
-	    return actives;
-	}
-	
-	public List<Emprunt> getEmpruntsStatut(StatutLocation statut) {
-	    List<Emprunt> actifs = new ArrayList();
-	    for (Emprunt e : emprunts) {
-	        if (e.getStatutLocation() == statut) {
-	            actifs.add(e);
-	        }
-	    }
-	    return actifs;
+		// badges triés par pointMin croissant
+		for (Badge b : badges) {
+			if (this.pointFidelite < b.getPointMin()) {
+				return b.getPointMin() - this.pointFidelite;
+			}
+		}
+		return 0; // déjà tous les badges obtenus
 	}
 
+	public List<Reservation> getReservationsActives(StatutReservation statut) {
+		List<Reservation> actives = new ArrayList<Reservation>();
+		for (Reservation r : reservations) {
+			if (r.getStatutReservation() == statut) {
+				actives.add(r);
+			}
+		}
+		return actives;
+	}
+
+	public List<Emprunt> getEmpruntsStatut(StatutLocation statut) {
+		List<Emprunt> actifs = new ArrayList<Emprunt>();
+		for (Emprunt e : emprunts) {
+			if (e.getStatutLocation() == statut) {
+				actifs.add(e);
+			}
+		}
+		return actifs;
+	}
 
 	// toString
 	@Override
 	public String toString() {
-		return "Client [pointFidelite=" + pointFidelite 
-				+ ", dateCreation=" + dateCreation 
+		return "Client [pointFidelite=" + pointFidelite
+				+ ", dateCreation=" + dateCreation
 				+ ", dateLastConnexion=" + dateLastConnexion
 				+ ", nbReservations=" + reservations.size()
 				+ ", nbEmprunts=" + emprunts.size()

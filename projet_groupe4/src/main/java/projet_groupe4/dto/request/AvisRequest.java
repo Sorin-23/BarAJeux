@@ -10,6 +10,7 @@ private int note;
 private String titre;
 
 private String commentaire;
+private Integer reservationId;
 
 public int getNote() {
 return note;
@@ -33,6 +34,14 @@ return commentaire;
 
 public void setCommentaire(String commentaire) {
 this.commentaire = commentaire;
+}
+
+public Integer getReservationId() {
+    return reservationId;
+}
+
+public void setReservationId(Integer reservationId) {
+    this.reservationId = reservationId;
 }
 
 

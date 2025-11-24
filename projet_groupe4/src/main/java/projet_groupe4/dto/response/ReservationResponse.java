@@ -2,37 +2,36 @@ package projet_groupe4.dto.response;
 
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-import projet_groupe4.view.Views;
-import projet_groupe4.model.Client;
-import projet_groupe4.model.Employe;
-import projet_groupe4.model.Jeu;
 import projet_groupe4.model.Reservation;
 import projet_groupe4.model.StatutReservation;
-import projet_groupe4.model.TableJeu;
 
 public class ReservationResponse {
 
-    @JsonView(Views.Common.class)
     private Integer id;
-    @JsonView(Views.Common.class)
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime datetimeDebut;
-    @JsonView(Views.Common.class)
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime datetimeFin;
-    @JsonView(Views.Common.class)
+
     private int nbJoueur;
 
-    @JsonView(Views.TableJeu.class)
-    private TableJeu tableJeu;
-    @JsonView(Views.Jeu.class)
-    private Jeu jeu;
-    @JsonView(Views.Common.class)
-    private StatutReservation statutReservation;
-    @JsonView(Views.ClientWithReservation.class)
-    private Client client;
-    @JsonView(Views.Employe.class)
-    private Employe gameMaster;
+    private Integer tableJeuId;
+    private String tableJeuNom;
+
+    private Integer jeuId;
+    private String jeuNom;
+
+    private Integer clientId;
+    private String clientNom;
+
+    private Integer gameMasterId;
+    private String gameMasterNom;
+
+    private StatutReservation statut;
 
     public Integer getId() {
         return id;
@@ -66,44 +65,76 @@ public class ReservationResponse {
         this.nbJoueur = nbJoueur;
     }
 
-    public TableJeu getTableJeu() {
-        return tableJeu;
+    public Integer getTableJeuId() {
+        return tableJeuId;
     }
 
-    public void setTableJeu(TableJeu tableJeu) {
-        this.tableJeu = tableJeu;
+    public void setTableJeuId(Integer tableJeuId) {
+        this.tableJeuId = tableJeuId;
     }
 
-    public Jeu getJeu() {
-        return jeu;
+    public String getTableJeuNom() {
+        return tableJeuNom;
     }
 
-    public void setJeu(Jeu jeu) {
-        this.jeu = jeu;
+    public void setTableJeuNom(String tableJeuNom) {
+        this.tableJeuNom = tableJeuNom;
     }
 
-    public StatutReservation getStatutReservation() {
-        return statutReservation;
+    public Integer getJeuId() {
+        return jeuId;
     }
 
-    public void setStatutReservation(StatutReservation statutReservation) {
-        this.statutReservation = statutReservation;
+    public void setJeuId(Integer jeuId) {
+        this.jeuId = jeuId;
     }
 
-    public Client getClient() {
-        return client;
+    public String getJeuNom() {
+        return jeuNom;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void setJeuNom(String jeuNom) {
+        this.jeuNom = jeuNom;
     }
 
-    public Employe getGameMaster() {
-        return gameMaster;
+    public Integer getClientId() {
+        return clientId;
     }
 
-    public void setGameMaster(Employe gameMaster) {
-        this.gameMaster = gameMaster;
+    public void setClientId(Integer clientId) {
+        this.clientId = clientId;
+    }
+
+    public String getClientNom() {
+        return clientNom;
+    }
+
+    public void setClientNom(String clientNom) {
+        this.clientNom = clientNom;
+    }
+
+    public Integer getGameMasterId() {
+        return gameMasterId;
+    }
+
+    public void setGameMasterId(Integer gameMasterId) {
+        this.gameMasterId = gameMasterId;
+    }
+
+    public String getGameMasterNom() {
+        return gameMasterNom;
+    }
+
+    public void setGameMasterNom(String gameMasterNom) {
+        this.gameMasterNom = gameMasterNom;
+    }
+
+    public StatutReservation getStatut() {
+        return statut;
+    }
+
+    public void setStatut(StatutReservation statut) {
+        this.statut = statut;
     }
 
     public static ReservationResponse convert(Reservation reservation) {
@@ -113,11 +144,26 @@ public class ReservationResponse {
         resp.setDatetimeDebut(reservation.getDatetimeDebut());
         resp.setDatetimeFin(reservation.getDatetimeFin());
         resp.setNbJoueur(reservation.getNbJoueur());
-        resp.setTableJeu(reservation.getTableJeu());
-        resp.setJeu(reservation.getJeu());
-        resp.setStatutReservation(reservation.getStatutReservation());
-        resp.setClient(reservation.getClient());
-        resp.setGameMaster(reservation.getGameMaster());
+        resp.setStatut(reservation.getStatutReservation());
+
+        if (reservation.getTableJeu() != null) {
+            resp.setTableJeuId(reservation.getTableJeu().getId());
+            resp.setTableJeuNom(reservation.getTableJeu().getNomTable());
+        }
+        if (reservation.getJeu() != null) {
+            resp.setJeuId(reservation.getJeu().getId());
+            resp.setJeuNom(reservation.getJeu().getNom());
+        }
+
+        if (reservation.getClient() != null) {
+            resp.setClientId(reservation.getClient().getId());
+            resp.setClientNom(reservation.getClient().getNom());
+        }
+
+        if (reservation.getGameMaster() != null) {
+            resp.setGameMasterId(reservation.getGameMaster().getId());
+            resp.setGameMasterNom(reservation.getGameMaster().getNom());
+        }
 
         return resp;
 

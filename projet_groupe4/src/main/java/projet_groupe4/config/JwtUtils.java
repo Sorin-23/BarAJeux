@@ -14,7 +14,8 @@ public class JwtUtils {
     private final static String JWT_KEY = "6E5A7234753778214125442A472D4B6150645367556B58703273357638792F42";
     private final static long JWT_EXPIRATION = 3_600_000; // 1 heure
 
-    private JwtUtils() { }
+    private JwtUtils() {
+    }
 
     public static String generate(Authentication auth) {
         Date now = new Date();
@@ -22,11 +23,11 @@ public class JwtUtils {
 
         // Si la connexion est OK, on génère un jeton JWT
         return Jwts.builder()
-            .subject(auth.getName()) // Souvent, c'est le username ici
-            .issuedAt(now) // Date de fabrication
-            .expiration(new Date(now.getTime() + JWT_EXPIRATION)) // Durée de validité
-            .signWith(secretKey)
-            .compact() // Le jeton JWT sous forme de String
+                .subject(auth.getName()) // Souvent, c'est le username ici
+                .issuedAt(now) // Date de fabrication
+                .expiration(new Date(now.getTime() + JWT_EXPIRATION)) // Durée de validité
+                .signWith(secretKey)
+                .compact() // Le jeton JWT sous forme de String
         ;
     }
 
@@ -36,11 +37,11 @@ public class JwtUtils {
         try {
             // Si la connexion est OK, on génère un jeton JWT
             String username = Jwts.parser()
-                .verifyWith(secretKey) // On donne la clé pour valider le jeton
-                .build()
-                .parseSignedClaims(token) // On donne le jeton à valider
-                .getPayload() // Le contenu du jeton
-                .getSubject() // Le nom d'utilisateur
+                    .verifyWith(secretKey) // On donne la clé pour valider le jeton
+                    .build()
+                    .parseSignedClaims(token) // On donne le jeton à valider
+                    .getPayload() // Le contenu du jeton
+                    .getSubject() // Le nom d'utilisateur
             ;
 
             return Optional.ofNullable(username);

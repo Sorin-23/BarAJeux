@@ -2,8 +2,7 @@ package projet_groupe4.rest;
 
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,64 +11,54 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.annotation.JsonView;
-
 import jakarta.validation.Valid;
 import projet_groupe4.dto.request.AvisRequest;
 import projet_groupe4.dto.response.AvisResponse;
+import projet_groupe4.dto.response.EntityCreatedResponse;
+import projet_groupe4.dto.response.EntityUpdatedResponse;
 import projet_groupe4.exception.IdNotFoundException;
-import projet_groupe4.model.Avis;
 import projet_groupe4.service.AvisService;
-import projet_groupe4.view.Views;
 
 @RestController
 @RequestMapping("/api/avis")
 @PreAuthorize("hasAnyRole('EMPLOYE', 'CLIENT')")
 public class AvisRestController {
+	private final AvisService srv;
 
-	@Autowired
-	private AvisService srv;
+	public AvisRestController(AvisService srv) {
+		this.srv = srv;
+	}
 
 	@GetMapping
-	@JsonView(Views.Avis.class)
 	public List<AvisResponse> allAviss() {
 		return this.srv.getAll().stream().map(AvisResponse::convert).toList();
 	}
 
 	@GetMapping("/{id}")
-	@JsonView(Views.Avis.class)
 	public AvisResponse ficheAvis(@PathVariable int id) {
 		return this.srv.getById(id).map(AvisResponse::convert).orElseThrow(IdNotFoundException::new);
 	}
 
 	@PostMapping
-	@JsonView(Views.Avis.class)
-	@PreAuthorize("hasAnyRole('EMPLOYE')")
-	public AvisResponse ajouterAvis(@Valid @RequestBody AvisRequest request) {
-		Avis avis = new Avis();
-		BeanUtils.copyProperties(request, avis);
-
-		this.srv.create(avis);
-
-		return AvisResponse.convert(avis);
+	@PreAuthorize("hasRole('EMPLOYE')")
+	@ResponseStatus(HttpStatus.CREATED)
+	public EntityCreatedResponse ajouterAvis(@Valid @RequestBody AvisRequest request) {
+		return new EntityCreatedResponse(this.srv.create(request).getId());
 	}
 
 	@PutMapping("/{id}")
-	@JsonView(Views.Avis.class)
-	@PreAuthorize("hasAnyRole('EMPLOYE')")
-	public AvisResponse modifierAvis(@PathVariable int id, @Valid @RequestBody AvisRequest request) {
-		Avis avis = this.srv.getById(id).orElseThrow(IdNotFoundException::new);
-		BeanUtils.copyProperties(request, avis);
+	@PreAuthorize("hasRole('EMPLOYE')")
+	public EntityUpdatedResponse modifierAvis(@PathVariable int id, @Valid @RequestBody AvisRequest request) {
+		this.srv.update(id, request);
 
-		this.srv.update(avis);
-
-		return AvisResponse.convert(avis);
+		return new EntityUpdatedResponse(id, true);
 	}
 
 	@DeleteMapping("/{id}")
 	@PreAuthorize("hasRole('EMPLOYE')")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteAvis(@PathVariable Integer id) {
 		this.srv.deleteById(id);
 	}

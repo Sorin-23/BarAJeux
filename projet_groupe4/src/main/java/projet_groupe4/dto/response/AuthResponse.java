@@ -12,6 +12,9 @@ public class AuthResponse {
 	private String username;
 
 	public AuthResponse(String token, Personne personne) {
+		if (personne == null) {
+			throw new IllegalArgumentException("Personne ne peut pas être null !");
+		}
 		this.token = token;
 		this.username = personne.getMail();
 		this.nom = personne.getNom();
@@ -26,16 +29,20 @@ public class AuthResponse {
 	public String getToken() {
 		return token;
 	}
-	public String getRole() { 
-		return role; 
+
+	public String getRole() {
+		return role;
 	}
-	public String getNom() { 
-		return nom; 
+
+	public String getNom() {
+		return nom;
 	}
-	public String getPrenom() { 
-		return prenom; 
+
+	public String getPrenom() {
+		return prenom;
 	}
+
 	public String getUsername() {
-		return username; 
+		return username;
 	}
 }

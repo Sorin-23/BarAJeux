@@ -2,8 +2,7 @@ package projet_groupe4.rest;
 
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,65 +11,56 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.annotation.JsonView;
 
 import jakarta.validation.Valid;
 import projet_groupe4.dto.request.ReservationRequest;
+import projet_groupe4.dto.response.EntityCreatedResponse;
+import projet_groupe4.dto.response.EntityUpdatedResponse;
 import projet_groupe4.dto.response.ReservationResponse;
 import projet_groupe4.exception.IdNotFoundException;
-import projet_groupe4.model.Reservation;
 import projet_groupe4.service.ReservationService;
-import projet_groupe4.view.Views;
 
 @RestController
 @RequestMapping("/api/reservation")
 @PreAuthorize("hasAnyRole('EMPLOYE', 'CLIENT')")
 public class ReservationRestController {
+    private final ReservationService srv;
 
-    @Autowired
-    private ReservationService srv;
+    public ReservationRestController(ReservationService srv) {
+        this.srv = srv;
+    }
 
     @GetMapping
-    @JsonView(Views.Reservation.class)
     public List<ReservationResponse> allReservations() {
         return this.srv.getAll().stream().map(ReservationResponse::convert).toList();
     }
 
     @GetMapping("/{id}")
-    @JsonView(Views.Reservation.class)
     public ReservationResponse ficheReservation(@PathVariable int id) {
         return this.srv.getById(id).map(ReservationResponse::convert).orElseThrow(IdNotFoundException::new);
     }
 
     @PostMapping
-    @JsonView(Views.Reservation.class)
-    @PreAuthorize("hasAnyRole('EMPLOYE')")
-    public ReservationResponse ajouterReservation(@Valid @RequestBody ReservationRequest request) {
-        Reservation reservation = new Reservation();
-        BeanUtils.copyProperties(request, reservation);
-
-        this.srv.create(reservation);
-
-        return ReservationResponse.convert(reservation);
+    @PreAuthorize("hasRole('EMPLOYE')")
+    @ResponseStatus(HttpStatus.CREATED)
+    public EntityCreatedResponse ajouterReservation(@Valid @RequestBody ReservationRequest request) {
+        return new EntityCreatedResponse(this.srv.create(request).getId());
     }
 
     @PutMapping("/{id}")
-    @JsonView(Views.Reservation.class)
-    @PreAuthorize("hasAnyRole('EMPLOYE')")
-    public ReservationResponse modifierReservation(@PathVariable int id,
+    @PreAuthorize("hasRole('EMPLOYE')")
+    public EntityUpdatedResponse modifierReservation(@PathVariable int id,
             @Valid @RequestBody ReservationRequest request) {
-        Reservation reservation = this.srv.getById(id).orElseThrow(IdNotFoundException::new);
-        BeanUtils.copyProperties(request, reservation);
+        this.srv.update(id, request);
 
-        this.srv.update(reservation);
-
-        return ReservationResponse.convert(reservation);
+        return new EntityUpdatedResponse(id, true);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('EMPLOYE')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteReservation(@PathVariable Integer id) {
         this.srv.deleteById(id);
     }

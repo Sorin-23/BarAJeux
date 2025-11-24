@@ -1,12 +1,13 @@
 package projet_groupe4.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import io.micrometer.common.lang.NonNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,26 +17,35 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import projet_groupe4.dao.IDAOPersonne;
 import projet_groupe4.model.Personne;
+import projet_groupe4.service.PersonneService;
+import projet_groupe4.exception.EmailAlreadyUsedException;
 import projet_groupe4.model.Client;
 import projet_groupe4.model.Employe;
 
 @Component
-public class JwtHeaderFilter extends OncePerRequestFilter{
-    @Autowired
-    private IDAOPersonne daoPersonne;
+public class JwtHeaderFilter extends OncePerRequestFilter {
+    private final PersonneService srvPersonne;
+
+    public JwtHeaderFilter(PersonneService srvPersonne) {
+        this.srvPersonne = srvPersonne;
+    }
+
     @Override
-    protected void doFilterInternal (HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain)
+            throws ServletException, IOException {
         String header = request.getHeader("Authorization");
         if (header != null) {
             String token = header.substring(7); // On enlève "Bearer " pour garder que le jeton
 
-            // On vérifie le jeton, et si tout est OK, on récupère l'utilisateur associé à ce jeton
+            // On vérifie le jeton, et si tout est OK, on récupère l'utilisateur associé à
+            // ce jeton
             Optional<String> optUsername = JwtUtils.validateAndGetSubjet(token);
 
             if (optUsername.isPresent()) {
-                Personne personne = this.daoPersonne.findByMail(optUsername.get()).orElseThrow();
+                Personne personne = this.srvPersonne.getByMail(optUsername.get())
+                        .orElseThrow(EmailAlreadyUsedException::new);
 
                 // On refabrique une liste de rôles pour l'utilisateur
                 List<GrantedAuthority> autorities = new ArrayList<>();
@@ -47,13 +57,17 @@ public class JwtHeaderFilter extends OncePerRequestFilter{
                 else if (personne instanceof Employe) {
                     autorities.add(new SimpleGrantedAuthority("ROLE_EMPLOYE"));
 
-                    /*if (e.isAdmin()) {
-                        autorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-                    }*/
+                    /*
+                     * if (e.isAdmin()) {
+                     * autorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+                     * }
+                     */
                 }
 
-                // Créer, pour Spring Security, un nouvel User, avec le nom d'utilisateur, pas de mdp, et la liste des autorités
-                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(optUsername.get(), null, autorities);
+                // Créer, pour Spring Security, un nouvel User, avec le nom d'utilisateur, pas
+                // de mdp, et la liste des autorités
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(optUsername.get(),
+                        null, autorities);
 
                 // Injecter notre nouvel authentication dans le contexte de Spring Security
                 SecurityContextHolder.getContext().setAuthentication(auth);
@@ -65,4 +79,4 @@ public class JwtHeaderFilter extends OncePerRequestFilter{
 
     }
 
-    }
+}
