@@ -35,14 +35,14 @@
       <img src="assets/images/bienvenue.png" alt="Intérieur du bar" id="img_bar" />
 
       <div class="bloc-resa" *ngIf="prenom">
-        <a href="table.html">
+        <a routerLink="/table">
           <img
             src="assets/images/resa_table.png"
             alt="Réservation de table"
             class="logo_resa"
           />
         </a>
-        <a href="table.html" class="class_resa">
+        <a routerLink="/table" class="class_resa">
           <h2>Réserver une table</h2>
           <p>
             Réservez votre table, choisissez vos jeux, et laissez la Taverne des
@@ -54,14 +54,14 @@
       <div id="info_table"></div>
       <!-- à développer ??-->
       <div class="bloc-resa" *ngIf="prenom">
-        <a href="jeu.html">
+        <a routerLink="/jeu">
           <img
             src="assets/images/resa_jeu.png"
             alt="Réservation de jeu"
             class="logo_resa"
           />
         </a>
-        <a href="jeu.html" class="class_resa">
+        <a routerLink="/jeu" class="class_resa">
           <h2>Réserver un jeu</h2>
           <p>
             Une ludothèque variée où chaque dé lancé et chaque carte jouée
@@ -99,8 +99,8 @@
             </ol>
           </div>
           <div *ngIf="prenom">
-            <a href="jeu.html"><input type="button" value="Louer une jeu" class="btn"  /></a>
-            <a href="table.html"><input type="button" value="Réserver une table" class="btn" /></a>
+            <a routerLink="/jeu"><input type="button" value="Louer une jeu" class="btn"  /></a>
+            <a routerLink="/table"><input type="button" value="Réserver une table" class="btn" /></a>
           </div>
         </div>
         <div id="left_container">

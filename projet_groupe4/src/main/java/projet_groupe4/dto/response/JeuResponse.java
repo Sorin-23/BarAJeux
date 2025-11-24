@@ -140,6 +140,8 @@ public class JeuResponse {
         resp.setNote(jeu.getNote());
         resp.setImgURL(jeu.getImgURL());
         resp.setBesoinGameMaster(jeu.isBesoinGameMaster());
+        resp.setCategoriesJeux(jeu.getCategoriesJeux());
+        resp.setTypesJeux(jeu.getTypesJeux());
 
         return resp;
 

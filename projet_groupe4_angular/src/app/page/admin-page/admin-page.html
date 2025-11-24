@@ -1,22 +1,26 @@
 <h1>Interface d'administrateur</h1>
 <div id="admin_bouton_section" class="block_white">
   <button
-    class="btn btn_admin active"
+    class="btn btn_admin"
+    [class.active]="currentSection === 'dashboard'"
     data-table="bdd_dashboard"
     (click)="currentSection = 'dashboard'"
   >
     Dashboard
   </button>
-  <button class="btn btn_admin" data-table="bdd_jeux" (click)="currentSection = 'jeu'">Jeux</button>
-  <button class="btn btn_admin" data-table="bdd_table" (click)="currentSection = 'table'">
+  <button class="btn btn_admin"  [class.active]="currentSection === 'jeu'" data-table="bdd_jeux" (click)="currentSection = 'jeu'">Jeux</button>
+  <button class="btn btn_admin" [class.active]="currentSection === 'table'" data-table="bdd_table" (click)="currentSection = 'table'">
     Tables
   </button>
-  <button class="btn btn_admin" data-table="bdd_employe" (click)="currentSection = 'employe'">
+  <button class="btn btn_admin" [class.active]="currentSection === 'employe'" data-table="bdd_employe" (click)="currentSection = 'employe'">
     Employés
   </button>
-  <button class="btn btn_admin" data-table="bdd_badge" (click)="currentSection = 'badge'">
+  <button class="btn btn_admin" [class.active]="currentSection === 'badge'" data-table="bdd_badge" (click)="currentSection = 'badge'">
     Badges
   </button>
+</div>
+<div>
+  currentSection = {{currentSection}}
 </div>
 
 <div id="admin_table_section" class="block_white">
@@ -44,6 +48,7 @@
   </div>
 
   <div *ngIf="currentSection === 'jeu'">
+    <h2>Jeu</h2>
     <table>
       <thead>
         <tr>
@@ -78,8 +83,8 @@
           <td>{{ jeu.nbExemplaire }}</td>
           <td>{{ jeu.nbJoueurMinimum }}</td>
           <td>{{ jeu.nbJoueurMaximum }}</td>
-          <td>{{ jeu.categoriesJeux }}</td>
-          <td>{{ jeu.typesJeux }}</td>
+          <td>{{ jeu.categoriesJeux?.join(', ') }}</td>
+          <td>{{ jeu.typesJeux?.join(', ') }}</td>
           <td>{{ jeu.note }}</td>
           <td>
             <button class="btn_crud btn_modifier" title="Modifier" (click)="modifierJeu(jeu)">

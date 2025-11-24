@@ -10,11 +10,12 @@ import { JeuService } from '../../service/jeu-service';
 import { ReservationService } from '../../service/reservation-service';
 import { TableJeuService } from '../../service/table-jeu-service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-admin-page',
-  imports: [ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './admin-page.html',
   styleUrl: './admin-page.css',
 })
@@ -39,7 +40,21 @@ export class AdminPage implements OnInit {
 
   ngOnInit(): void {
     this.jeuService.findAll().subscribe((data) => {
-      this.jeux = data;
+      this.jeux =  data.map(j => new Jeu(
+      j.id,
+      j.nom,
+      j.typesJeux || [],
+      j.ageMinimum,
+      j.nbJoueurMinimum,
+      j.nbJoueurMaximum,
+      j.duree,
+      j.nbExemplaire,
+      j.note,
+      j.categoriesJeux || [],
+      j.imgURL,
+      j.besoinGameMaster
+    ));
+    console.log('Jeux transformés:', this.jeux);
     });
     this.employeService.findAll().subscribe((data) => {
       this.employes = data;
