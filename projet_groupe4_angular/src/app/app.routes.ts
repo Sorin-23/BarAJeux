@@ -9,11 +9,12 @@ import { LoginPage } from './page/login-page/login-page';
 export const routes: Routes = [
 
 
-    {path:'table',component:TablePage , canActivate: [authGuard]},
-    {path:'jeu',component:JeuPage , canActivate: [authGuard]},
-    {path:'client',component:ClientPage , canActivate: [authGuard]},
-    {path:'admin',component:AdminPage , canActivate: [authGuard]},
+    {path:'table',component:TablePage /*, canActivate: [authGuard]*/},
+    {path:'jeu',component:JeuPage /*, canActivate: [authGuard]*/},
+    {path:'client',component:ClientPage /*, canActivate: [authGuard]*/},
+    {path:'admin',component:AdminPage /*, canActivate: [authGuard]*/},
     {path:'home',component:HomePage},
-    {path:'login',component:LoginPage}
+    {path:'login',component:LoginPage},
+    {path:'', redirectTo:'home' , pathMatch: 'full'}
 
 ];

@@ -5,16 +5,15 @@
     </a>
   </div>
   <nav class="menu" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-
+    <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Accueil</a>
     <!-- Liens visibles uniquement si NON connecté -->
     <ng-container *ngIf="!(isLoggedIn$ | async)">
-      <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Accueil</a>
+      
       <a routerLink="/login" routerLinkActive="active">Se connecter</a>
-    </ng-container>
+  <!--  </ng-container>
 
-    <!-- Liens visibles uniquement si connecté -->
-    <ng-container *ngIf="isLoggedIn$ | async">
-      <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Accueil</a>
+    Liens visibles uniquement si connecté
+    <ng-container *ngIf="isLoggedIn$ | async"> -->
       <a routerLink="/table" routerLinkActive="active">Réservation de table</a>
       <a routerLink="/jeu" routerLinkActive="active">Réservation de jeu</a>
       <a routerLink="/client" routerLinkActive="active">Compte</a>

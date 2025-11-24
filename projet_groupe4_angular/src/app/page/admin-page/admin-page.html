@@ -1,1 +1,102 @@
-<p>admin-page works!</p>
+<h1>Interface d'administrateur</h1>
+<div id="admin_bouton_section" class="block_white">
+  <button
+    class="btn btn_admin active"
+    data-table="bdd_dashboard"
+    (click)="currentSection = 'dashboard'"
+  >
+    Dashboard
+  </button>
+  <button class="btn btn_admin" data-table="bdd_jeux" (click)="currentSection = 'jeu'">Jeux</button>
+  <button class="btn btn_admin" data-table="bdd_table" (click)="currentSection = 'table'">
+    Tables
+  </button>
+  <button class="btn btn_admin" data-table="bdd_employe" (click)="currentSection = 'employe'">
+    Employés
+  </button>
+  <button class="btn btn_admin" data-table="bdd_badge" (click)="currentSection = 'badge'">
+    Badges
+  </button>
+</div>
+
+<div id="admin_table_section" class="block_white">
+  <div *ngIf="currentSection === 'dashboard'">
+    <div class="dashboard_card">
+      <h3>Jeux</h3>
+      <p class="dashboard_value" id="count_jeux">{{ jeux.length }}</p>
+    </div>
+    <div class="dashboard_card">
+      <h3>Employés</h3>
+      <p class="dashboard_value" id="count_employes">{{ employes.length }}</p>
+    </div>
+    <div class="dashboard_card">
+      <h3>Tables</h3>
+      <p class="dashboard_value" id="count_tables">{{ tables.length }}</p>
+    </div>
+    <div class="dashboard_card">
+      <h3>Badges</h3>
+      <p class="dashboard_value" id="count_badges">{{ badges.length }}</p>
+    </div>
+    <div class="dashboard_card">
+      <h3>Réservations du jour</h3>
+      <p class="dashboard_value" id="count_reservations">3</p>
+    </div>
+  </div>
+
+  <div *ngIf="currentSection === 'jeu'">
+    <table>
+      <thead>
+        <tr>
+          <th data-type="number">id</th>
+          <th data-type="text">Nom du jeu</th>
+          <th data-type="number">Age minimum</th>
+          <th data-type="checkbox">Besoin d'un GameMaster</th>
+          <th data-type="number">Durée</th>
+          <th data-type="text">Image</th>
+          <th data-type="number">Nombres d'exemplaires</th>
+          <th data-type="number">Nombres de joueurs minimum</th>
+          <th data-type="number">Nombres de joueurs maximum</th>
+          <th
+            data-type="liste"
+            data-options="STRATEGIE,COOPERATIF,ENFANT,AMBIANCE,RAPIDITE,REFLEXION"
+          >
+            Catégories
+          </th>
+          <th data-type="liste" data-options="PLATEAU,CARTE,DES,ROLE,AMBIANCE">Types</th>
+          <th data-type="number">Note</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let jeu of jeux">
+          <td>{{ jeu.id }}</td>
+          <td>{{ jeu.nom }}</td>
+          <td>{{ jeu.ageMinimum }}</td>
+          <td>{{ jeu.besoinGameMaster }}</td>
+          <td>{{ jeu.duree }}</td>
+          <td>{{ jeu.imgURL }}</td>
+          <td>{{ jeu.nbExemplaire }}</td>
+          <td>{{ jeu.nbJoueurMinimum }}</td>
+          <td>{{ jeu.nbJoueurMaximum }}</td>
+          <td>{{ jeu.categoriesJeux }}</td>
+          <td>{{ jeu.typesJeux }}</td>
+          <td>{{ jeu.note }}</td>
+          <td>
+            <button class="btn_crud btn_modifier" title="Modifier" (click)="modifierJeu(jeu)">
+              ✏️
+            </button>
+            <button class="btn_crud btn_supprimer" title="Supprimer" (click)="supprimerJeu(jeu)">
+              🗑️
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="currentSection === 'table'"></div>
+
+  <div *ngIf="currentSection === 'employe'"></div>
+
+  <div *ngIf="currentSection === 'badge'"></div>
+</div>

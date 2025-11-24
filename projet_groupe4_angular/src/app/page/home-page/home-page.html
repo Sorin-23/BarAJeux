@@ -34,7 +34,7 @@
       </p>
       <img src="assets/images/bienvenue.png" alt="Intérieur du bar" id="img_bar" />
 
-      <div class="bloc-resa">
+      <div class="bloc-resa" *ngIf="prenom">
         <a href="table.html">
           <img
             src="assets/images/resa_table.png"
@@ -53,7 +53,7 @@
 
       <div id="info_table"></div>
       <!-- à développer ??-->
-      <div class="bloc-resa">
+      <div class="bloc-resa" *ngIf="prenom">
         <a href="jeu.html">
           <img
             src="assets/images/resa_jeu.png"
@@ -98,7 +98,7 @@
               <li>jeu 3</li>
             </ol>
           </div>
-          <div>
+          <div *ngIf="prenom">
             <a href="jeu.html"><input type="button" value="Louer une jeu" class="btn"  /></a>
             <a href="table.html"><input type="button" value="Réserver une table" class="btn" /></a>
           </div>

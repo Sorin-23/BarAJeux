@@ -1,5 +1,7 @@
 package projet_groupe4.dto.response;
 
+import projet_groupe4.model.Client;
+import projet_groupe4.model.Employe;
 import projet_groupe4.model.Personne;
 
 public class AuthResponse {
@@ -14,9 +16,9 @@ public class AuthResponse {
 		this.username = personne.getMail();
 		this.nom = personne.getNom();
 		this.prenom = personne.getPrenom();
-		if (personne instanceof projet_groupe4.model.Client) {
+		if (personne instanceof Client) {
 			this.role = "ROLE_CLIENT";
-		} else if (personne instanceof projet_groupe4.model.Employe) {
+		} else if (personne instanceof Employe) {
 			this.role = "ROLE_EMPLOYE";
 		}
 	}
