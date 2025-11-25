@@ -19,27 +19,25 @@
     Badges
   </button>
 </div>
-<div>
-  currentSection = {{currentSection}}
-</div>
+
 
 <div id="admin_table_section" class="block_white">
   <div *ngIf="currentSection === 'dashboard'">
     <div class="dashboard_card">
       <h3>Jeux</h3>
-      <p class="dashboard_value" id="count_jeux">{{ jeux.length }}</p>
+      <p class="dashboard_value" id="count_jeux">{{ data['jeux']?.length }}</p>
     </div>
     <div class="dashboard_card">
       <h3>Employés</h3>
-      <p class="dashboard_value" id="count_employes">{{ employes.length }}</p>
+      <p class="dashboard_value" id="count_employes">{{ data['employes']?.length }}</p>
     </div>
     <div class="dashboard_card">
       <h3>Tables</h3>
-      <p class="dashboard_value" id="count_tables">{{ tables.length }}</p>
+      <p class="dashboard_value" id="count_tables">{{ data['tables']?.length }}</p>
     </div>
     <div class="dashboard_card">
       <h3>Badges</h3>
-      <p class="dashboard_value" id="count_badges">{{ badges.length }}</p>
+      <p class="dashboard_value" id="count_badges">{{ data['badges']?.length }}</p>
     </div>
     <div class="dashboard_card">
       <h3>Réservations du jour</h3>
@@ -48,32 +46,42 @@
   </div>
 
   <div *ngIf="currentSection === 'jeu'">
-    <h2>Jeu</h2>
-    <table>
+    <section id="bdd_recherche_ajout">
+            <input
+              type="text"
+              id="recherche_bdd"
+              class="barre_recherche"
+              placeholder="🔍 Rechercher..."
+              [formControl]="searchControls['jeux']"
+            
+            />
+            <button class="btn_crud btn_ajouter" title="Ajouter" (click)="ajouter('jeux')">➕</button>
+      </section>
+    <table matSort (matSortChange)="sortData('jeux', $event)">
       <thead>
         <tr>
-          <th data-type="number">id</th>
-          <th data-type="text">Nom du jeu</th>
-          <th data-type="number">Age minimum</th>
-          <th data-type="checkbox">Besoin d'un GameMaster</th>
-          <th data-type="number">Durée</th>
-          <th data-type="text">Image</th>
-          <th data-type="number">Nombres d'exemplaires</th>
-          <th data-type="number">Nombres de joueurs minimum</th>
-          <th data-type="number">Nombres de joueurs maximum</th>
+          <th data-type="number" mat-sort-header="id">id</th>
+          <th data-type="text" mat-sort-header="nom">Nom du jeu</th>
+          <th data-type="number" mat-sort-header="ageMinimum">Age minimum</th>
+          <th data-type="checkbox" mat-sort-header="besoinGameMaster">Besoin d'un GameMaster</th>
+          <th data-type="number" mat-sort-header="duree">Durée</th>
+          <th data-type="text" mat-sort-header="imgURL">Image</th>
+          <th data-type="number" mat-sort-header="nbExemplaire">Nombres d'exemplaires</th>
+          <th data-type="number" mat-sort-header="nbJoueurMinimum">Nombres de joueurs minimum</th>
+          <th data-type="number" mat-sort-header="nbJoueurMaximum">Nombres de joueurs maximum</th>
           <th
-            data-type="liste"
+            data-type="liste" mat-sort-header="categoriesJeux"
             data-options="STRATEGIE,COOPERATIF,ENFANT,AMBIANCE,RAPIDITE,REFLEXION"
           >
             Catégories
           </th>
-          <th data-type="liste" data-options="PLATEAU,CARTE,DES,ROLE,AMBIANCE">Types</th>
-          <th data-type="number">Note</th>
+          <th data-type="liste" mat-sort-header="typesJeux" data-options="PLATEAU,CARTE,DES,ROLE,AMBIANCE">Types</th>
+          <th data-type="number" mat-sort-header="note">Note</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let jeu of jeux">
+        <tr *ngFor="let jeu of filteredItems['jeux']">
           <td>{{ jeu.id }}</td>
           <td>{{ jeu.nom }}</td>
           <td>{{ jeu.ageMinimum }}</td>
@@ -87,10 +95,10 @@
           <td>{{ jeu.typesJeux?.join(', ') }}</td>
           <td>{{ jeu.note }}</td>
           <td>
-            <button class="btn_crud btn_modifier" title="Modifier" (click)="modifierJeu(jeu)">
+            <button class="btn_crud btn_modifier" title="Modifier" (click)="modifier('jeux', jeu)">
               ✏️
             </button>
-            <button class="btn_crud btn_supprimer" title="Supprimer" (click)="supprimerJeu(jeu)">
+            <button class="btn_crud btn_supprimer" title="Supprimer" (click)="supprimer('jeux', jeu)">
               🗑️
             </button>
           </td>
@@ -104,4 +112,4 @@
   <div *ngIf="currentSection === 'employe'"></div>
 
   <div *ngIf="currentSection === 'badge'"></div>
-</div>
+</div> 
