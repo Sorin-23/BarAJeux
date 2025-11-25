@@ -18,6 +18,9 @@
   <button class="btn btn_admin" [class.active]="currentSection === 'badge'" data-table="bdd_badge" (click)="currentSection = 'badge'">
     Badges
   </button>
+  <button class="btn btn_admin" [class.active]="currentSection === 'emprunt'" data-table="bdd_emprunt" (click)="currentSection = 'emprunt'">
+    Emprunts
+  </button>
 </div>
 
 
@@ -104,12 +107,55 @@
           </td>
         </tr>
       </tbody>
+      
     </table>
   </div>
 
-  <div *ngIf="currentSection === 'table'"></div>
+  <div *ngIf="currentSection === 'table'">
+
+    <section id="bdd_recherche_ajout">
+    <input
+      type="text"
+      id="recherche_bdd"
+      class="barre_recherche"
+      placeholder="🔍 Rechercher..."
+      [formControl]="searchControls['tables']"
+    />
+    <button class="btn_crud btn_ajouter" title="Ajouter" (click)="ajouter('tables')">➕</button>
+  </section>
+  
+  <table matSort (matSortChange)="sortData('tables', $event)">
+    <thead>
+      <tr>
+        <th data-type="number" mat-sort-header="id">ID</th>
+        <th data-type="text" mat-sort-header="nomTable">Nom de la table</th>
+        <th data-type="number" mat-sort-header="capacite">Capacité</th>
+        <th data-type="text" mat-sort-header="imgUrl">Image</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let table of filteredItems['tables']">
+        <td>{{ table.id }}</td>
+        <td>{{ table.nomTable }}</td>
+        <td>{{ table.capacite }}</td>
+        <td>{{ table.imgUrl }}</td>
+        <td>
+          <button class="btn_crud btn_modifier" title="Modifier" (click)="modifier('tables', table)">
+            ✏️
+          </button>
+          <button class="btn_crud btn_supprimer" title="Supprimer" (click)="supprimer('tables', table)">
+            🗑️
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  </div>
 
   <div *ngIf="currentSection === 'employe'"></div>
 
   <div *ngIf="currentSection === 'badge'"></div>
+  <div *ngIf="currentSection === 'emprunt'"></div>
 </div> 

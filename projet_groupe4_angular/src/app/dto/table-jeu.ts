@@ -33,6 +33,8 @@ export class TableJeu {
     this._capacite = value;
   }
 
+
+
   public get reservations(): Reservation[] {
     return this._reservations;
   }

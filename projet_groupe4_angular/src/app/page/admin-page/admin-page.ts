@@ -12,7 +12,7 @@ import { TableJeuService } from '../../service/table-jeu-service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import {  MatSortModule, Sort } from '@angular/material/sort';
-
+import { EmpruntService } from '../../service/emprunt-service';
 
 
 @Component({
@@ -28,6 +28,7 @@ export class AdminPage implements OnInit {
     tables: [],
     badges: [],
     reservations: [],
+    emprunts:[],
   };
 
 
@@ -37,6 +38,7 @@ export class AdminPage implements OnInit {
     tables: [],
     badges: [],
     reservations: [],
+    emprunts:[],
   };
   lastSort: { [key: string]: Sort | null } = {};
 
@@ -46,7 +48,9 @@ export class AdminPage implements OnInit {
     employes: new FormControl(''),
     tables: new FormControl(''),
     badges: new FormControl(''),
-    reservations: new FormControl('')
+    reservations: new FormControl(''),
+    emprunts: new FormControl('')
+    
   };
 
   currentEdit: { [key: string]: any } = {
@@ -55,6 +59,7 @@ export class AdminPage implements OnInit {
     table: null,
     badge: null,
     reservation: null,
+    emprunt:null
   };
 
   currentSection = 'dashboard';
@@ -65,6 +70,7 @@ export class AdminPage implements OnInit {
     private tableJeuService: TableJeuService,
     private badgeService: BadgeService,
     private reservationService: ReservationService,
+    private empruntService : EmpruntService
   ) {}
 
     ngOnInit(): void {
@@ -74,6 +80,7 @@ export class AdminPage implements OnInit {
     this.loadSection('tables', this.tableJeuService);
     this.loadSection('badges', this.badgeService);
     this.loadSection('reservations', this.reservationService);
+    this.loadSection('emprunts',this.empruntService);
 
 
     Object.keys(this.searchControls).forEach(section => {
@@ -98,7 +105,7 @@ filter(section: string, term: string) {
       this.filteredItems[section] = [...this.data[section]];
     } else {
       this.filteredItems[section] = this.data[section].filter(item =>
-        (item.nom || item.name || '').toLowerCase().includes(term)
+        (item.nom || item.name || item.nomTable ||'').toLowerCase().includes(term)
       );
     if(this.lastSort[section]){
       this.sortData(section, this.lastSort[section]);
@@ -152,6 +159,9 @@ supprimer(section: string, item: any) {
         break;
       case 'reservations':
         this.reservationService.deleteById(item.id);
+        break;
+      case 'emprunts':
+        this.empruntService.deleteById(item.id);
         break;
     }
   }
