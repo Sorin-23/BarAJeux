@@ -15,6 +15,7 @@ import {  MatSortModule, Sort } from '@angular/material/sort';
 import { EmpruntService } from '../../service/emprunt-service';
 
 
+
 @Component({
   selector: 'app-admin-page',
   imports: [CommonModule, ReactiveFormsModule, MatSortModule],
@@ -105,7 +106,7 @@ filter(section: string, term: string) {
       this.filteredItems[section] = [...this.data[section]];
     } else {
       this.filteredItems[section] = this.data[section].filter(item =>
-        (item.nom || item.name || item.nomTable ||'').toLowerCase().includes(term)
+        (item.nom || item.name || item.nomTable ||item.nomBadge ||item.client.nom || item.client.prenom ||'').toLowerCase().includes(term)
       );
     if(this.lastSort[section]){
       this.sortData(section, this.lastSort[section]);
@@ -176,6 +177,10 @@ supprimer(section: string, item: any) {
     //ouverture du modal en automatique 
   }
 
+  
+
+
+  
 
   
 }  

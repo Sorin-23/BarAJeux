@@ -17,24 +17,24 @@ public class EmpruntResponse {
 
     private StatutLocation statutLocation;
 
-    private Integer clientId;
+    private ClientResponse client;
 
-    private Integer jeuId;
+    private JeuResponse jeu;
 
-    public Integer getClientId() {
-        return clientId;
+    public ClientResponse getClient() {
+        return client;
     }
 
-    public void setClientId(Integer clientId) {
-        this.clientId = clientId;
+    public void setClient(ClientResponse client) {
+        this.client = client;
     }
 
-    public Integer getJeuId() {
-        return jeuId;
+    public JeuResponse getJeu() {
+        return jeu;
     }
 
-    public void setJeuId(Integer jeuId) {
-        this.jeuId = jeuId;
+    public void setJeu(JeuResponse jeu) {
+        this.jeu = jeu;
     }
 
     public Integer getId() {
@@ -86,11 +86,12 @@ public class EmpruntResponse {
         resp.setDateRetourReel(emprunt.getDateRetourReel());
         resp.setStatutLocation(emprunt.getStatutLocation());
 
-        if (emprunt.getClient() != null) {
-            resp.setClientId(emprunt.getClient().getId());
+        if(emprunt.getClient() != null){
+            resp.setClient(ClientResponse.convert(emprunt.getClient()));
         }
-        if (emprunt.getJeu() != null) {
-            resp.setJeuId(emprunt.getJeu().getId());
+
+        if(emprunt.getJeu() != null){
+            resp.setJeu(JeuResponse.convert(emprunt.getJeu()));
         }
 
         return resp;

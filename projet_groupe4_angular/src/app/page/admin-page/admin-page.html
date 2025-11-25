@@ -8,21 +8,56 @@
   >
     Dashboard
   </button>
-  <button class="btn btn_admin"  [class.active]="currentSection === 'jeu'" data-table="bdd_jeux" (click)="currentSection = 'jeu'">Jeux</button>
-  <button class="btn btn_admin" [class.active]="currentSection === 'table'" data-table="bdd_table" (click)="currentSection = 'table'">
+  <button
+    class="btn btn_admin"
+    [class.active]="currentSection === 'jeu'"
+    data-table="bdd_jeux"
+    (click)="currentSection = 'jeu'"
+  >
+    Jeux
+  </button>
+  <button
+    class="btn btn_admin"
+    [class.active]="currentSection === 'table'"
+    data-table="bdd_table"
+    (click)="currentSection = 'table'"
+  >
     Tables
   </button>
-  <button class="btn btn_admin" [class.active]="currentSection === 'employe'" data-table="bdd_employe" (click)="currentSection = 'employe'">
+  <button
+    class="btn btn_admin"
+    [class.active]="currentSection === 'employe'"
+    data-table="bdd_employe"
+    (click)="currentSection = 'employe'"
+  >
     Employés
   </button>
-  <button class="btn btn_admin" [class.active]="currentSection === 'badge'" data-table="bdd_badge" (click)="currentSection = 'badge'">
+  <button
+    class="btn btn_admin"
+    [class.active]="currentSection === 'badge'"
+    data-table="bdd_badge"
+    (click)="currentSection = 'badge'"
+  >
     Badges
   </button>
-  <button class="btn btn_admin" [class.active]="currentSection === 'emprunt'" data-table="bdd_emprunt" (click)="currentSection = 'emprunt'">
+  <button
+    class="btn btn_admin"
+    [class.active]="currentSection === 'emprunt'"
+    data-table="bdd_emprunt"
+    (click)="currentSection = 'emprunt'"
+  >
     Emprunts
   </button>
-</div>
 
+  <button
+    class="btn btn_admin"
+    [class.active]="currentSection === 'reservation'"
+    data-table="bdd_reservation"
+    (click)="currentSection = 'reservation'"
+  >
+    Reservations
+  </button>
+</div>
 
 <div id="admin_table_section" class="block_white">
   <div *ngIf="currentSection === 'dashboard'">
@@ -50,16 +85,15 @@
 
   <div *ngIf="currentSection === 'jeu'">
     <section id="bdd_recherche_ajout">
-            <input
-              type="text"
-              id="recherche_bdd"
-              class="barre_recherche"
-              placeholder="🔍 Rechercher..."
-              [formControl]="searchControls['jeux']"
-            
-            />
-            <button class="btn_crud btn_ajouter" title="Ajouter" (click)="ajouter('jeux')">➕</button>
-      </section>
+      <input
+        type="text"
+        id="recherche_bdd"
+        class="barre_recherche"
+        placeholder="🔍 Rechercher..."
+        [formControl]="searchControls['jeux']"
+      />
+      <button class="btn_crud btn_ajouter" title="Ajouter" (click)="ajouter('jeux')">➕</button>
+    </section>
     <table matSort (matSortChange)="sortData('jeux', $event)">
       <thead>
         <tr>
@@ -73,12 +107,19 @@
           <th data-type="number" mat-sort-header="nbJoueurMinimum">Nombres de joueurs minimum</th>
           <th data-type="number" mat-sort-header="nbJoueurMaximum">Nombres de joueurs maximum</th>
           <th
-            data-type="liste" mat-sort-header="categoriesJeux"
+            data-type="liste"
+            mat-sort-header="categoriesJeux"
             data-options="STRATEGIE,COOPERATIF,ENFANT,AMBIANCE,RAPIDITE,REFLEXION"
           >
             Catégories
           </th>
-          <th data-type="liste" mat-sort-header="typesJeux" data-options="PLATEAU,CARTE,DES,ROLE,AMBIANCE">Types</th>
+          <th
+            data-type="liste"
+            mat-sort-header="typesJeux"
+            data-options="PLATEAU,CARTE,DES,ROLE,AMBIANCE"
+          >
+            Types
+          </th>
           <th data-type="number" mat-sort-header="note">Note</th>
           <th>Actions</th>
         </tr>
@@ -101,61 +142,286 @@
             <button class="btn_crud btn_modifier" title="Modifier" (click)="modifier('jeux', jeu)">
               ✏️
             </button>
-            <button class="btn_crud btn_supprimer" title="Supprimer" (click)="supprimer('jeux', jeu)">
+            <button
+              class="btn_crud btn_supprimer"
+              title="Supprimer"
+              (click)="supprimer('jeux', jeu)"
+            >
               🗑️
             </button>
           </td>
         </tr>
       </tbody>
-      
     </table>
   </div>
 
   <div *ngIf="currentSection === 'table'">
+    <section id="bdd_recherche_ajout">
+      <input
+        type="text"
+        id="recherche_bdd"
+        class="barre_recherche"
+        placeholder="🔍 Rechercher..."
+        [formControl]="searchControls['tables']"
+      />
+      <button class="btn_crud btn_ajouter" title="Ajouter" (click)="ajouter('tables')">➕</button>
+    </section>
 
+    <table matSort (matSortChange)="sortData('tables', $event)">
+      <thead>
+        <tr>
+          <th data-type="number" mat-sort-header="id">ID</th>
+          <th data-type="text" mat-sort-header="nomTable">Nom de la table</th>
+          <th data-type="number" mat-sort-header="capacite">Capacité</th>
+          <th data-type="text" mat-sort-header="imgUrl">Image</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let table of filteredItems['tables']">
+          <td>{{ table.id }}</td>
+          <td>{{ table.nomTable }}</td>
+          <td>{{ table.capacite }}</td>
+          <td>{{ table.imgUrl }}</td>
+          <td>
+            <button
+              class="btn_crud btn_modifier"
+              title="Modifier"
+              (click)="modifier('tables', table)"
+            >
+              ✏️
+            </button>
+            <button
+              class="btn_crud btn_supprimer"
+              title="Supprimer"
+              (click)="supprimer('tables', table)"
+            >
+              🗑️
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="currentSection === 'employe'">
+    <section id="bdd_recherche_ajout">
+      <input
+        type="text"
+        id="recherche_bdd"
+        class="barre_recherche"
+        placeholder="🔍 Rechercher..."
+        [formControl]="searchControls['employes']"
+      />
+      <button class="btn_crud btn_ajouter" title="Ajouter" (click)="ajouter('employes')">➕</button>
+    </section>
+
+    <table matSort (matSortChange)="sortData('employes', $event)">
+      <thead>
+        <tr>
+          <th data-type="number" mat-sort-header="id">ID</th>
+          <th data-type="text" mat-sort-header="nom">Nom</th>
+          <th data-type="text" mat-sort-header="prenom">Prénom</th>
+          <th data-type="text" mat-sort-header="mail">Email</th>
+          <th data-type="text" mat-sort-header="telephone">Téléphone</th>
+          <th data-type="text" mat-sort-header="job">Poste</th>
+          <th data-type="checkbox" mat-sort-header="gameMaster">Game Master</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let employe of filteredItems['employes']">
+          <td>{{ employe.id }}</td>
+          <td>{{ employe.nom }}</td>
+          <td>{{ employe.prenom }}</td>
+          <td>{{ employe.mail }}</td>
+          <td>{{ employe.telephone }}</td>
+          <td>{{ employe.job }}</td>
+          <td>
+            {{ employe.gameMaster }}
+          </td>
+          <td>
+            <button
+              class="btn_crud btn_modifier"
+              title="Modifier"
+              (click)="modifier('employes', employe)"
+            >
+              ✏️
+            </button>
+            <button
+              class="btn_crud btn_supprimer"
+              title="Supprimer"
+              (click)="supprimer('employes', employe)"
+            >
+              🗑️
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="currentSection === 'badge'">
+    <section id="bdd_recherche_ajout">
+      <input
+        type="text"
+        id="recherche_bdd"
+        class="barre_recherche"
+        placeholder="🔍 Rechercher..."
+        [formControl]="searchControls['badges']"
+      />
+      <button class="btn_crud btn_ajouter" title="Ajouter" (click)="ajouter('badges')">➕</button>
+    </section>
+
+    <table matSort (matSortChange)="sortData('badges', $event)">
+      <thead>
+        <tr>
+          <th data-type="number" mat-sort-header="id">ID</th>
+          <th data-type="text" mat-sort-header="nomBadge">Nom du badge</th>
+          <th data-type="number" mat-sort-header="pointMin">Points minimum</th>
+          <th data-type="text" mat-sort-header="imgURL">Image</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let badge of filteredItems['badges']">
+          <td>{{ badge.id }}</td>
+          <td>{{ badge.nomBadge }}</td>
+          <td>{{ badge.pointMin }}</td>
+          <td>{{ badge.imgURL }}</td>
+
+          <td>
+            <button
+              class="btn_crud btn_modifier"
+              title="Modifier"
+              (click)="modifier('badges', badge)"
+            >
+              ✏️
+            </button>
+            <button
+              class="btn_crud btn_supprimer"
+              title="Supprimer"
+              (click)="supprimer('badges', badge)"
+            >
+              🗑️
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="currentSection === 'emprunt'">
+    <section id="bdd_recherche_ajout">
+      <input
+        type="text"
+        id="recherche_bdd"
+        class="barre_recherche"
+        placeholder="🔍 Rechercher..."
+        [formControl]="searchControls['emprunts']"
+      />
+      <button class="btn_crud btn_ajouter" title="Ajouter" (click)="ajouter('emprunts')">➕</button>
+    </section>
+
+    <table matSort (matSortChange)="sortData('emprunts', $event)">
+      <thead>
+        <tr>
+          <th data-type="number" mat-sort-header="id">ID</th>
+          <th data-type="text" mat-sort-header="dateEmprunt">Date emprunt</th>
+          <th data-type="text" mat-sort-header="dateRetour">Date retour prévue</th>
+          <th data-type="text" mat-sort-header="dateRetourReel">Date retour réel</th>
+          <th data-type="text" mat-sort-header="statutLocation">Statut</th>
+          <th data-type="text" mat-sort-header="client">Client</th>
+          <th data-type="text" mat-sort-header="jeu">Jeu</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let e of filteredItems['emprunts']">
+          <td>{{ e.id }}</td>
+
+          <td>{{ e.dateEmprunt | date : 'dd/MM/yyyy' }}</td>
+          <td>{{ e.dateRetour | date : 'dd/MM/yyyy' }}</td>
+          <td>{{ e.dateRetourReel ? (e.dateRetourReel | date : 'dd/MM/yyyy') : '—' }}</td>
+
+          <td>{{ e.statutLocation }}</td>
+
+          <!-- Client visible sous forme "Nom Prénom" -->
+          <td>{{ e.client ? e.client.nom + ' ' + e.client.prenom : '—' }}</td>
+
+          <!-- Jeu affiché sous son nom -->
+          <td>{{ e.jeu?.nom }}</td>
+
+          <td>
+            <button
+              class="btn_crud btn_modifier"
+              title="Modifier"
+              (click)="modifier('emprunts', e)"
+            >
+              ✏️
+            </button>
+            <button
+              class="btn_crud btn_supprimer"
+              title="Supprimer"
+              (click)="supprimer('emprunts', e)"
+            >
+              🗑️
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <div *ngIf="currentSection === 'reservation'"> 
     <section id="bdd_recherche_ajout">
     <input
       type="text"
-      id="recherche_bdd"
+      id="recherche_reservation"
       class="barre_recherche"
       placeholder="🔍 Rechercher..."
-      [formControl]="searchControls['tables']"
+      [formControl]="searchControls['reservations']"
     />
-    <button class="btn_crud btn_ajouter" title="Ajouter" (click)="ajouter('tables')">➕</button>
+    <button class="btn_crud btn_ajouter" title="Ajouter" (click)="ajouter('reservations')">➕</button>
   </section>
-  
-  <table matSort (matSortChange)="sortData('tables', $event)">
+
+  <table matSort (matSortChange)="sortData('reservations', $event)">
     <thead>
       <tr>
         <th data-type="number" mat-sort-header="id">ID</th>
-        <th data-type="text" mat-sort-header="nomTable">Nom de la table</th>
-        <th data-type="number" mat-sort-header="capacite">Capacité</th>
-        <th data-type="text" mat-sort-header="imgUrl">Image</th>
+        <th data-type="datetime" mat-sort-header="datetimeDebut">Début</th>
+        <th data-type="datetime" mat-sort-header="datetimeFin">Fin</th>
+        <th data-type="number" mat-sort-header="nbJoueur">Nb Joueurs</th>
+        <th data-type="text" mat-sort-header="tableJeu">Table</th>
+        <th data-type="text" mat-sort-header="jeu">Jeu</th>
+        <th data-type="text" mat-sort-header="statutReservation">Statut</th>
+        <th data-type="text" mat-sort-header="client">Client</th>
+        <th data-type="text" mat-sort-header="gameMaster">GameMaster</th>
         <th>Actions</th>
       </tr>
     </thead>
+
     <tbody>
-      <tr *ngFor="let table of filteredItems['tables']">
-        <td>{{ table.id }}</td>
-        <td>{{ table.nomTable }}</td>
-        <td>{{ table.capacite }}</td>
-        <td>{{ table.imgUrl }}</td>
+      <tr *ngFor="let res of filteredItems['reservations']">
+        <td>{{ res.id }}</td>
+        <td>{{ res.datetimeDebut | date:'yyyy-MM-dd HH:mm' }}</td>
+<td>{{ res.datetimeFin   | date:'yyyy-MM-dd HH:mm' }}</td>
+        <td>{{ res.nbJoueur }}</td>
+        <td>{{ res.tableJeu?.nomTable }}</td>
+        <td>{{ res.jeu?.nom }}</td>
+        <td>{{ res.statutReservation }}</td>
+        <td>{{ res.client?.nom }} {{ res.client?.prenom }}</td>
+        <td>{{ res.gameMaster?.nom }} {{ res.gameMaster?.prenom }}</td>
         <td>
-          <button class="btn_crud btn_modifier" title="Modifier" (click)="modifier('tables', table)">
-            ✏️
-          </button>
-          <button class="btn_crud btn_supprimer" title="Supprimer" (click)="supprimer('tables', table)">
-            🗑️
-          </button>
+          <button class="btn_crud btn_modifier" title="Modifier" (click)="modifier('reservations', res)">✏️</button>
+          <button class="btn_crud btn_supprimer" title="Supprimer" (click)="supprimer('reservations', res)">🗑️</button>
         </td>
       </tr>
     </tbody>
   </table>
 
   </div>
-
-  <div *ngIf="currentSection === 'employe'"></div>
-
-  <div *ngIf="currentSection === 'badge'"></div>
-  <div *ngIf="currentSection === 'emprunt'"></div>
-</div> 
+  
+</div>

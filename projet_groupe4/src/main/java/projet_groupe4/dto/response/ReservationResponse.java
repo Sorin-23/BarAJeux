@@ -11,10 +11,10 @@ public class ReservationResponse {
 
     private Integer id;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime datetimeDebut;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime datetimeFin;
 
     private int nbJoueur;
