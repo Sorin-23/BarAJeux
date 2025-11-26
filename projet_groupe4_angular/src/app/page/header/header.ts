@@ -24,6 +24,7 @@ export class Header implements OnInit {
 
   logout() {
     this.authService.logout();
+    window.location.reload();
     this.router.navigate(['/home']);
   }
 }

@@ -35,8 +35,11 @@ export class LoginPage implements OnInit{
       // La méthode auth renvoyant une Promise, on peut attendre la résolution avec "await"
       await this.authService.auth(new AuthRequest(this.usernameCtrl.value, this.passwordCtrl.value));
 
+     
       // Si tout est OK, on va sur la page d'accueil
-      this.router.navigate([ '/home' ]);
+      this.router.navigate(['/home']).then(() => {
+      window.location.reload(); // reload uniquement après navigation
+    });
     }
 
     // Si la connexion n'a pas pu se faire, affichage de l'erreur sur le template
