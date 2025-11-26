@@ -1,109 +1,97 @@
 <h1>Bienvenue à la Tavern des 4 As !</h1>
-      <div id="message_bienvenu" *ngIf="prenom">
-        <p >
-          <br /><!-- affiché message personnalisé si connecté sinon metre autre message ou retirer #message_bienvenu-->
-          Bravo {{ prenom }} {{ nom }} Tes exploits à la Taverne des 4 As ne passent pas
-          inaperçus 🍻 Grâce à tes réservations, tu as obtenu le badge :
-          <br />
-          <br />
-          <br /><br />
-          Continue de jouer, de réserver et de partager des parties épiques pour
-          débloquer de nouveaux insignes de prestige !
-        </p>
-        <img
-          src="assets/images/badge/novice.png"
-          alt="Badge"
-          class="badge_img"
-        /><!--Image a générer en fonction de son niveau-->
-      </div>
+<div id="message_bienvenu" *ngIf="prenom && role === 'ROLE_CLIENT'">
+  <p>
+    <br /><!-- affiché message personnalisé si connecté sinon metre autre message ou retirer #message_bienvenu-->
+    Bravo {{ prenom }} {{ nom }} Tes exploits à la Taverne des 4 As ne passent pas inaperçus 🍻
+    Grâce à tes réservations, tu as obtenu le badge :
+    <br />
+    <br />
+    <br /><br />
+    Continue de jouer, de réserver et de partager des parties épiques pour débloquer de nouveaux
+    insignes de prestige !
+  </p>
+  <img
+    *ngIf="badgeActuel"
+    [src]="'assets/images/badge/' + badgeActuel.imgURL"
+    [alt]="badgeActuel.nomBadge"
+    class="badge_img"
+  />
+</div>
 
-      <h2>La taverne des 4 As</h2>
+<h2>La taverne des 4 As</h2>
 
-      <p>
-        La Taverne des 4 As n’est pas un simple bar : c’est un repaire
-        chaleureux où se rencontrent passionnés de jeux, curieux et amis en
-        quête de bons moments. Ici, chaque partie est une aventure, chaque table
-        une histoire, et chaque verre un prétexte à partager.Que vous soyez
-        stratège chevronné, joueur du dimanche ou amateur de découvertes, notre
-        taverne vous ouvre ses portes pour des soirées mémorables autour de jeux
-        de société et de convivialité.
-      </p>
-      <p>
-        “À la Taverne des 4 As, on vient pour jouer… mais on reste pour
-        l’ambiance.”
-      </p>
-      <img src="assets/images/bienvenue.png" alt="Intérieur du bar" id="img_bar" />
+<p>
+  La Taverne des 4 As n’est pas un simple bar : c’est un repaire chaleureux où se rencontrent
+  passionnés de jeux, curieux et amis en quête de bons moments. Ici, chaque partie est une aventure,
+  chaque table une histoire, et chaque verre un prétexte à partager.Que vous soyez stratège
+  chevronné, joueur du dimanche ou amateur de découvertes, notre taverne vous ouvre ses portes pour
+  des soirées mémorables autour de jeux de société et de convivialité.
+</p>
+<p>“À la Taverne des 4 As, on vient pour jouer… mais on reste pour l’ambiance.”</p>
+<img src="assets/images/bienvenue.png" alt="Intérieur du bar" id="img_bar" />
 
-      <div class="bloc-resa" *ngIf="prenom">
-        <a routerLink="/table">
-          <img
-            src="assets/images/resa_table.png"
-            alt="Réservation de table"
-            class="logo_resa"
-          />
-        </a>
-        <a routerLink="/table" class="class_resa">
-          <h2>Réserver une table</h2>
-          <p>
-            Réservez votre table, choisissez vos jeux, et laissez la Taverne des
-            4 As s’occuper du reste : convivialité garantie.
-          </p>
-        </a>
-      </div>
+<div class="bloc-resa" *ngIf="prenom && role === 'ROLE_CLIENT'">
+  <a routerLink="/table">
+    <img src="assets/images/resa_table.png" alt="Réservation de table" class="logo_resa" />
+  </a>
+  <a routerLink="/table" class="class_resa">
+    <h2>Réserver une table</h2>
+    <p>
+      Réservez votre table, choisissez vos jeux, et laissez la Taverne des 4 As s’occuper du reste :
+      convivialité garantie.
+    </p>
+  </a>
+</div>
 
-      <div id="info_table"></div>
-      <!-- à développer ??-->
-      <div class="bloc-resa" *ngIf="prenom">
-        <a routerLink="/jeu">
-          <img
-            src="assets/images/resa_jeu.png"
-            alt="Réservation de jeu"
-            class="logo_resa"
-          />
-        </a>
-        <a routerLink="/jeu" class="class_resa">
-          <h2>Réserver un jeu</h2>
-          <p>
-            Une ludothèque variée où chaque dé lancé et chaque carte jouée
-            rapprochent les joueurs autour de moments inoubliables.
-          </p>
-        </a>
-      </div>
+<div id="info_table"></div>
+<!-- à développer ??-->
+<div class="bloc-resa" *ngIf="prenom && role === 'ROLE_CLIENT'">
+  <a routerLink="/jeu">
+    <img src="assets/images/resa_jeu.png" alt="Réservation de jeu" class="logo_resa" />
+  </a>
+  <a routerLink="/jeu" class="class_resa">
+    <h2>Réserver un jeu</h2>
+    <p>
+      Une ludothèque variée où chaque dé lancé et chaque carte jouée rapprochent les joueurs autour
+      de moments inoubliables.
+    </p>
+  </a>
+</div>
 
-      <div id="info_jeu">
-        <div id="right_container">
-          <div id="top_jeu_resa">
-            Jeux les plus réserver :
-            <ol>
-              <li>jeu 1</li>
-              <li>jeu 2</li>
-              <li>jeu 3</li>
-            </ol>
-          </div>
+<div id="info_jeu">
+  <div id="right_container">
+    <div id="top_jeu_resa">
+      Jeux les plus réserver :
+      <ol>
+        <li>jeu 1</li>
+        <li>jeu 2</li>
+        <li>jeu 3</li>
+      </ol>
+    </div>
 
-          <div id="top_jeu_loue">
-            Jeux les plus loué :
-            <ol>
-              <li>jeu 1</li>
-              <li>jeu 2</li>
-              <li>jeu 3</li>
-            </ol>
-          </div>
+    <div id="top_jeu_loue">
+      Jeux les plus loué :
+      <ol>
+        <li>jeu 1</li>
+        <li>jeu 2</li>
+        <li>jeu 3</li>
+      </ol>
+    </div>
 
-          <div id="top_jeu_aime">
-            Jeux les plus aimé :
-            <ol>
-              <li>jeu 1</li>
-              <li>jeu 2</li>
-              <li>jeu 3</li>
-            </ol>
-          </div>
-          <div *ngIf="prenom">
-            <a routerLink="/jeu"><input type="button" value="Louer une jeu" class="btn"  /></a>
-            <a routerLink="/table"><input type="button" value="Réserver une table" class="btn" /></a>
-          </div>
-        </div>
-        <div id="left_container">
-          <img src="assets/images/jeux/catan.jpg" alt="image du jeu le plus réserver" />
-        </div>
-      </div>
+    <div id="top_jeu_aime">
+      Jeux les plus aimé :
+      <ol>
+        <li>jeu 1</li>
+        <li>jeu 2</li>
+        <li>jeu 3</li>
+      </ol>
+    </div>
+    <div *ngIf="prenom && role === 'ROLE_CLIENT'">
+      <a routerLink="/jeu"><input type="button" value="Louer une jeu" class="btn" /></a>
+      <a routerLink="/table"><input type="button" value="Réserver une table" class="btn" /></a>
+    </div>
+  </div>
+  <div id="left_container">
+    <img src="assets/images/jeux/catan.jpg" alt="image du jeu le plus réserver" />
+  </div>
+</div>

@@ -207,3 +207,28 @@ th,
 }
 
 
+
+/* ===== Dropdown filtres ===== */
+#bdd_recherche_ajout select {
+    padding: 0.8vh 1vh; 
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #fdfdfd;
+    font-size: 1em;
+    color: #333;
+    cursor: pointer;
+    transition: 0.2s;
+    margin-left: 1vh; 
+}
+
+#bdd_recherche_ajout select:focus {
+    outline: none;
+    border-color: var(--couleur-principale);
+    box-shadow: 0 0 4px var(--couleur-principale);
+}
+
+#bdd_recherche_ajout select option {
+    padding: 0.5em;
+}
+
+

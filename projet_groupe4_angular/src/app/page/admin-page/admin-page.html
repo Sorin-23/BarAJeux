@@ -79,7 +79,7 @@
     </div>
     <div class="dashboard_card">
       <h3>Réservations du jour</h3>
-      <p class="dashboard_value" id="count_reservations">3</p>
+      <p class="dashboard_value" id="count_reservations">{{ reservationsDuJour }}</p>
     </div>
   </div>
 
@@ -320,6 +320,10 @@
         placeholder="🔍 Rechercher..."
         [formControl]="searchControls['emprunts']"
       />
+      <select [formControl]="statutControls['emprunts']">
+        <option value="">Tous</option>
+        <option *ngFor="let s of statutsEmprunt" [value]="s">{{ s }}</option>
+      </select>
       <button class="btn_crud btn_ajouter" title="Ajouter" (click)="ajouter('emprunts')">➕</button>
     </section>
 
@@ -383,6 +387,10 @@
         placeholder="🔍 Rechercher..."
         [formControl]="searchControls['reservations']"
       />
+      <select [formControl]="statutControls['reservations']">
+        <option value="">Tous</option>
+        <option *ngFor="let s of statutsReservation" [value]="s">{{ s }}</option>
+      </select>
       <button class="btn_crud btn_ajouter" title="Ajouter" (click)="ajouter('reservations')">
         ➕
       </button>
