@@ -374,54 +374,65 @@
     </table>
   </div>
 
-
-  <div *ngIf="currentSection === 'reservation'"> 
+  <div *ngIf="currentSection === 'reservation'">
     <section id="bdd_recherche_ajout">
-    <input
-      type="text"
-      id="recherche_reservation"
-      class="barre_recherche"
-      placeholder="🔍 Rechercher..."
-      [formControl]="searchControls['reservations']"
-    />
-    <button class="btn_crud btn_ajouter" title="Ajouter" (click)="ajouter('reservations')">➕</button>
-  </section>
+      <input
+        type="text"
+        id="recherche_reservation"
+        class="barre_recherche"
+        placeholder="🔍 Rechercher..."
+        [formControl]="searchControls['reservations']"
+      />
+      <button class="btn_crud btn_ajouter" title="Ajouter" (click)="ajouter('reservations')">
+        ➕
+      </button>
+    </section>
 
-  <table matSort (matSortChange)="sortData('reservations', $event)">
-    <thead>
-      <tr>
-        <th data-type="number" mat-sort-header="id">ID</th>
-        <th data-type="datetime" mat-sort-header="datetimeDebut">Début</th>
-        <th data-type="datetime" mat-sort-header="datetimeFin">Fin</th>
-        <th data-type="number" mat-sort-header="nbJoueur">Nb Joueurs</th>
-        <th data-type="text" mat-sort-header="tableJeu">Table</th>
-        <th data-type="text" mat-sort-header="jeu">Jeu</th>
-        <th data-type="text" mat-sort-header="statutReservation">Statut</th>
-        <th data-type="text" mat-sort-header="client">Client</th>
-        <th data-type="text" mat-sort-header="gameMaster">GameMaster</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
+    <table matSort (matSortChange)="sortData('reservations', $event)">
+      <thead>
+        <tr>
+          <th data-type="number" mat-sort-header="id">ID</th>
+          <th data-type="datetime" mat-sort-header="datetimeDebut">Début</th>
+          <th data-type="datetime" mat-sort-header="datetimeFin">Fin</th>
+          <th data-type="number" mat-sort-header="nbJoueur">Nb Joueurs</th>
+          <th data-type="text" mat-sort-header="tableJeu">Table</th>
+          <th data-type="text" mat-sort-header="jeu">Jeu</th>
+          <th data-type="text" mat-sort-header="statutReservation">Statut</th>
+          <th data-type="text" mat-sort-header="client">Client</th>
+          <th data-type="text" mat-sort-header="gameMaster">GameMaster</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
 
-    <tbody>
-      <tr *ngFor="let res of filteredItems['reservations']">
-        <td>{{ res.id }}</td>
-        <td>{{ res.datetimeDebut | date:'yyyy-MM-dd HH:mm' }}</td>
-<td>{{ res.datetimeFin   | date:'yyyy-MM-dd HH:mm' }}</td>
-        <td>{{ res.nbJoueur }}</td>
-        <td>{{ res.tableJeu?.nomTable }}</td>
-        <td>{{ res.jeu?.nom }}</td>
-        <td>{{ res.statutReservation }}</td>
-        <td>{{ res.client?.nom }} {{ res.client?.prenom }}</td>
-        <td>{{ res.gameMaster?.nom }} {{ res.gameMaster?.prenom }}</td>
-        <td>
-          <button class="btn_crud btn_modifier" title="Modifier" (click)="modifier('reservations', res)">✏️</button>
-          <button class="btn_crud btn_supprimer" title="Supprimer" (click)="supprimer('reservations', res)">🗑️</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
+      <tbody>
+        <tr *ngFor="let res of filteredItems['reservations']">
+          <td>{{ res.id }}</td>
+          <td>{{ res.datetimeDebut | date : 'yyyy-MM-dd HH:mm' }}</td>
+          <td>{{ res.datetimeFin | date : 'yyyy-MM-dd HH:mm' }}</td>
+          <td>{{ res.nbJoueur }}</td>
+          <td>{{ res.tableJeu?.nomTable }}</td>
+          <td>{{ res.jeu?.nom }}</td>
+          <td>{{ res.statutReservation }}</td>
+          <td>{{ res.client?.nom }} {{ res.client?.prenom }}</td>
+          <td>{{ res.gameMaster?.nom }} {{ res.gameMaster?.prenom }}</td>
+          <td>
+            <button
+              class="btn_crud btn_modifier"
+              title="Modifier"
+              (click)="modifier('reservations', res)"
+            >
+              ✏️
+            </button>
+            <button
+              class="btn_crud btn_supprimer"
+              title="Supprimer"
+              (click)="supprimer('reservations', res)"
+            >
+              🗑️
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  
 </div>
