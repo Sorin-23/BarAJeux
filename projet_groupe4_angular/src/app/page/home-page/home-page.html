@@ -3,7 +3,7 @@
   <p>
     <br /><!-- affiché message personnalisé si connecté sinon metre autre message ou retirer #message_bienvenu-->
     Bravo {{ prenom }} {{ nom }} Tes exploits à la Taverne des 4 As ne passent pas inaperçus 🍻
-    Grâce à tes réservations, tu as obtenu le badge : {{badgeActuel?.nomBadge}}
+    Grâce à tes réservations, tu as obtenu le badge : {{ badgeActuel?.nomBadge }}
     <br />
     <br />
     <br /><br />
@@ -59,31 +59,25 @@
 </div>
 
 <div id="info_jeu">
-  <div id="right_container">
+  <div id="left_container">
     <div id="top_jeu_resa">
       Jeux les plus réserver :
       <ol>
-        <li>jeu 1</li>
-        <li>jeu 2</li>
-        <li>jeu 3</li>
+        <li *ngFor="let jeu of topReserves">{{ jeu.jeu.nom }} ({{ jeu.count }})</li>
       </ol>
     </div>
 
     <div id="top_jeu_loue">
       Jeux les plus loué :
       <ol>
-        <li>jeu 1</li>
-        <li>jeu 2</li>
-        <li>jeu 3</li>
+        <li *ngFor="let jeu of topLoc">{{ jeu.jeu.nom }} ({{ jeu.count }})</li>
       </ol>
     </div>
 
     <div id="top_jeu_aime">
       Jeux les plus aimé :
       <ol>
-        <li>jeu 1</li>
-        <li>jeu 2</li>
-        <li>jeu 3</li>
+        <li *ngFor="let jeu of topLike">{{ jeu.jeu.nom }} ({{ jeu.count }})</li>
       </ol>
     </div>
     <div *ngIf="prenom && role === 'ROLE_CLIENT'">
@@ -91,7 +85,8 @@
       <a routerLink="/table"><input type="button" value="Réserver une table" class="btn" /></a>
     </div>
   </div>
-  <div id="left_container">
-    <img src="assets/images/jeux/catan.jpg" alt="image du jeu le plus réserver" />
+  <div id="right_container">
+    <img [src]="'assets/images/jeux/' + topReserves[0].jeu.imgURL" 
+  [alt]="topReserves[0].jeu.nom"  alt="image du jeu le plus réserver" />
   </div>
 </div>

@@ -69,22 +69,25 @@
     flex-wrap: wrap;
 }
 
-#info_jeu #right_container {
+#info_jeu #left_container {
     flex: 2;
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-#info_jeu #left_container {
+#info_jeu #right_container {
     flex: 3;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-#info_jeu #left_container img {
+#info_jeu #right_container img {
     max-width: 60%;
+    max-height: 300px;
+    width: auto;
+    height: auto;
     border-radius: 15px;
     object-fit: cover;
 }

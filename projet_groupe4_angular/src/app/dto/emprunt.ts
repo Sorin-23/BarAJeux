@@ -8,9 +8,10 @@ constructor(
         public _dateEmprunt: Date,
         public _dateRetour: Date,
         public _statutLocation: StatutLocation,
+        
+        public _client: Client,
+        public _jeu: Jeu,
         public _dateRetourReel?: Date,
-        public _client?: Client,
-        public _jeu?: Jeu
     ) {}
 
     public get id(): number {
@@ -48,17 +49,17 @@ constructor(
         this._dateRetourReel = value;
     }
 
-    public get client(): Client | undefined {
+    public get client(): Client  {
         return this._client;
     }
-    public set client(value: Client | undefined) {
+    public set client(value: Client ) {
         this._client = value;
     }
 
-    public get jeu(): Jeu | undefined {
+    public get jeu(): Jeu  {
         return this._jeu;
     }
-    public set jeu(value: Jeu | undefined) {
+    public set jeu(value: Jeu ) {
         this._jeu = value;
     }
 
