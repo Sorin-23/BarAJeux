@@ -61,32 +61,32 @@
 <div id="info_jeu">
   <div id="left_container">
     <div id="top_jeu_resa">
-      Jeux les plus réserver :
+      Jeux les plus réservés :
       <ol>
         <li *ngFor="let jeu of topReserves">{{ jeu.jeu.nom }} ({{ jeu.count }})</li>
       </ol>
     </div>
 
     <div id="top_jeu_loue">
-      Jeux les plus loué :
+      Jeux les plus loués :
       <ol>
         <li *ngFor="let jeu of topLoc">{{ jeu.jeu.nom }} ({{ jeu.count }})</li>
       </ol>
     </div>
 
     <div id="top_jeu_aime">
-      Jeux les plus aimé :
+      Jeux les plus aimés :
       <ol>
         <li *ngFor="let jeu of topLike">{{ jeu.jeu.nom }} ({{ jeu.count }})</li>
       </ol>
     </div>
     <div *ngIf="prenom && role === 'ROLE_CLIENT'">
-      <a routerLink="/jeu"><input type="button" value="Louer une jeu" class="btn" /></a>
+      <a routerLink="/jeu"><input type="button" value="Louer un jeu" class="btn" /></a>
       <a routerLink="/table"><input type="button" value="Réserver une table" class="btn" /></a>
     </div>
   </div>
   <div id="right_container">
     <img [src]="'assets/images/jeux/' + topReserves[0].jeu.imgURL" 
-  [alt]="topReserves[0].jeu.nom"  alt="image du jeu le plus réserver" />
+  [alt]="'jeu le plus réservé : ' + topReserves[0].jeu.nom"  />
   </div>
 </div>
