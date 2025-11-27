@@ -1,11 +1,11 @@
 export abstract class Personne {
   constructor(
-    private _id: number,
-    private _nom: string,
-    private _prenom: string,
-    private _mail: string,
-    private _mdp: string,
-    private _telephone?: string
+    public _id: number,
+    public _nom: string,
+    public _prenom: string,
+    public _mail: string,
+    public _mdp: string,
+    public _telephone?: string
   ) {}
   public get id(): number {
     return this._id;

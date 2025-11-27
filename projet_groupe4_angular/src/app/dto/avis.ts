@@ -2,11 +2,11 @@ import { Reservation } from "./reservation";
 
 export class Avis {
     constructor(
-        private _id: number,
-        private _note:number,
-        private _titre:string,
-        private _commentaire?:string,
-        private _reservation? : Reservation
+        public _id: number,
+        public _note:number,
+        public _titre:string,
+        public _commentaire?:string,
+        public _reservation? : Reservation
     ){}
 
     public get id(): number {

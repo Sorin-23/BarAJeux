@@ -1,10 +1,10 @@
 export class Badge {
 
     constructor(
-        private _id: number,
-        private _nomBadge: string,
-        private _pointMin: number,
-        private _imgURL?: string
+        public _id: number,
+        public _nomBadge: string,
+        public _pointMin: number,
+        public _imgURL?: string
     ) {}
 
     public get id(): number {

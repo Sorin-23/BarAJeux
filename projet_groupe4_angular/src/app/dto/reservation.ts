@@ -6,15 +6,15 @@ import { TableJeu } from "./table-jeu";
 
 export class Reservation {
 constructor(
-        private _id: number,
-        private _datetimeDebut: Date,
-        private _datetimeFin: Date,
-        private _nbJoueur: number,
-        private _tableJeu: TableJeu,
-        private _jeu: Jeu,
-        private _statutReservation: StatutReservation,
-        private _client: Client,
-        private _gameMaster: Employe
+        public _id: number,
+        public _datetimeDebut: Date,
+        public _datetimeFin: Date,
+        public _nbJoueur: number,
+        public _tableJeu: TableJeu,
+        public _jeu: Jeu,
+        public _statutReservation: StatutReservation,
+        public _client: Client,
+        public _gameMaster: Employe
     ) {}
 
     public get id(): number { return this._id; }

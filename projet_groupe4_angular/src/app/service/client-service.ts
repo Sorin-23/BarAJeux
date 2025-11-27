@@ -28,7 +28,9 @@ export class ClientService {
   }
 
   public findByUsername(username: string): Observable<Client> {
-    return this.http.get<Client>(`${this.apiUrl}/username/${username}`);
+    //return this.http.get<Client>(`${this.apiUrl}/username/${username}`);
+    const encodedUsername = encodeURIComponent(username);
+  return this.http.get<Client>(`${this.apiUrl}/username/${encodedUsername}`);
   }
 
   public save(clientDto: Client): void {

@@ -20,6 +20,8 @@ import projet_groupe4.dto.response.EmployeResponse;
 import projet_groupe4.dto.response.EntityCreatedResponse;
 import projet_groupe4.dto.response.EntityUpdatedResponse;
 import projet_groupe4.exception.IdNotFoundException;
+import projet_groupe4.model.Employe;
+import projet_groupe4.model.Personne;
 import projet_groupe4.service.PersonneService;
 
 @RestController
@@ -67,5 +69,16 @@ public class EmployeRestController {
     public void deleteEmploye(@PathVariable Integer id) {
         this.srv.deleteById(id);
     }
+    
+    @GetMapping("/username/{email}")
+    public EmployeResponse getByUsername(@PathVariable String email) {
+        Personne p = srv.getByMail(email)
+                        .orElseThrow(IdNotFoundException::new);
+        if (!(p instanceof Employe emp)) {
+            throw new IdNotFoundException();
+        }
+        return EmployeResponse.convert(emp);
+    }
+
 
 }

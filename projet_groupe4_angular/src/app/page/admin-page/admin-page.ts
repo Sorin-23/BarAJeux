@@ -9,16 +9,20 @@ import { EmployeService } from '../../service/employe-service';
 import { JeuService } from '../../service/jeu-service';
 import { ReservationService } from '../../service/reservation-service';
 import { TableJeuService } from '../../service/table-jeu-service';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { EmpruntService } from '../../service/emprunt-service';
 import { StatutReservation } from '../../dto/enum/statut-reservation';
 import { StatutLocation } from '../../dto/enum/statut-location';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { CategorieJeu } from '../../dto/enum/categorie-jeu';
+import { TypeJeu } from '../../dto/enum/type-jeu';
 
 @Component({
   selector: 'app-admin-page',
-  imports: [CommonModule, ReactiveFormsModule, MatSortModule],
+  imports: [CommonModule, ReactiveFormsModule, MatSortModule, MatDialogModule, MatButtonModule],
   templateUrl: './admin-page.html',
   styleUrl: './admin-page.css',
 })
@@ -65,12 +69,19 @@ export class AdminPage implements OnInit {
     emprunts: new FormControl(''),
   };
 
-  statutsReservation: string[] = Object.values(StatutReservation);
-  statutsEmprunt: string[] = Object.values(StatutLocation);
+  enumOptions: { [key: string]: any[] } = {
+    typesJeux: Object.values(TypeJeu),
+    categoriesJeux: Object.values(CategorieJeu),
+    statutReservation: Object.values(StatutReservation),
+    statutLocation: Object.values(StatutLocation),
+  };
 
   reservationsDuJour: number = 0;
 
   currentSection = 'dashboard';
+
+  modalForm!: FormGroup;
+  modalVisible: boolean = false;
 
   constructor(
     private jeuService: JeuService,
@@ -98,7 +109,6 @@ export class AdminPage implements OnInit {
       this.statutControls[section].valueChanges.subscribe(() => {
         this.filter(section, this.searchControls[section].value);
       });
-
     });
   }
 
@@ -108,8 +118,8 @@ export class AdminPage implements OnInit {
       this.filteredItems[section] = [...data];
 
       if (section === 'reservations') {
-      this.loadResaDuJour();
-    }
+        this.loadResaDuJour();
+      }
     });
   }
 
@@ -196,7 +206,33 @@ export class AdminPage implements OnInit {
   }
 
   openModal(section: string) {
-    //ouverture du modal en automatique
+    //ouverture du modal en automatique pas ecnre réussi .... j'ai mis les dto en public pour récup données ??
+    this.currentSection = section;
+    const item = this.currentEdit[section];
+
+    const data = this.data[section];
+
+    const fields = item ? Object.keys(item) : Object.keys(data[0] || {});
+
+    
+
+    console.log('Champs:', fields);
+
+
+    console.log('Ouverture du modal pour la section:', section);
+    console.log('Item actuel:', item);
+    this.modalForm = new FormGroup({});
+
+    this.modalVisible = true;
+  }
+
+  closeModal() {
+    this.modalVisible = false;
+  }
+
+  submitModal() {
+    console.log('Données du formulaire', this.modalForm.value);
+    this.closeModal();
   }
 
   loadResaDuJour() {

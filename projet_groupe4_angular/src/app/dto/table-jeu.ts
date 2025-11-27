@@ -4,11 +4,11 @@ export class TableJeu {
 
 
     constructor(
-    private _id: number,
-    private _nomTable: string,
-    private _capacite: number,
-    private _reservations: Reservation[] = [],
-    private _imgUrl : string
+    public _id: number,
+    public _nomTable: string,
+    public _capacite: number,
+    public _reservations: Reservation[] = [],
+    public _imgUrl : string
   ) {}
 
   // Getters & Setters

@@ -10,14 +10,14 @@ export class Client extends Personne {
         mail: string,
         mdp: string,
         telephone: string | undefined,
-        private _pointFidelite: number,
-        private _dateCreation: Date,
-        private _dateLastConnexion: Date,
-        private _reservations: Reservation[] = [],
-        private _emprunts: Emprunt[] = [],
-        private _ville: string,
-        private _codePostale: string,
-        private _adresse: string
+        public _pointFidelite: number,
+        public _dateCreation: Date,
+        public _dateLastConnexion: Date,
+        public _reservations: Reservation[] = [],
+        public _emprunts: Emprunt[] = [],
+        public _ville: string,
+        public _codePostale: string,
+        public _adresse: string
     ) { super(id, nom, prenom, mail, mdp, telephone); }
 
     public get pointFidelite(): number {

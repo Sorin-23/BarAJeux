@@ -26,19 +26,22 @@ export class HomePage implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.nom = this.authService.nom;
-    this.prenom = this.authService.prenom;
+    //this.nom = this.authService.nom;
+    //this.prenom = this.authService.prenom;
     this.role = this.authService.role;
     const username = this.authService.username;
 
     this.clientService.findByUsername(username).subscribe((client) => {
+      this.nom = client.nom;
+      this.prenom = client.prenom;
       this.pointFidelite = client.pointFidelite;
 
       this.badgeService.findAll().subscribe((badges) => {
         this.badgeActuel = this.getBadgeForPoints(this.pointFidelite, badges);
       });
+
     });
-  }
+}
 
   public getBadgeForPoints(points: number, badges: Badge[]): Badge {
     return badges.filter((b) => b.pointMin <= points).sort((a, b) => b.pointMin - a.pointMin)[0];

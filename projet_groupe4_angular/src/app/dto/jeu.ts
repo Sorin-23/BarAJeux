@@ -3,18 +3,18 @@ import { TypeJeu } from "./enum/type-jeu";
 
 export class Jeu {
     constructor(
-    private _id: number,
-    private _nom: string,
-    private _typesJeux: TypeJeu[] = [],
-    private _ageMinimum: number ,
-    private _nbJoueurMinimum: number,
-    private _nbJoueurMaximum: number,
-    private _duree: number,
-    private _nbExemplaire: number ,
-    private _note: number,
-    private _categoriesJeux: CategorieJeu[] = [],
-    private _imgURL?: string,
-    private _besoinGameMaster: boolean = false
+    public _id: number,
+    public _nom: string,
+    public _typesJeux: TypeJeu[] = [],
+    public _ageMinimum: number ,
+    public _nbJoueurMinimum: number,
+    public _nbJoueurMaximum: number,
+    public _duree: number,
+    public _nbExemplaire: number ,
+    public _note: number,
+    public _categoriesJeux: CategorieJeu[] = [],
+    public _imgURL?: string,
+    public _besoinGameMaster: boolean = false
   ) {}
 
   public get id(): number {

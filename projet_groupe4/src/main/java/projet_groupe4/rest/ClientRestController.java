@@ -23,6 +23,7 @@ import projet_groupe4.dto.response.EntityCreatedResponse;
 import projet_groupe4.dto.response.EntityUpdatedResponse;
 import projet_groupe4.exception.IdNotFoundException;
 import projet_groupe4.model.Client;
+import projet_groupe4.model.Personne;
 import projet_groupe4.service.PersonneService;
 
 @RestController
@@ -80,5 +81,16 @@ public class ClientRestController {
     public void deleteClient(@PathVariable Integer id) {
         this.srv.deleteById(id);
     }
+    
+    @GetMapping("/username/{email}")
+    public ClientResponse getByUsername(@PathVariable String email) {
+        Personne p = srv.getByMail(email)
+                        .orElseThrow(IdNotFoundException::new);
+        if (!(p instanceof Client client)) {
+            throw new IdNotFoundException(); // si ce n'est pas un client
+        }
+        return ClientResponse.convert(client);
+    }
+    
 
 }

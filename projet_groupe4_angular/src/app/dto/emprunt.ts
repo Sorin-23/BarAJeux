@@ -4,13 +4,13 @@ import { Jeu } from "./jeu";
 
 export class Emprunt {
 constructor(
-        private _id: number,
-        private _dateEmprunt: Date,
-        private _dateRetour: Date,
-        private _statutLocation: StatutLocation,
-        private _dateRetourReel?: Date,
-        private _client?: Client,
-        private _jeu?: Jeu
+        public _id: number,
+        public _dateEmprunt: Date,
+        public _dateRetour: Date,
+        public _statutLocation: StatutLocation,
+        public _dateRetourReel?: Date,
+        public _client?: Client,
+        public _jeu?: Jeu
     ) {}
 
     public get id(): number {

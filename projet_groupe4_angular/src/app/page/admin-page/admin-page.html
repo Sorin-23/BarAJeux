@@ -322,7 +322,7 @@
       />
       <select [formControl]="statutControls['emprunts']">
         <option value="">Tous</option>
-        <option *ngFor="let s of statutsEmprunt" [value]="s">{{ s }}</option>
+        <option *ngFor="let s of enumOptions['statutLocation']" [value]="s">{{ s }}</option>
       </select>
       <button class="btn_crud btn_ajouter" title="Ajouter" (click)="ajouter('emprunts')">➕</button>
     </section>
@@ -389,7 +389,7 @@
       />
       <select [formControl]="statutControls['reservations']">
         <option value="">Tous</option>
-        <option *ngFor="let s of statutsReservation" [value]="s">{{ s }}</option>
+        <option *ngFor="let s of enumOptions['statutReservation']" [value]="s">{{ s }}</option>
       </select>
       <button class="btn_crud btn_ajouter" title="Ajouter" (click)="ajouter('reservations')">
         ➕

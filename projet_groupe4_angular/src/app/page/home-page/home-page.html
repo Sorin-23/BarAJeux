@@ -3,7 +3,7 @@
   <p>
     <br /><!-- affiché message personnalisé si connecté sinon metre autre message ou retirer #message_bienvenu-->
     Bravo {{ prenom }} {{ nom }} Tes exploits à la Taverne des 4 As ne passent pas inaperçus 🍻
-    Grâce à tes réservations, tu as obtenu le badge :
+    Grâce à tes réservations, tu as obtenu le badge : {{badgeActuel?.nomBadge}}
     <br />
     <br />
     <br /><br />
@@ -11,9 +11,9 @@
     insignes de prestige !
   </p>
   <img
-    *ngIf="badgeActuel"
-    [src]="'assets/images/badge/' + badgeActuel.imgURL"
-    [alt]="badgeActuel.nomBadge"
+    *ngIf="badgeActuel?.id"
+    [src]="'assets/images/badge/' + badgeActuel?.imgURL"
+    [alt]="badgeActuel?.nomBadge"
     class="badge_img"
   />
 </div>

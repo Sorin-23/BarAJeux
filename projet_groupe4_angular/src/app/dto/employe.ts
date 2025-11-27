@@ -8,8 +8,8 @@ export class Employe extends Personne {
         mail: string,
         mdp: string,
         telephone: string | undefined,
-        private _job:string,
-        private _gameMaster : boolean
+        public _job:string,
+        public _gameMaster : boolean
     
     ){
         super(id, nom, prenom, mail, mdp, telephone);

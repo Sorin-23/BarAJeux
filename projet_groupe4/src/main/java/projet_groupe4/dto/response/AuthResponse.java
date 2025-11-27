@@ -7,8 +7,8 @@ import projet_groupe4.model.Personne;
 public class AuthResponse {
 	private String token;
 	private String role;
-	private String nom;
-	private String prenom;
+	/*private String nom;
+	private String prenom;*/
 	private String username;
 
 	public AuthResponse(String token, Personne personne) {
@@ -17,8 +17,8 @@ public class AuthResponse {
 		}
 		this.token = token;
 		this.username = personne.getMail();
-		this.nom = personne.getNom();
-		this.prenom = personne.getPrenom();
+		/*this.nom = personne.getNom();
+		this.prenom = personne.getPrenom();*/
 		if (personne instanceof Client) {
 			this.role = "ROLE_CLIENT";
 		} else if (personne instanceof Employe) {
@@ -34,13 +34,13 @@ public class AuthResponse {
 		return role;
 	}
 
-	public String getNom() {
+	/*public String getNom() {
 		return nom;
 	}
 
 	public String getPrenom() {
 		return prenom;
-	}
+	}*/
 
 	public String getUsername() {
 		return username;
