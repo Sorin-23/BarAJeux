@@ -1,1 +1,52 @@
-<p>jeu-page works!</p>
+<h1>Réservez votre table</h1>
+<section id="filtre_section" class="block_white">
+  <h2>Filtrer les jeux</h2>
+  <form id="filtre_form" [formGroup]="filtreForm" (ngSubmit)="appliquerFiltre()">
+    <div class="filtre_groupe">
+      <label for="nbPersonnes">Nombre de personnes</label>
+      <input type="number" id="nbPersonnes" min="1" max="15" formControlName="nbPersonnes"/>
+    </div>
+
+
+    <div class="filtre_groupe">
+      <label for="ageMin">Age minimum</label>
+      <input type="number" id="ageMin" min="1" max="100" formControlName="ageMin"/>
+    </div>
+
+    <div class="filtre_groupe">
+      <label for="dureeMax">Durée maximum</label>
+      <input type="number" id="dureeMax" min="1" max="10" formControlName="dureeMax"/>
+    </div>
+    
+
+    <input type="submit" value="Appliquer les filtres" class="btn" />
+  </form>
+</section>
+
+<section id="resultat_filtre" class="block_white">
+  <h2>🎲 Nos jeux</h2>
+  <div class="carrousel-container">
+    <button class="nav-btn prev" (click)="prev()">&#10094;</button>
+
+    <div class="carrousel">
+      <div class="carte-jeu" *ngFor="let jeu of jeux">
+        <img [src]="'assets/images/jeux/' + jeu.imgURL" [alt]="jeu.nom" />
+        <div class="carte-info">
+          <h3>{{ jeu.nom }}</h3>
+          <p>âge minimum : {{ jeu.ageMinimum }}</p>
+          <p>Nombre de joueurs min : {{ jeu.nbJoueurMinimum }} </p>
+          <p> Nombre de joueurs max : {{jeu.nbJoueurMaximum}}</p>         
+          <p>durée : {{ jeu.duree }} minutes - note : {{jeu.note}}</p>
+
+          <div class="actions">
+            <button class="btn btn-louer">Louer</button> <!-- ouvre une étape d'emprunt-->
+            <button class="btn btn-reserver">Réserver</button> <!-- visible si table pas choisi-->
+            <button class="btn btn-choisir">Choisir</button>    <!-- visible si table choisi et du coup ouvre la finalisation de réservation -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="nav-btn next" (click)="next()">&#10095;</button>
+  </div>
+</section>

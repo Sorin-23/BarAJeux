@@ -58,7 +58,13 @@ export class HomePage implements OnInit {
         this.badgeActuel = this.getBadgeForPoints(this.pointFidelite, badges);
       });
 
-      this.reservationService.findAll().subscribe((res) => {
+      
+
+
+
+    });
+
+    this.reservationService.findAll().subscribe((res) => {
         this.reservations = res;
         this.calculateTopReserves();
       });
@@ -69,10 +75,6 @@ export class HomePage implements OnInit {
       });
 
       this.loadTopLike();
-
-
-
-    });
   }
 
   public getBadgeForPoints(points: number, badges: Badge[]): Badge {
