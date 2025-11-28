@@ -43,14 +43,14 @@ public class ReservationRestController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('EMPLOYE')")
+    @PreAuthorize("hasRole('CLIENT')")
     @ResponseStatus(HttpStatus.CREATED)
     public EntityCreatedResponse ajouterReservation(@Valid @RequestBody ReservationRequest request) {
         return new EntityCreatedResponse(this.srv.create(request).getId());
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('EMPLOYE')")
+    @PreAuthorize("hasAnyRole('EMPLOYE','CLIENT')")
     public EntityUpdatedResponse modifierReservation(@PathVariable int id,
             @Valid @RequestBody ReservationRequest request) {
         this.srv.update(id, request);

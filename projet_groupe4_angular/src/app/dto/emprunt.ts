@@ -69,8 +69,8 @@ constructor(
             dateRetour: this._dateRetour,
             statutLocation: this._statutLocation,
             dateRetourReel: this._dateRetourReel,
-            client: this._client?.toJson(),
-            jeu: this._jeu?.toJson()
+            client: this._client ? { id: this._client.id } : null,
+        jeu: this._jeu ? { id: this._jeu.id } : null
         };
     }
 

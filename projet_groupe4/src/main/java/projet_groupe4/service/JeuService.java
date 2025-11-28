@@ -1,5 +1,7 @@
 package projet_groupe4.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,14 +10,22 @@ import org.springframework.stereotype.Service;
 import projet_groupe4.dao.IDAOJeu;
 import projet_groupe4.dto.request.JeuRequest;
 import projet_groupe4.exception.IdNotFoundException;
+import projet_groupe4.model.Emprunt;
 import projet_groupe4.model.Jeu;
+import projet_groupe4.model.Reservation;
+import projet_groupe4.model.StatutLocation;
+import projet_groupe4.model.StatutReservation;
 
 @Service
 public class JeuService {
 	private final IDAOJeu dao;
+	private final EmpruntService empruntService;
+    private final ReservationService reservationService;
 
-	public JeuService(IDAOJeu dao) {
+	public JeuService(IDAOJeu dao,  EmpruntService empruntService, ReservationService reservationService) {
 		this.dao = dao;
+		this.empruntService = empruntService;
+        this.reservationService = reservationService;
 	}
 
 	public List<Jeu> getAll() {
@@ -65,5 +75,44 @@ public class JeuService {
 
 		return this.dao.save(jeu);
 	}
+	
+	public List<Jeu> getDisponibles(LocalDate dateDebut){
+		LocalDate dateFin = dateDebut.plusDays(15);
+		LocalDateTime debutLDT = dateDebut.atStartOfDay();
+	    LocalDateTime finLDT = dateFin.atTime(23, 59);
+	    
+	    
+		List<Jeu> allJeux = dao.findAll();
+        List<Emprunt> empruntsActifs = empruntService.getAll();
+        List<Reservation> reservationsActives = reservationService.getAll();
+        
+        return allJeux.stream().filter(jeu -> {
+            int enUtilisation = 0;
+
+            // Vérifier les emprunts en conflit
+            for (Emprunt e : empruntsActifs) {
+                if (e.getJeu().equals(jeu) &&
+                    (e.getStatutLocation() == StatutLocation.enCours || e.getStatutLocation() == StatutLocation.enRetard) &&
+                    !e.getDateEmprunt().isAfter(dateFin) &&  // e.getDateEmprunt() <= dateFin
+                    !e.getDateRetour().isBefore(dateDebut)) { // e.getDateRetour() >= dateDebut
+                    enUtilisation++;
+                }
+            }
+
+            // Vérifier les réservations confirmées en conflit (LocalDateTime)
+            for (Reservation r : reservationsActives) {
+                if (r.getJeu().equals(jeu) &&
+                    r.getStatutReservation() == StatutReservation.confirmée &&
+                    !r.getDatetimeDebut().isAfter(finLDT) &&
+                    !r.getDatetimeFin().isBefore(debutLDT)) {
+                    enUtilisation++;
+                }
+            }
+
+            return enUtilisation < jeu.getNbExemplaire();
+        }).toList();
+    }
+		
+	
 
 }

@@ -43,21 +43,21 @@ public class EmpruntRestController {
 	}
 
 	@PostMapping
-	@PreAuthorize("hasRole('EMPLOYE')")
+	@PreAuthorize("hasRole('CLIENT')")
 	@ResponseStatus(HttpStatus.CREATED)
 	public EntityCreatedResponse ajouterEmprunt(@Valid @RequestBody EmpruntRequest request) {
 		return new EntityCreatedResponse(this.srv.create(request).getId());
 	}
 
 	@PutMapping("/{id}")
-	@PreAuthorize("hasRole('EMPLOYE')")
+	@PreAuthorize("hasAnyRole('EMPLOYE','CLIENT')")
 	public EntityUpdatedResponse modifierEmprunt(@PathVariable Integer id, @Valid @RequestBody EmpruntRequest request) {
 		this.srv.update(id, request);
 		return new EntityUpdatedResponse(id, true);
 	}
 
 	@DeleteMapping("/{id}")
-	@PreAuthorize("hasRole('EMPLOYE')")
+	@PreAuthorize("hasAnyRole('EMPLOYE')")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteEmprunt(@PathVariable Integer id) {
 		this.srv.deleteById(id);

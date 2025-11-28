@@ -247,7 +247,12 @@ export class AdminPage implements OnInit {
     }).length;
   }
 
-
+/* pour gérér les rendu de emprunt ? 
+  rendreJeu(location: Location) {
+  location.statutLocation = StatutLocation.RENDU;
+  location.dateRetourReel = new Date();
+}
+*/
 
 
 

@@ -44,4 +44,9 @@ export class JeuService {
     this.http.delete<void>(`${this.apiUrl}/${id}`)
       .subscribe(() => this.refresh());
   }
+
+  public findDisponibles(dateDebut: string): Observable<Jeu[]> {
+  return this.http.get<Jeu[]>(`${this.apiUrl}/disponibles?dateDebut=${dateDebut}`);
+}
+
 }

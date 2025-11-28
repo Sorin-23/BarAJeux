@@ -1,7 +1,9 @@
 package projet_groupe4.rest;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,12 +15,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
 import jakarta.validation.Valid;
 import projet_groupe4.dto.request.JeuRequest;
 import projet_groupe4.dto.response.EntityCreatedResponse;
 import projet_groupe4.dto.response.EntityUpdatedResponse;
 import projet_groupe4.dto.response.JeuResponse;
 import projet_groupe4.exception.IdNotFoundException;
+import projet_groupe4.model.Jeu;
 import projet_groupe4.service.JeuService;
 
 @RestController
@@ -62,6 +66,13 @@ public class JeuRestController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteJeu(@PathVariable Integer id) {
         this.srv.deleteById(id);
+    }
+    
+    @GetMapping("/disponibles")
+    public List<JeuResponse> getJeuxDisponibles(
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateDebut) {
+        List<Jeu> jeuxDisponibles = this.srv.getDisponibles(dateDebut);
+        return jeuxDisponibles.stream().map(JeuResponse::convert).toList();
     }
 
 }
