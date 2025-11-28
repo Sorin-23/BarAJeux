@@ -1,5 +1,8 @@
 package projet_groupe4.dto.response;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import projet_groupe4.model.TableJeu;
 
 public class TableResponse {
@@ -11,6 +14,11 @@ public class TableResponse {
     private int capacite;
 
     private String imgUrl;
+    private List<ReservationResponse> reservations = new ArrayList<>();
+
+    public List<ReservationResponse> getReservations() { return reservations; }
+    public void setReservations(List<ReservationResponse> reservations) { this.reservations = reservations; }
+
 
     public Integer getId() {
         return id;
@@ -44,6 +52,8 @@ public class TableResponse {
         this.imgUrl = imgUrl;
     }
 
+    
+
     public static TableResponse convert(TableJeu table) {
         TableResponse resp = new TableResponse();
 
@@ -51,6 +61,15 @@ public class TableResponse {
         resp.setNomTable(table.getNomTable());
         resp.setCapacite(table.getCapacite());
         resp.setImgUrl(table.getImgUrl());
+
+        if (table.getReservations() != null) {
+            resp.setReservations(
+                table.getReservations().stream()
+                     .map(ReservationResponse::convert)
+                     .toList()
+            );
+        }
+
 
         return resp;
 

@@ -3,6 +3,7 @@ package projet_groupe4.dto.response;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import projet_groupe4.model.Reservation;
 import projet_groupe4.model.StatutReservation;
@@ -19,12 +20,21 @@ public class ReservationResponse {
 
     private int nbJoueur;
 
-    private TableResponse tableJeu;
-    private JeuResponse jeu;
+    @JsonIgnore
     private ClientResponse client;
+
+    @JsonIgnore
     private EmployeResponse gameMaster;
 
+    @JsonIgnore
+    private JeuResponse jeu;
+
     private StatutReservation statutReservation;
+
+    private Integer tableId; // Id de la table
+
+     public Integer getTableId() { return tableId; }
+
 
     public Integer getId() {
         return id;
@@ -59,13 +69,6 @@ public class ReservationResponse {
     }
 
     
-    public TableResponse getTableJeu() {
-		return tableJeu;
-	}
-
-	public void setTableJeu(TableResponse tableJeu) {
-		this.tableJeu = tableJeu;
-	}
 
 	public JeuResponse getJeu() {
 		return jeu;
@@ -99,26 +102,17 @@ public class ReservationResponse {
         this.statutReservation = statutReservation;
     }
 
+    
+
     public static ReservationResponse convert(Reservation reservation) {
         ReservationResponse resp = new ReservationResponse();
-
-        resp.setId(reservation.getId());
-        resp.setDatetimeDebut(reservation.getDatetimeDebut());
-        resp.setDatetimeFin(reservation.getDatetimeFin());
-        resp.setNbJoueur(reservation.getNbJoueur());
-        resp.setStatutReservation(reservation.getStatutReservation());
-
-        if (reservation.getTableJeu() != null)
-            resp.tableJeu = TableResponse.convert(reservation.getTableJeu());
-
-        if (reservation.getJeu() != null)
-            resp.jeu = JeuResponse.convert(reservation.getJeu());
-
-        if (reservation.getClient() != null)
-            resp.client = ClientResponse.convert(reservation.getClient());
-
-        if (reservation.getGameMaster() != null)
-            resp.gameMaster = EmployeResponse.convert(reservation.getGameMaster());
+        
+        resp.id = reservation.getId();
+        resp.datetimeDebut = reservation.getDatetimeDebut();
+        resp.datetimeFin = reservation.getDatetimeFin();
+        resp.nbJoueur = reservation.getNbJoueur();
+        resp.tableId = reservation.getTableJeu() != null ? reservation.getTableJeu().getId() : null;
+        resp.statutReservation = reservation.getStatutReservation();
 
         return resp;
 

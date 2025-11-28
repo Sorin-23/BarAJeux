@@ -70,6 +70,9 @@ public class TableJeu {
 	public String getImgUrl() { return imgUrl; }
 	public void setImgUrl(String imgUrl) { this.imgUrl = imgUrl; }
 
+	public List<Reservation> getReservations() {
+        return reservations;
+    }
 	// toString
 	@Override
 	public String toString() {

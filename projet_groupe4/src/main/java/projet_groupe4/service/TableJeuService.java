@@ -19,8 +19,11 @@ public class TableJeuService {
 	}
 
 	public List<TableJeu> getAll() {
-		return this.dao.findAll();
+		return this.dao.findAllWithReservations();
 	}
+	/*public List<TableJeu> findAllWithReservations() {
+        return this.dao.findAllWithReservations();
+    }*/
 
 	public Optional<TableJeu> getById(Integer id) {
 		return this.dao.findById(id);
