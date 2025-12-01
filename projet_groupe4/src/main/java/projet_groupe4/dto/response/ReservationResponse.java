@@ -3,7 +3,6 @@ package projet_groupe4.dto.response;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import projet_groupe4.model.Reservation;
 import projet_groupe4.model.StatutReservation;
@@ -20,18 +19,15 @@ public class ReservationResponse {
 
     private int nbJoueur;
 
-    @JsonIgnore
     private ClientResponse client;
 
-    @JsonIgnore
     private EmployeResponse gameMaster;
 
-    @JsonIgnore
     private JeuResponse jeu;
 
     private StatutReservation statutReservation;
 
-    private Integer tableId; // Id de la table
+    private Integer tableId; 
 
      public Integer getTableId() { return tableId; }
 
@@ -113,6 +109,9 @@ public class ReservationResponse {
         resp.nbJoueur = reservation.getNbJoueur();
         resp.tableId = reservation.getTableJeu() != null ? reservation.getTableJeu().getId() : null;
         resp.statutReservation = reservation.getStatutReservation();
+        if (reservation.getJeu() != null) {
+            resp.setJeu(JeuResponse.convert(reservation.getJeu())); 
+        }
 
         return resp;
 

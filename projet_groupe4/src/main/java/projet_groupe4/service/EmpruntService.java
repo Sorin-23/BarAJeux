@@ -12,6 +12,7 @@ import projet_groupe4.dto.request.EmpruntRequest;
 import projet_groupe4.exception.IdNotFoundException;
 import projet_groupe4.model.Client;
 import projet_groupe4.model.Emprunt;
+import projet_groupe4.model.Personne;
 
 @Service
 public class EmpruntService {
@@ -55,7 +56,15 @@ public class EmpruntService {
 		emprunt.setDateRetour(request.getDateRetour());
 		emprunt.setDateRetourReel(request.getDateRetourReel());
 		emprunt.setStatutLocation(request.getStatutLocation());
-		emprunt.setClient((Client) this.personneDao.getReferenceById(request.getClientId()));
+		Personne personne = this.personneDao.findById(request.getClientId())
+		        .orElseThrow(() -> new IdNotFoundException());
+
+		if (!(personne instanceof Client client)) {
+		    throw new RuntimeException("L'id ne correspond pas à un client");
+		}
+
+		emprunt.setClient(client);
+		//emprunt.setClient((Client) this.personneDao.getReferenceById(request.getClientId()));
 		emprunt.setJeu(this.jeuDao.getReferenceById(request.getJeuId()));
 
 		return this.dao.save(emprunt);
