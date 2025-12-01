@@ -1,5 +1,6 @@
 package projet_groupe4.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -131,6 +132,8 @@ public class PersonneService {
 		client.setVille(request.getVille());
 		client.setCodePostale(request.getCodePostale());
 		client.setAdresse(request.getAdresse());
+		client.setDateCreation(LocalDate.now());
+		client.setDateLastConnexion(LocalDate.now());
 
 		return this.dao.save(client);
 	}
