@@ -1,8 +1,6 @@
 /* ============================================= */
-/* =========== MAIN - PAGE CONNEXION =========== */
+/* =========== MAIN - PAGE INSCRIPTION ========= */
 /* ============================================= */
-
-#connexion_main,
 #inscription_main {
   display: flex;
   justify-content: center;
@@ -12,8 +10,6 @@
   padding: 2rem 0;
 }
 
-/* Cartes */
-#connexion_main .connexion_card,
 #inscription_main .inscription_card {
   position: relative;
   background-color: #fff;
@@ -26,8 +22,6 @@
   margin-bottom: 1rem;
 }
 
-/* Titres des cartes */
-#connexion_main .card_title,
 #inscription_main .card_title {
   position: absolute;
   top: -0.9rem;
@@ -43,8 +37,6 @@
   border-radius: 10px;
 }
 
-/* Formulaires */
-#connexion_main form,
 #inscription_main form {
   display: flex;
   flex-direction: column;
@@ -53,7 +45,6 @@
   width: 100%;
 }
 
-#connexion_main form label,
 #inscription_main form label {
   align-self: flex-start;
   margin-left: 1rem;
@@ -61,7 +52,6 @@
   color: var(--couleur-principale);
 }
 
-#connexion_main form input,
 #inscription_main form input {
   width: 80%;
   padding: 0.5rem 0.75rem;
@@ -70,8 +60,17 @@
   font-size: 1rem;
 }
 
-/* Boutons */
-#connexion_main .btn,
+#inscription_main form input.is-invalid {
+  border-color: #dc3545;
+}
+
+#inscription_main .invalid-feedback {
+  color: #dc3545;
+  font-size: 0.85rem;
+  text-align: left;
+  margin-left: 1rem;
+}
+
 #inscription_main .btn {
   width: 48%;
   font-weight: bold;
@@ -87,8 +86,22 @@
   display: inline-block;
 }
 
-#connexion_main .btn:hover,
 #inscription_main .btn:hover {
   background-color: var(--couleur-tertiaire);
   color: var(--couleur-principale);
+}
+
+#inscription_main .btn:disabled {
+  background-color: #ccc; /* gris clair */
+  color: #666; /* texte gris */
+  border-color: #999;
+  cursor: not-allowed;
+}
+
+#inscription_main .alert {
+  width: 90%;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
 }

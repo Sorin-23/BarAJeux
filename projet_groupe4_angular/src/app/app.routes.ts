@@ -6,15 +6,14 @@ import { ClientPage } from './page/client-page/client-page';
 import { HomePage } from './page/home-page/home-page';
 import { JeuPage } from './page/jeu-page/jeu-page';
 import { LoginPage } from './page/login-page/login-page';
+import { InscriptionPage } from './page/inscription-page/inscription-page';
 export const routes: Routes = [
-
-
-    {path:'table',component:TablePage , canActivate: [authGuard]},
-    {path:'jeu',component:JeuPage , canActivate: [authGuard]},
-    {path:'client',component:ClientPage , canActivate: [authGuard]},
-    {path:'admin',component:AdminPage , canActivate: [authGuard]},
-    {path:'home',component:HomePage},
-    {path:'login',component:LoginPage},
-    {path:'', redirectTo:'home' , pathMatch: 'full'}
-
+  { path: 'table', component: TablePage, canActivate: [authGuard] },
+  { path: 'jeu', component: JeuPage, canActivate: [authGuard] },
+  { path: 'client', component: ClientPage, canActivate: [authGuard] },
+  { path: 'admin', component: AdminPage, canActivate: [authGuard] },
+  { path: 'home', component: HomePage },
+  { path: 'login', component: LoginPage },
+  { path: 'inscription', component: InscriptionPage },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
 ];

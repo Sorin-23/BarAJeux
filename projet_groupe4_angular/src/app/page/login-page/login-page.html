@@ -15,7 +15,7 @@
         required
       />
       <span *ngIf="usernameCtrl?.hasError('required')">Le nom d'utilisateur est obligatoire</span>
-        <br>
+      <br />
       <label for="password">Mot de passe</label>
       <input
         type="password"
@@ -26,18 +26,13 @@
         required
       />
       <span *ngIf="passwordCtrl?.hasError('required')">Le mot de passe est obligatoire</span>
-    <br>
-      <input type="submit" value="Me connecter" class="btn" [disabled]="userForm.invalid"/>
-      <p>Pas encore inscrit ? <a href="#" id="switchToInscription">Inscription</a></p>
-
-      
-
+      <br />
+      <input type="submit" value="Me connecter" class="btn" [disabled]="userForm.invalid" />
     </form>
+    <p>
+      Pas encore inscrit ? <a routerLink="/inscription" id="switchToInscription">Inscription</a>
+    </p>
   </div>
 
-
-
-<!-- faire la section Inscription -->
-
+  <!-- faire la section Inscription -->
 </div>
-
