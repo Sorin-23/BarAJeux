@@ -20,6 +20,9 @@ public class TableResponse {
     public void setReservations(List<ReservationResponse> reservations) { this.reservations = reservations; }
 
 
+
+
+
     public Integer getId() {
         return id;
     }
@@ -69,6 +72,8 @@ public class TableResponse {
                      .toList()
             );
         }
+        
+        
 
 
         return resp;

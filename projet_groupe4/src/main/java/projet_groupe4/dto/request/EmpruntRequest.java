@@ -15,7 +15,6 @@ public class EmpruntRequest {
     @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateRetour;
-    @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateRetourReel;
 

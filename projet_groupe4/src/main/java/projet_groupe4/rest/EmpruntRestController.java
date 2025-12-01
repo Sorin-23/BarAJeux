@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,6 +48,7 @@ public class EmpruntRestController {
 	@PreAuthorize("hasRole('CLIENT')")
 	@ResponseStatus(HttpStatus.CREATED)
 	public EntityCreatedResponse ajouterEmprunt(@Valid @RequestBody EmpruntRequest request) {
+		 
 		return new EntityCreatedResponse(this.srv.create(request).getId());
 	}
 
@@ -57,7 +60,7 @@ public class EmpruntRestController {
 	}
 
 	@DeleteMapping("/{id}")
-	@PreAuthorize("hasAnyRole('EMPLOYE')")
+	@PreAuthorize("hasRole('EMPLOYE')")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteEmprunt(@PathVariable Integer id) {
 		this.srv.deleteById(id);
