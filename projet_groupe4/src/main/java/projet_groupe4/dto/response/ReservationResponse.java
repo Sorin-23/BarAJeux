@@ -20,13 +20,10 @@ public class ReservationResponse {
 
     private int nbJoueur;
 
-    @JsonIgnore
     private ClientResponse client;
 
-    @JsonIgnore
     private EmployeResponse gameMaster;
 
-    @JsonIgnore
     private JeuResponse jeu;
 
     private StatutReservation statutReservation;
