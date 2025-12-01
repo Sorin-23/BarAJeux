@@ -9,9 +9,11 @@ import projet_groupe4.dao.IDAOEmprunt;
 import projet_groupe4.dao.IDAOJeu;
 import projet_groupe4.dao.IDAOPersonne;
 import projet_groupe4.dto.request.EmpruntRequest;
+import projet_groupe4.dto.response.TopJeuResponse;
 import projet_groupe4.exception.IdNotFoundException;
 import projet_groupe4.model.Client;
 import projet_groupe4.model.Emprunt;
+import projet_groupe4.model.Jeu;
 import projet_groupe4.model.Personne;
 
 @Service
@@ -50,6 +52,15 @@ public class EmpruntService {
 	public void delete(Emprunt emprunt) {
 		this.dao.delete(emprunt);
 	}
+	public List<TopJeuResponse> getTop3Emprunts(){
+		List<Object[]> results = dao.findTopEmprunts();
+        return results.stream()
+                .map(r -> new TopJeuResponse((Jeu) r[0], ((Long) r[1]).doubleValue()))
+                .limit(3)
+                .toList();
+    
+	}
+	
 
 	private Emprunt save(Emprunt emprunt, EmpruntRequest request) {
 		emprunt.setDateEmprunt(request.getDateEmprunt());

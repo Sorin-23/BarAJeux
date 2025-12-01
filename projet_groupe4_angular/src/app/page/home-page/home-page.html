@@ -63,21 +63,21 @@
     <div id="top_jeu_resa">
       Jeux les plus réservés :
       <ol>
-        <li *ngFor="let jeu of topReserves">{{ jeu.jeu.nom }} ({{ jeu.count }})</li>
+        <li *ngFor="let jeu of topReserves">{{ jeu.jeu.nom }} ({{ jeu.count }} réservations)</li>
       </ol>
     </div>
 
     <div id="top_jeu_loue">
       Jeux les plus loués :
       <ol>
-        <li *ngFor="let jeu of topLoc">{{ jeu.jeu.nom }} ({{ jeu.count }})</li>
+        <li *ngFor="let jeu of topLoc">{{ jeu.jeu.nom }} ({{ jeu.count }} emprunts)</li>
       </ol>
     </div>
 
     <div id="top_jeu_aime">
       Jeux les plus aimés :
       <ol>
-        <li *ngFor="let jeu of topLike">{{ jeu.jeu.nom }} ({{ jeu.count }})</li>
+        <li *ngFor="let jeu of topLike">{{ jeu.jeu.nom }} (note : {{ jeu.count }})</li>
       </ol>
     </div>
     <div *ngIf="prenom && role === 'ROLE_CLIENT'">

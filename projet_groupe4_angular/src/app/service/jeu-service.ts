@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject, Observable, startWith, switchMap } from 'rxjs';
 import { Jeu } from '../dto/jeu';
+import { Top } from '../dto/top';
 
 @Injectable({
   providedIn: 'root',
@@ -48,5 +49,9 @@ export class JeuService {
   public findDisponibles(dateDebut: string): Observable<Jeu[]> {
   return this.http.get<Jeu[]>(`${this.apiUrl}/disponibles?dateDebut=${dateDebut}`);
 }
+public getTopNotes(): Observable<Top[]> {
+    return this.http.get<Top[]>(`/api/top/notes`);
+}
+
 
 }

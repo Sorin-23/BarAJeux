@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import projet_groupe4.dao.IDAOJeu;
 import projet_groupe4.dto.request.JeuRequest;
+import projet_groupe4.dto.response.TopJeuResponse;
 import projet_groupe4.exception.IdNotFoundException;
 import projet_groupe4.model.Emprunt;
 import projet_groupe4.model.Jeu;
@@ -92,7 +93,8 @@ public class JeuService {
             // Vérifier les emprunts en conflit
             for (Emprunt e : empruntsActifs) {
                 if (e.getJeu().equals(jeu) &&
-                    (e.getStatutLocation() == StatutLocation.enCours || e.getStatutLocation() == StatutLocation.enRetard) &&
+                    (e.getStatutLocation() == StatutLocation.enCours || e.getStatutLocation() == StatutLocation.enRetard) 
+                    &&
                     !e.getDateEmprunt().isAfter(dateFin) &&  // e.getDateEmprunt() <= dateFin
                     !e.getDateRetour().isBefore(dateDebut)) { // e.getDateRetour() >= dateDebut
                     enUtilisation++;
@@ -112,7 +114,12 @@ public class JeuService {
             return enUtilisation < jeu.getNbExemplaire();
         }).toList();
     }
-		
-	
+
+	public List<TopJeuResponse> getTop3Notes() {
+	    return dao.findTopByNote().stream()
+	              .limit(3)
+	              .map(j -> new TopJeuResponse(j, j.getNote()))
+	              .toList();
+	}
 
 }

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject, Observable, startWith, switchMap } from 'rxjs';
 import { Emprunt } from '../dto/emprunt';
+import { Top } from '../dto/top';
 
 @Injectable({
   providedIn: 'root',
@@ -44,4 +45,7 @@ export class EmpruntService {
     this.http.delete<void>(`${this.apiUrl}/${id}`)
       .subscribe(() => this.refresh());
   }
+  public getTopEmprunts(): Observable<Top[]>{
+    return this.http.get<Top[]>(`/api/top/emprunts`);
+}
 }

@@ -12,6 +12,8 @@ import { ReservationService } from '../../service/reservation-service';
 import { EmpruntService } from '../../service/emprunt-service';
 import { AvisService } from '../../service/avis-service';
 import { JeuService } from '../../service/jeu-service';
+import { Top } from '../../dto/top';
+import { TopService } from '../../service/top-service';
 
 @Component({
   selector: 'app-home-page',
@@ -26,13 +28,9 @@ export class HomePage implements OnInit {
   public badgeActuel?: Badge;
   public role: string = '';
 
-  reservations: Reservation[] = [];
-  emprunts: Emprunt[] = [];
-  avisList: Avis[] = [];
-
-  topReserves: any[] = [];
-  topLoc: any[] = [];
-  topLike: any[] = [];
+  topReserves: Top[] = [];
+  topLoc: Top[] = [];
+  topLike: Top[] = [];
 
   constructor(
     private authService: AuthService,
@@ -40,12 +38,11 @@ export class HomePage implements OnInit {
     private clientService: ClientService,
     private reservationService: ReservationService,
     private empruntService: EmpruntService,
+    private topService: TopService,
     private jeuService: JeuService
   ) {}
 
   ngOnInit(): void {
-    //this.nom = this.authService.nom;
-    //this.prenom = this.authService.prenom;
     this.role = this.authService.role;
     const username = this.authService.username;
 
@@ -57,81 +54,16 @@ export class HomePage implements OnInit {
       this.badgeService.findAll().subscribe((badges) => {
         this.badgeActuel = this.getBadgeForPoints(this.pointFidelite, badges);
       });
-
-      
-
-
-
     });
 
-    this.reservationService.findAll().subscribe((res) => {
-        this.reservations = res;
-        this.calculateTopReserves();
-      });
+    this.topService.getTopReservations().subscribe((res) => (this.topReserves = res));
 
-      this.empruntService.findAll().subscribe((emp) => {
-        this.emprunts = emp;
-        this.calculateTopLoc();
-      });
+    this.topService.getTopEmprunts().subscribe((res) => (this.topLoc = res));
 
-      this.loadTopLike();
+    this.topService.getTopNotes().subscribe((res) => (this.topLike = res));
   }
 
   public getBadgeForPoints(points: number, badges: Badge[]): Badge {
     return badges.filter((b) => b.pointMin <= points).sort((a, b) => b.pointMin - a.pointMin)[0];
   }
-
-  calculateTopReserves() {
-    const counts: Record<number, { jeu: any; count: number }> = {};
-
-    this.reservations.forEach((r) => {
-      const j = r.jeu;
-      const jeuId = j.id;
-
-      if (!counts[jeuId]) {
-        counts[jeuId] = { jeu: j, count: 0 };
-      }
-      counts[jeuId].count++;
-    });
-
-    // Transformer en tableau, trier et prendre le top 3
-    this.topReserves = Object.values(counts)
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 3);
-  }
-
-  calculateTopLoc(){
-
-    const counts: Record<number, { jeu: any; count: number }> = {};
-
-    this.emprunts.forEach((e) => {
-      const j = e.jeu;
-      const jeuId = j.id;
-
-      if (!counts[jeuId]) {
-        counts[jeuId] = { jeu: j, count: 0 };
-      }
-      counts[jeuId].count++;
-    });
-
-    // Transformer en tableau, trier et prendre le top 3
-    this.topLoc = Object.values(counts)
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 3);
-
-
-
-  }
-
-  loadTopLike(){
-    this.jeuService.findAll().subscribe((jeux) => {
-    this.topLike = jeux
-      .sort((a, b) => b.note - a.note) // tri décroissant par note
-      .slice(0, 3) // top 3
-      .map(j => ({ jeu: j, count: j.note })); 
-  });
-  }
-
-
-
 }

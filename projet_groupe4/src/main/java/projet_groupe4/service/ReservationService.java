@@ -10,9 +10,11 @@ import projet_groupe4.dao.IDAOPersonne;
 import projet_groupe4.dao.IDAOReservation;
 import projet_groupe4.dao.IDAOTableJeu;
 import projet_groupe4.dto.request.ReservationRequest;
+import projet_groupe4.dto.response.TopJeuResponse;
 import projet_groupe4.exception.IdNotFoundException;
 import projet_groupe4.model.Client;
 import projet_groupe4.model.Employe;
+import projet_groupe4.model.Jeu;
 import projet_groupe4.model.Reservation;
 
 @Service
@@ -53,6 +55,16 @@ public class ReservationService {
 	public void delete(Reservation reservation) {
 		this.dao.delete(reservation);
 	}
+	
+	public List<TopJeuResponse> getTop3Reservations(){
+		List<Object[]> results = dao.findTopReservations();
+        return results.stream()
+                .map(r -> new TopJeuResponse((Jeu) r[0], ((Long) r[1]).doubleValue()))
+                .limit(3)
+                .toList();
+    
+	}
+	
 
 	private Reservation save(Reservation reservation, ReservationRequest request) {
 		reservation.setDatetimeDebut(request.getDatetimeDebut());

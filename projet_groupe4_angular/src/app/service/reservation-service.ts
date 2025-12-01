@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject, Observable, startWith, switchMap } from 'rxjs';
 import { Reservation } from '../dto/reservation';
+import { Top } from '../dto/top';
 
 @Injectable({
   providedIn: 'root',
@@ -44,4 +45,8 @@ export class ReservationService {
     this.http.delete<void>(`${this.apiUrl}/${id}`)
       .subscribe(() => this.refresh());
   }
+
+  public getTopReservations(): Observable<Top[]>{
+    return this.http.get<Top[]>(`/api/top/reservations`);
+}
 }

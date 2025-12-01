@@ -21,6 +21,7 @@ import projet_groupe4.dto.request.EmpruntRequest;
 import projet_groupe4.dto.response.EmpruntResponse;
 import projet_groupe4.dto.response.EntityCreatedResponse;
 import projet_groupe4.dto.response.EntityUpdatedResponse;
+import projet_groupe4.dto.response.TopJeuResponse;
 import projet_groupe4.exception.IdNotFoundException;
 import projet_groupe4.service.EmpruntService;
 
@@ -65,5 +66,6 @@ public class EmpruntRestController {
 	public void deleteEmprunt(@PathVariable Integer id) {
 		this.srv.deleteById(id);
 	}
+
 
 }

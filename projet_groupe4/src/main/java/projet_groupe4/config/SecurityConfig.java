@@ -29,7 +29,7 @@ public class SecurityConfig {
             // auth.requestMatchers("/WEB-INF/**", "/*.css", "/assets/**").permitAll();
 
             // On autorise tout le monde sur connexion
-            auth.requestMatchers("/api/auth", "/api/inscription/**").permitAll();
+            auth.requestMatchers("/api/auth", "/api/inscription/**","/api/top", "/api/top/**").permitAll();
 
             // Sinon, accès restreint aux utilisateurs authentifiés
             auth.requestMatchers("/**").authenticated();
