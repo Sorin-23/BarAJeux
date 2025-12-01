@@ -7,11 +7,13 @@ import { HomePage } from './page/home-page/home-page';
 import { JeuPage } from './page/jeu-page/jeu-page';
 import { LoginPage } from './page/login-page/login-page';
 import { InscriptionPage } from './page/inscription-page/inscription-page';
+import { roleGuard } from './guard/role-guard';
+
 export const routes: Routes = [
-  { path: 'table', component: TablePage, canActivate: [authGuard] },
-  { path: 'jeu', component: JeuPage, canActivate: [authGuard] },
-  { path: 'client', component: ClientPage, canActivate: [authGuard] },
-  { path: 'admin', component: AdminPage, canActivate: [authGuard] },
+  { path: 'table', component: TablePage, canActivate: [authGuard, roleGuard], data: { role: 'ROLE_CLIENT' } },
+  { path: 'jeu', component: JeuPage, canActivate: [authGuard, roleGuard],data: { role: 'ROLE_CLIENT' } },
+  { path: 'client', component: ClientPage, canActivate: [authGuard, roleGuard],data: { role: 'ROLE_CLIENT' } },
+  { path: 'admin', component: AdminPage, canActivate: [authGuard, roleGuard],data: { role: 'ROLE_EMPLOYE' } },
   { path: 'home', component: HomePage },
   { path: 'login', component: LoginPage },
   { path: 'inscription', component: InscriptionPage },

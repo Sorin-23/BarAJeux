@@ -47,10 +47,10 @@
 <!-- à développer ??-->
 <div class="bloc-resa" *ngIf="prenom && role === 'ROLE_CLIENT'">
   <a routerLink="/jeu">
-    <img src="assets/images/resa_jeu.png" alt="Réservation de jeu" class="logo_resa" />
+    <img src="assets/images/resa_jeu.png" alt="Emprunter un jeu" class="logo_resa" />
   </a>
   <a routerLink="/jeu" class="class_resa">
-    <h2>Réserver un jeu</h2>
+    <h2>Emprunter un jeu</h2>
     <p>
       Une ludothèque variée où chaque dé lancé et chaque carte jouée rapprochent les joueurs autour
       de moments inoubliables.
@@ -81,7 +81,7 @@
       </ol>
     </div>
     <div *ngIf="prenom && role === 'ROLE_CLIENT'">
-      <a routerLink="/jeu"><input type="button" value="Louer un jeu" class="btn" /></a>
+      <a routerLink="/jeu"><input type="button" value="Emprunter un jeu" class="btn" /></a>
       <a routerLink="/table"><input type="button" value="Réserver une table" class="btn" /></a>
     </div>
   </div>
