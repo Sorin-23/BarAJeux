@@ -66,6 +66,7 @@ public class JwtHeaderFilter extends OncePerRequestFilter {
 
                 // Créer, pour Spring Security, un nouvel User, avec le nom d'utilisateur, pas
                 // de mdp, et la liste des autorités
+
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(optUsername.get(),
                         null, autorities);
 

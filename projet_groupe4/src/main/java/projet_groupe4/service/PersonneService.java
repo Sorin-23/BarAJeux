@@ -16,6 +16,7 @@ import projet_groupe4.exception.ResourceNotFoundException;
 import projet_groupe4.model.Client;
 import projet_groupe4.model.Employe;
 import projet_groupe4.model.Personne;
+import projet_groupe4.dto.request.UpdateClientRequest;
 
 @Service
 public class PersonneService {
@@ -68,7 +69,7 @@ public class PersonneService {
 			throw new IllegalArgumentException("Type de requête inconnu pour la création d'une personne");
 		}
 	}
-
+	/* *
 	public Personne update(Integer id, Object request) {
 		if (request instanceof SubscribeClientRequest clientRequest) {
 			Client client = this.getClientById(id).orElseThrow(IdNotFoundException::new);
@@ -82,7 +83,45 @@ public class PersonneService {
 
 			throw new IllegalArgumentException("Type de requête non supporté pour l'update");
 		}
-	}
+	}*/
+	private Client updateClient(Client client, UpdateClientRequest request) {
+    // On met à jour uniquement les infos de profil modifiables depuis la page client
+    client.setNom(request.getNom());
+    client.setPrenom(request.getPrenom());
+    client.setMail(request.getMail());
+    client.setTelephone(request.getTelephone());
+    client.setVille(request.getVille());
+    client.setCodePostale(request.getCodePostale());
+    client.setAdresse(request.getAdresse());
+
+    // On NE touche PAS au mot de passe, ni aux dates ici
+    return this.dao.save(client);
+}
+
+
+	public Personne update(Integer id, Object request) {
+    // 1. Nouveau cas : mise à jour du profil client avec UpdateClientRequest
+    if (request instanceof UpdateClientRequest updateReq) {
+        Client client = this.getClientById(id).orElseThrow(IdNotFoundException::new);
+        return updateClient(client, updateReq);
+    }
+
+    // 2. Ancien cas : inscription / mise à jour complète avec SubscribeClientRequest
+    if (request instanceof SubscribeClientRequest clientRequest) {
+        Client client = this.getClientById(id).orElseThrow(IdNotFoundException::new);
+        return saveClient(client, clientRequest);
+    }
+
+    // 3. Cas employé inchangé
+    if (request instanceof SubscribeEmployeRequest employeRequest) {
+        Employe employe = this.getEmployeById(id).orElseThrow(IdNotFoundException::new);
+        return saveEmploye(employe, employeRequest);
+    }
+
+    // 4. Fallback
+    throw new IllegalArgumentException("Type de requête non supporté pour l'update");
+}
+
 
 	public Personne updateInfosConnect(Integer id, String login, String password) {
 		Personne personne = this.dao.findById(id).orElseThrow(IdNotFoundException::new);

@@ -13,7 +13,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(
-      withInterceptors([ apiUrlInterceptor, jwtHeaderInterceptor ])
+      withInterceptors([apiUrlInterceptor, jwtHeaderInterceptor ]) //apiUrlInterceptor,
     )
   ]
 };

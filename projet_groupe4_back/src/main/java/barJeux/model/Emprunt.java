@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
+
+
 @Entity
 @Table(name="emprunt")
 public class Emprunt {
@@ -30,6 +32,7 @@ public class Emprunt {
 	
 	// valeur générique 
 	private static final int DUREE_EMPRUNT_STANDARD = 15;
+	public Emprunt() {}
 	
 	//Constructors
 	public Emprunt(Integer id, LocalDate dateEmprunt, LocalDate dateRetour, StatutLocation statutLocation,

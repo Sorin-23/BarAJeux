@@ -58,6 +58,8 @@ public class Reservation {
 		this.gameMaster = gameMaster;
 	}
 	
+	public Reservation() {}
+	
 	// Getters & Setters
 	public Integer getId() {
 		return id;

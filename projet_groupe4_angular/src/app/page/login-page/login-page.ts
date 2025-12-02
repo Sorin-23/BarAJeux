@@ -44,17 +44,28 @@ export class LoginPage implements OnInit {
 
   public async connecter() {
     try {
-      // La méthode auth renvoyant une Promise, on peut attendre la résolution avec "await"
-      await this.authService.auth(
+      // 1. Authenticate with the backend
+      // We expect the service to return the response object (JSON)
+      const response: any = await this.authService.auth(
         new AuthRequest(this.usernameCtrl.value, this.passwordCtrl.value)
       );
 
-      // Si tout est OK, on va sur la page d'accueil
+      //token pour l'interceptor
+      if (response && response.token) {
+        localStorage.setItem('token', response.token);
+      }
+      
+      
+      localStorage.setItem('username', this.usernameCtrl.value);
+
+     
+      // Removing window.location.reload() prevents variables from being wiped out
       this.router.navigate(['/home']).then(() => {
-        window.location.reload(); // reload uniquement après navigation
-      });
-    } catch {
-      // Si la connexion n'a pas pu se faire, affichage de l'erreur sur le template
+    window.location.reload(); // reload uniquement après navigation
+  });
+      
+    } catch (error) {
+      console.error("Login failed:", error);
       this.loginError = true;
     }
   }

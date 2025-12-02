@@ -61,8 +61,6 @@
 			<version>2.7.2</version>
 		</dependency>
 	</dependencies>
-	
-
 
 	<properties>
 		<spring.version>5.3.21</spring.version>

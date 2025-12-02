@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ProjetGroupe4Application<projet_groupe4>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "projet_groupe4.ProjetGroupe4Application",
+            "projectName": "projet_groupe4",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

@@ -10,9 +10,9 @@
 
 		<properties>
 			<property name="hibernate.connection.driver" value="com.mysql.cj.jdbc.Driver" />
-			<property name="hibernate.connection.url" value="jdbc:mysql://localhost:8889/bar_a_jeux" />
+			<property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/bar_a_jeux" />
 			<property name="hibernate.connection.user" value="root" />
-			<property name="hibernate.connection.password" value="root" />
+			<property name="hibernate.connection.password" value="s7tZG9ASuNPpFmYx" />
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
 			<!-- validate, create, update -->
 			<property name="hibernate.hbm2ddl.auto" value="create" />

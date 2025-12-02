@@ -76,6 +76,8 @@ public class Jeu {
 		this.imgURL = imgURL;
 		this.besoinGameMaster = besoinGameMaster;
 	}
+	
+	public Jeu() {}
 
 	
 	

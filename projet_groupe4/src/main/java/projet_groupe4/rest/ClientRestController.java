@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import projet_groupe4.dto.request.SubscribeClientRequest;
+import projet_groupe4.dto.request.UpdateClientRequest;
 import projet_groupe4.dto.response.ClientResponse;
 import projet_groupe4.dto.response.ClientWithEmpruntResponse;
 import projet_groupe4.dto.response.ClientWithReservationResponse;
@@ -67,13 +68,12 @@ public class ClientRestController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('EMPLOYE')")
+    @PreAuthorize("hasAnyRole('EMPLOYE','CLIENT')")
     public EntityUpdatedResponse modifierClient(@PathVariable int id,
-            @Valid @RequestBody SubscribeClientRequest request) {
-        this.srv.update(id, request);
-
-        return new EntityUpdatedResponse(id, true);
-    }
+        @Valid @RequestBody UpdateClientRequest request) {
+    this.srv.update(id, request); 
+    return new EntityUpdatedResponse(id, true);
+}
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('EMPLOYE')")

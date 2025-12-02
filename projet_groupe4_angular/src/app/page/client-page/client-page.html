@@ -1,1 +1,118 @@
-<p>client-page works!</p>
+<main>
+  <h1>Interface client</h1>
+
+  <!-- TAB 1: INFORMATIONS -->
+  <div id="client_formulaire" *ngIf="currentView === 'info'">
+    
+    <div id="client_badge">
+      <button class="btn btn-switch" (click)="switchView('reservation')">
+        Voir mes réservations
+      </button>
+      
+     
+      <img [src]="'assets/images/badge/' + getBadgeLevel(client.pointFidelite) + '.png'" 
+           alt="Badge" class="badge_img" />
+      
+      <h4>Points de fidélité : {{ client.pointFidelite }}</h4>
+    </div>
+
+    <div id="informations" class="block_white">
+      <h2>Mes informations personnelles</h2>
+      <form class="general_fields">
+        
+        <!-- Parent Props -->
+        <label>Nom :</label>
+        <input type="text" [(ngModel)]="client.nom" name="nom" [disabled]="!isEditing" />
+
+        <label>Prénom :</label>
+        <input type="text" [(ngModel)]="client.prenom" name="prenom" [disabled]="!isEditing" />
+
+        <label>Email :</label>
+        <input type="email" [(ngModel)]="client.mail" name="mail" [disabled]="!isEditing" />
+
+        <label>Mot de passe :</label>
+        <input type="password" [(ngModel)]="client.mdp" name="mdp" [disabled]="!isEditing" placeholder="******" />
+
+        <label>Téléphone :</label>
+        <input type="text" [(ngModel)]="client.telephone" name="tel" [disabled]="!isEditing" />
+
+        <!-- Client Specific Props -->
+        <div id="client_fields">
+          <label>Adresse :</label>
+          <input type="text" [(ngModel)]="client.adresse" name="adresse" [disabled]="!isEditing" />
+
+          <label>Ville :</label>
+          <input type="text" [(ngModel)]="client.ville" name="ville" [disabled]="!isEditing" />
+
+          <label>Code Postal :</label>
+          <input type="text" [(ngModel)]="client.codePostale" name="cp" [disabled]="!isEditing" />
+        </div>
+
+        <div id="client_btn_section">
+          <button type="button" class="btn modifier" *ngIf="!isEditing" (click)="enableEdit()">Modifier</button>
+          <button type="button" class="btn annuler" *ngIf="isEditing" (click)="cancelEdit()">Annuler</button>
+          <button type="button" class="btn enregistrer" *ngIf="isEditing" (click)="saveProfile()">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TAB 2: RESERVATIONS -->
+  <div id="client_reservation" *ngIf="currentView === 'reservation'">
+    
+    <div id="client_retour_infos">
+      <button class="btn btn-switch" (click)="switchView('info')">
+        Voir mes informations
+      </button>
+    </div>
+
+    <div id="client_reservation_avis" class="block_white full-width">
+      <h2>Mes réservations</h2>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Game Master</th>
+              <th>Jeu</th>
+              <th>Table</th>
+              <th>Titre avis</th>
+              <th>Commentaire</th>
+              <th>Note</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of reservationsList">
+            
+              <td>{{ item.original.datetimeDebut | date:'dd/MM/yyyy' }}</td>
+              <td>{{ item.original.gameMaster?.prenom }}</td>
+              <td>{{ item.original.jeu?.nom }}</td>
+              <td>{{ item.original.tableJeu?.id }}</td>
+              
+              <td>
+                <input type="text" [(ngModel)]="item.titreAvis" class="input_avis" 
+                       [disabled]="!item.avisModifiable" placeholder="Titre..." />
+              </td>
+              <td>
+                <textarea [(ngModel)]="item.commentaire" class="input_avis" 
+                          [disabled]="!item.avisModifiable" placeholder="Avis..."></textarea>
+              </td>
+              <td>
+                <div class="note_etoiles" [class.disabled]="!item.avisModifiable">
+                  <span *ngFor="let star of [1,2,3,4,5]" 
+                        (click)="setRating(item, star)"
+                        [class.active]="item.note >= star">★</span>
+                </div>
+              </td>
+              <td>
+                <button *ngIf="item.avisModifiable" class="btn_crud btn_ajouter" 
+                        (click)="saveAvis(item)">✏️</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>

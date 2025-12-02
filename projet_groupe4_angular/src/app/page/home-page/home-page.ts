@@ -1,22 +1,25 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../service/auth-service';
 import { RouterLink } from '@angular/router';
-import { Badge } from '../../dto/badge';
+
+// Make sure these paths match your actual file names (dash vs dot)
+import { AuthService } from '../../service/auth-service'; 
 import { BadgeService } from '../../service/badge-service';
 import { ClientService } from '../../service/client-service';
-import { Reservation } from '../../dto/reservation';
-import { Avis } from '../../dto/avis';
-import { Emprunt } from '../../dto/emprunt';
 import { ReservationService } from '../../service/reservation-service';
 import { EmpruntService } from '../../service/emprunt-service';
-import { AvisService } from '../../service/avis-service';
 import { JeuService } from '../../service/jeu-service';
 import { Top } from '../../dto/top';
 import { TopService } from '../../service/top-service';
 
+import { Badge } from '../../dto/badge';
+import { Reservation } from '../../dto/reservation';
+import { Avis } from '../../dto/avis';
+import { Emprunt } from '../../dto/emprunt';
+
 @Component({
   selector: 'app-home-page',
+  standalone: true, // Assuming standalone based on previous code
   imports: [CommonModule, RouterLink],
   templateUrl: './home-page.html',
   styleUrl: './home-page.css',
@@ -46,15 +49,21 @@ export class HomePage implements OnInit {
     this.role = this.authService.role;
     const username = this.authService.username;
 
-    this.clientService.findByUsername(username).subscribe((client) => {
-      this.nom = client.nom;
-      this.prenom = client.prenom;
-      this.pointFidelite = client.pointFidelite;
+    if (username) {
+      this.clientService.findByUsername(username).subscribe({
+        next: (client) => {
+          this.nom = client.nom;
+          this.prenom = client.prenom;
+          this.pointFidelite = client.pointFidelite; // Ensure this matches DTO (pointFidelite vs point_fidelite)
 
-      this.badgeService.findAll().subscribe((badges) => {
-        this.badgeActuel = this.getBadgeForPoints(this.pointFidelite, badges);
+          // Only load badge if we have points
+          this.badgeService.findAll().subscribe((badges) => {
+            this.badgeActuel = this.getBadgeForPoints(this.pointFidelite, badges);
+          });
+        },
+        error: (err) => console.error('Error loading client:', err)
       });
-    });
+    };
 
     this.topService.getTopReservations().subscribe((res) => (this.topReserves = res));
 
@@ -64,6 +73,10 @@ export class HomePage implements OnInit {
   }
 
   public getBadgeForPoints(points: number, badges: Badge[]): Badge {
-    return badges.filter((b) => b.pointMin <= points).sort((a, b) => b.pointMin - a.pointMin)[0];
+    // Safety check if badges is empty
+    if (!badges || badges.length === 0) return {} as Badge;
+    
+    const sorted = badges.filter((b) => b.pointMin <= points).sort((a, b) => b.pointMin - a.pointMin);
+    return sorted.length > 0 ? sorted[0] : badges[0]; // Return the first badge if none match
   }
 }
