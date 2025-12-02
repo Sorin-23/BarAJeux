@@ -551,6 +551,7 @@
       <select formControlName="statutEmprunt">
         <option *ngFor="let s of enumOptions['statutLocation']" [value]="s">{{ s }}</option>
       </select>
+      <label>Date retour réel :</label>
       <input type="date" formControlName="dateRetourReel" />
       <button type="submit" [disabled]="empruntForm.invalid">Sauvegarder</button>
       <button type="button" (click)="editMode = false; currentEdit['emprunts'] = null">

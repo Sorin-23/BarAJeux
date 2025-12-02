@@ -126,8 +126,8 @@ export class AdminPage implements OnInit {
       statutReservation: new FormControl(null, { validators: Validators.required }),
     });
     this.empruntForm = new FormGroup({
-      statutLocation: new FormControl(null, { validators: Validators.required }),
-      dateRetourReel: new FormControl(null, { validators: Validators.required }),
+      statutEmprunt: new FormControl(null, { validators: Validators.required }),
+      dateRetourReel: new FormControl(null),
     });
     this.badgeForm = new FormGroup({
       nomBadge: new FormControl(null, { validators: Validators.required }),
@@ -244,19 +244,8 @@ export class AdminPage implements OnInit {
     console.log('modifier called', section, item);
     this.currentEdit[section] = item;
     this.editMode = true;
-    this.jeuForm = new FormGroup({
-      nom: new FormControl(null, { validators: Validators.required }),
-      typesJeux: new FormControl(null, { validators: Validators.required }),
-      ageMinimum: new FormControl(null, { validators: Validators.required }),
-      nbJoueurMinimum: new FormControl(null, { validators: Validators.required }),
-      nbJoueurMaximum: new FormControl(null, { validators: Validators.required }),
-      duree: new FormControl(null, { validators: Validators.required }),
-      nbExemplaire: new FormControl(null, { validators: Validators.required }),
-      note: new FormControl(null, { validators: Validators.required }),
-      categoriesJeux: new FormControl(null, { validators: Validators.required }),
-      imgURL: new FormControl(null, { validators: Validators.required }),
-      besoinGameMaster: new FormControl(null, { validators: Validators.required }),
-    });
+
+   
     if (section === 'jeux') {
       // Pré-remplir le formulaire
       this.jeuForm.patchValue({
@@ -274,7 +263,7 @@ export class AdminPage implements OnInit {
 
       });
     }
-    if(section === 'tables'){
+    else if(section === 'tables'){
     // Pré-remplir le formulaire
       this.tableForm.patchValue({
         nomTable: item.nomTable,
@@ -282,7 +271,7 @@ export class AdminPage implements OnInit {
         imgUrl: item.imgUrl,
       });
     }
-    if (section === 'badges') {
+    else if (section === 'badges') {
       // Pré-remplir le formulaire
       this.badgeForm.patchValue({
         imgURL: item.imgURL,
@@ -290,7 +279,7 @@ export class AdminPage implements OnInit {
         nomBadge: item.nomBadge,
       });
     }
-    if (section === 'employes') {
+    else if (section === 'employes') {
       // Pré-remplir le formulaire
       this.employeForm.patchValue({
       nom:item.nom,
@@ -301,11 +290,17 @@ export class AdminPage implements OnInit {
       gameMaster: item.gameMaster
       });
     }
-    if (section === 'reservations') {
+    else if (section === 'reservations') {
       // Pré-remplir le formulaire
       this.reservationForm.patchValue({
         statutReservation: item.statutReservation,
       });
+    }
+    else if (section ==='emprunts'){
+      this.empruntForm.patchValue({
+         statutEmprunt: item.statutLocation
+      })
+     
     }
   }
   supprimer(section: string, item: any) {
