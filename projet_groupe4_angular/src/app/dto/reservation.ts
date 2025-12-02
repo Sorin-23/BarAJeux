@@ -15,7 +15,8 @@ export class Reservation {
     public _jeu: Jeu,
     public _statutReservation: StatutReservation,
     public _client: Client,
-    public _gameMaster: Employe
+    public _gameMaster: Employe,
+    public _tableID?: number
   ) {}
 
   public get id(): number {
@@ -80,13 +81,19 @@ export class Reservation {
   public set gameMaster(value: Employe) {
     this._gameMaster = value;
   }
+  public get tableID(): number | undefined {
+    return this._tableID;
+  }
+  public set tableID(value: number | undefined) {
+    this._tableID = value;
+  }
 
   public toJson(): any {
     return {
       datetimeDebut: this._datetimeDebut ? this.toBackendFormat(this._datetimeDebut) : null,
       datetimeFin: this._datetimeFin ? this.toBackendFormat(this._datetimeFin) : null,
       nbJoueur: this._nbJoueur,
-      tableJeuId: this._tableJeu?.id ?? null,
+      tableJeuId: this._tableJeu?.id ?? this._tableID?? null,
       jeuId: this._jeu?.id ?? null,
       statutReservation: this._statutReservation,
       clientId: this._client?.id ?? null,

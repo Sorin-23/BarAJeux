@@ -4,7 +4,7 @@ export class Badge {
         public _id: number,
         public _nomBadge: string,
         public _pointMin: number,
-        public _imgURL?: string
+        public _imgURL: string
     ) {}
 
     public get id(): number {
@@ -31,11 +31,11 @@ export class Badge {
         this._pointMin = value;
     }
 
-    public get imgURL(): string | undefined {
+    public get imgURL(): string {
         return this._imgURL;
     }
 
-    public set imgURL(value: string | undefined) {
+    public set imgURL(value: string) {
         this._imgURL = value;
     }
 

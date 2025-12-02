@@ -365,13 +365,13 @@
             >
               ✏️
             </button>
-            <button
+            <!--<button
               class="btn_crud btn_supprimer"
               title="Supprimer"
               (click)="supprimer('emprunts', e)"
             >
               🗑️
-            </button>
+            </button>-->
           </td>
         </tr>
       </tbody>
@@ -431,13 +431,13 @@
             >
               ✏️
             </button>
-            <button
+            <!--<button
               class="btn_crud btn_supprimer"
               title="Supprimer"
               (click)="supprimer('reservations', res)"
             >
               🗑️
-            </button>
+            </button>-->
           </td>
         </tr>
       </tbody>
@@ -446,37 +446,132 @@
 </div>
 
 <div id="admin_form_section" class="block_white" *ngIf="editMode">
-  <div *ngIf="currentSection === 'jeu' "></div>
-  <div *ngIf="currentSection === 'table' "></div>
-  <div *ngIf="currentSection === 'employe' "></div>
-  <div *ngIf="currentSection === 'badge'"></div>
-  <div *ngIf="currentSection === 'emprunt' ">
+  <div *ngIf="currentSection === 'jeu'">
+    <h3>Modifier le jeu #{{ currentEdit['jeux']?.id || 'nouveau' }}</h3>
+    <form [formGroup]="jeuForm" (ngSubmit)="sauvergarder('jeu', currentEdit['jeux'])">
+      <label>Nom :</label>
+      <input type="text" formControlName="nom" />
+      <label>Types :</label>
+      <select formControlName="typesJeux" multiple>
+        <option *ngFor="let type of enumOptions['typesJeux']" [value]="type">{{ type }}</option>
+      </select>
+      <label>Âge minimum :</label>
+      <input type="number" formControlName="ageMinimum" />
+      <label>Nombre de joueurs minimum :</label>
+      <input type="number" formControlName="nbJoueurMinimum" />
+
+      <label>Nombre de joueurs maximum :</label>
+      <input
+        type="number"
+        formControlName="nbJoueurMaximum"
+        [min]="jeuForm.get('nbJoueurMinimum')?.value"
+      />
+      <label>Durée (minutes) :</label>
+      <input type="number" formControlName="duree" />
+      <label>Nombre d'exemplaires :</label>
+      <input type="number" formControlName="nbExemplaire" />
+      <label>Note :</label>
+      <input type="number" formControlName="note" min="0" max="5" />
+      <label>Catégories :</label>
+      <select formControlName="categoriesJeux" multiple>
+        <option *ngFor="let cat of enumOptions['categoriesJeux']" [value]="cat">{{ cat }}</option>
+      </select>
+      <label>Image URL :</label>
+      <input type="text" formControlName="imgURL" />
+      <label>Besoin d'un GameMaster :</label>
+      <input type="checkbox" formControlName="besoinGameMaster" />
+
+      <button type="submit" [disabled]="jeuForm.invalid">Sauvegarder</button>
+      <button type="button" (click)="editMode = false; currentEdit['jeux'] = null">Annuler</button>
+    </form>
+  </div>
+
+  <div *ngIf="currentSection === 'table'">
+    <h3>Modifier la table #{{ currentEdit['tables']?.id || 'nouveau' }}</h3>
+    <form [formGroup]="tableForm" (ngSubmit)="sauvergarder('table', currentEdit['tables'])">
+      <label>Nom :</label>
+      <input type="text" formControlName="nomTable" />
+      <label>Capacité :</label>
+      <input type="number" formControlName="capacite" min="1" />
+      <label>Image URL :</label>
+      <input type="text" formControlName="imgUrl" />
+
+      <button type="submit" [disabled]="tableForm.invalid">Sauvegarder</button>
+      <button type="button" (click)="editMode = false; currentEdit['tables'] = null">
+        Annuler
+      </button>
+    </form>
+  </div>
+  <div *ngIf="currentSection === 'employe'">
+    <h3>Modifier l'employe #{{ currentEdit['employes']?.id || 'nouveau' }}</h3>
+    <form [formGroup]="employeForm" (ngSubmit)="sauvergarder('employe', currentEdit['employes'])">
+      <label>Nom :</label>
+      <input type="text" formControlName="nom" />
+      <label>Prénom :</label>
+      <input type="text" formControlName="prenom" />
+      <label>Mail :</label>
+      <input type="email" formControlName="mail" />
+      <div *ngIf="employeForm.get('mail')?.invalid && employeForm.get('mail')?.touched">
+        <small *ngIf="employeForm.get('mail')?.errors?.['required']">Email requis.</small>
+        <small *ngIf="employeForm.get('mail')?.errors?.['email']">Email invalide.</small>
+      </div>
+
+      <label>Téléphone :</label>
+      <input type="text" formControlName="telephone" />
+      <label>Job :</label>
+      <input type="text" formControlName="job" />
+      <label>GameMaster :</label>
+      <input type="checkbox" formControlName="gameMaster" />
+
+      <button type="submit" [disabled]="employeForm.invalid">Sauvegarder</button>
+      <button type="button" (click)="editMode = false; currentEdit['employes'] = null">
+        Annuler
+      </button>
+    </form>
+  </div>
+  <div *ngIf="currentSection === 'badge'">
+    <h3>Modifier le badge #{{ currentEdit['badges']?.id || 'nouveau' }}</h3>
+    <form [formGroup]="badgeForm" (ngSubmit)="sauvergarder('badge', currentEdit['badges'])">
+      <label>nom du badge :</label>
+      <input type="text" formControlName="nomBadge" />
+      <label>point minimum :</label>
+      <input type="number" formControlName="pointMin" />
+      <label>img URL :</label>
+      <input type="text" formControlName="imgURL" />
+      <button type="submit" [disabled]="badgeForm.invalid">Sauvegarder</button>
+      <button type="button" (click)="editMode = false; currentEdit['badges'] = null">
+        Annuler
+      </button>
+    </form>
+  </div>
+  <div *ngIf="currentSection === 'emprunt'">
     <h3>Modifier l'emprunt #{{ currentEdit['emprunts'].id }}</h3>
-  <form [formGroup]="empruntForm" (ngSubmit)="sauvergarder('emprunt', currentEdit['emprunts'])">
-    <label>Statut :</label>
-    <select formControlName="statutEmprunt">
-      <option *ngFor="let s of enumOptions['statutLocation']" [value]="s">{{ s }}</option>
-    </select>
-    <input type="date" formControlName="dateRetourReel"/>
-    <button type="submit" [disabled]="empruntForm.invalid">Sauvegarder</button>
-    <button type="button" (click)="editMode = false;currentEdit['emprunts'] = null">Annuler</button>
-
-  </form>
-</div>
-  <div *ngIf="currentSection === 'reservation' ">
-    
-  <h3>Modifier la réservation #{{ currentEdit['reservations'].id }}</h3>
-  <form [formGroup]="reservationForm" (ngSubmit)="sauvergarder('reservation', currentEdit['reservations'])">
-    <label>Statut :</label>
-    <select formControlName="statutReservation">
-      <option *ngFor="let s of enumOptions['statutReservation']" [value]="s">{{ s }}</option>
-    </select>
-    <button type="submit" [disabled]="reservationForm.invalid">Sauvegarder</button>
-    <button type="button" (click)="editMode = false;currentEdit['reservations'] = null">Annuler</button>
-
-  </form>
-
-  
-
+    <form [formGroup]="empruntForm" (ngSubmit)="sauvergarder('emprunt', currentEdit['emprunts'])">
+      <label>Statut :</label>
+      <select formControlName="statutEmprunt">
+        <option *ngFor="let s of enumOptions['statutLocation']" [value]="s">{{ s }}</option>
+      </select>
+      <input type="date" formControlName="dateRetourReel" />
+      <button type="submit" [disabled]="empruntForm.invalid">Sauvegarder</button>
+      <button type="button" (click)="editMode = false; currentEdit['emprunts'] = null">
+        Annuler
+      </button>
+    </form>
+  </div>
+  <div *ngIf="currentSection === 'reservation'">
+    <h3>Modifier la réservation #{{ currentEdit['reservations'].id }}</h3>
+    <form
+      [formGroup]="reservationForm"
+      (ngSubmit)="sauvergarder('reservation', currentEdit['reservations'])"
+    >
+      <label>Statut :</label>
+      <select formControlName="statutReservation">
+        <option *ngFor="let s of enumOptions['statutReservation']" [value]="s">{{ s }}</option>
+      </select>
+      <button type="submit" [disabled]="reservationForm.invalid">Sauvegarder</button>
+      <button type="button" (click)="editMode = false; currentEdit['reservations'] = null">
+        Annuler
+      </button>
+    </form>
   </div>
 </div>

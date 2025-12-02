@@ -25,7 +25,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { CategorieJeu } from '../../dto/enum/categorie-jeu';
 import { TypeJeu } from '../../dto/enum/type-jeu';
-import { CdkPortal } from '@angular/cdk/portal';
 import { Emprunt } from '../../dto/emprunt';
 
 @Component({
@@ -88,7 +87,11 @@ export class AdminPage implements OnInit {
   editMode = false;
   currentSection = 'dashboard';
   reservationForm!: FormGroup;
-  empruntForm!:FormGroup;
+  badgeForm!: FormGroup;
+  jeuForm!: FormGroup;
+  tableForm!: FormGroup;
+  employeForm!: FormGroup;
+  empruntForm!: FormGroup;
 
   constructor(
     private jeuService: JeuService,
@@ -108,7 +111,6 @@ export class AdminPage implements OnInit {
     this.loadSection('reservations', this.reservationService);
     this.loadSection('emprunts', this.empruntService);
 
-
     Object.keys(this.searchControls).forEach((section) => {
       this.searchControls[section].valueChanges.subscribe((term) => {
         this.filter(section, term);
@@ -124,9 +126,41 @@ export class AdminPage implements OnInit {
       statutReservation: new FormControl(null, { validators: Validators.required }),
     });
     this.empruntForm = new FormGroup({
-      statutEmprunt: new FormControl(null, { validators: Validators.required }),
-      dateRetourReel:new FormControl(null)
+      statutLocation: new FormControl(null, { validators: Validators.required }),
+      dateRetourReel: new FormControl(null, { validators: Validators.required }),
     });
+    this.badgeForm = new FormGroup({
+      nomBadge: new FormControl(null, { validators: Validators.required }),
+      pointMin: new FormControl(null, { validators: Validators.required }),
+      imgURL: new FormControl(null, { validators: Validators.required }),
+    });
+    this.employeForm = new FormGroup({
+      nom: new FormControl(null, { validators: Validators.required }),
+      prenom: new FormControl(null, { validators: Validators.required }),
+      mail: new FormControl(null, { validators: [Validators.required, Validators.email] }),
+      telephone: new FormControl(null, { validators: Validators.required }),
+      job: new FormControl(null, { validators: Validators.required }),
+      gameMaster: new FormControl(false),
+    });
+    this.jeuForm = new FormGroup({
+      nom: new FormControl(null, { validators: Validators.required }),
+      typesJeux: new FormControl(null, { validators: Validators.required }),
+      ageMinimum: new FormControl(0, { validators: Validators.required }),
+      nbJoueurMinimum: new FormControl(1, { validators: Validators.required }),
+      nbJoueurMaximum: new FormControl(1, { validators: Validators.required }),
+      duree: new FormControl(1, { validators: Validators.required }),
+      nbExemplaire: new FormControl(1, { validators: Validators.required }),
+      note: new FormControl(null, { validators: Validators.required }),
+      categoriesJeux: new FormControl(null, { validators: Validators.required }),
+      imgURL: new FormControl(null, { validators: Validators.required }),
+      besoinGameMaster: new FormControl(false),
+    });
+     this.tableForm = new FormGroup({
+      nomTable: new FormControl(null, { validators: Validators.required }),
+      capacite: new FormControl(null, { validators: Validators.required }),
+      imgUrl: new FormControl(null, { validators: Validators.required }),
+    });
+
   }
 
   private loadSection(section: string, service: any) {
@@ -135,7 +169,6 @@ export class AdminPage implements OnInit {
       this.filteredItems[section] = [...data];
 
       if (section === 'reservations') {
-
         this.loadResaDuJour();
         this.loadTableJeuReservation();
       }
@@ -189,6 +222,21 @@ export class AdminPage implements OnInit {
   }
 
   ajouter(section: string) {
+    switch (section) {
+      case 'jeux':
+        this.jeuForm.reset();
+        break;
+      case 'employes':
+        this.employeForm.reset();
+        break;
+      case 'tables':
+        this.tableForm.reset();
+        break;
+      case 'badges':
+        this.badgeForm.reset();
+        break;
+    }
+
     this.currentEdit[section] = null;
     this.editMode = true;
   }
@@ -196,21 +244,74 @@ export class AdminPage implements OnInit {
     console.log('modifier called', section, item);
     this.currentEdit[section] = item;
     this.editMode = true;
+    this.jeuForm = new FormGroup({
+      nom: new FormControl(null, { validators: Validators.required }),
+      typesJeux: new FormControl(null, { validators: Validators.required }),
+      ageMinimum: new FormControl(null, { validators: Validators.required }),
+      nbJoueurMinimum: new FormControl(null, { validators: Validators.required }),
+      nbJoueurMaximum: new FormControl(null, { validators: Validators.required }),
+      duree: new FormControl(null, { validators: Validators.required }),
+      nbExemplaire: new FormControl(null, { validators: Validators.required }),
+      note: new FormControl(null, { validators: Validators.required }),
+      categoriesJeux: new FormControl(null, { validators: Validators.required }),
+      imgURL: new FormControl(null, { validators: Validators.required }),
+      besoinGameMaster: new FormControl(null, { validators: Validators.required }),
+    });
+    if (section === 'jeux') {
+      // Pré-remplir le formulaire
+      this.jeuForm.patchValue({
+       nom: item.nom,
+       typesJeux : item.typesJeux,
+       ageMinimum : item.ageMinimum,
+       nbJoueurMinimum : item.nbJoueurMinimum,
+       nbJoueurMaximum : item.nbJoueurMaximum,
+       duree : item.duree,
+       nbExemplaire : item.nbExemplaire,
+       note : item.note,
+       categoriesJeux : item.categoriesJeux,
+       imgURL : item.imgURL,
+       besoinGameMaster : item.besoinGameMaster,
+
+      });
+    }
+    if(section === 'tables'){
+    // Pré-remplir le formulaire
+      this.tableForm.patchValue({
+        nomTable: item.nomTable,
+        capacite: item.capacite,
+        imgUrl: item.imgUrl,
+      });
+    }
+    if (section === 'badges') {
+      // Pré-remplir le formulaire
+      this.badgeForm.patchValue({
+        imgURL: item.imgURL,
+        pointMin: item.pointMin,
+        nomBadge: item.nomBadge,
+      });
+    }
+    if (section === 'employes') {
+      // Pré-remplir le formulaire
+      this.employeForm.patchValue({
+      nom:item.nom,
+      prenom:item.prenom,
+      mail: item.mail,
+      telephone: item.telephone,
+      job: item.job,
+      gameMaster: item.gameMaster
+      });
+    }
     if (section === 'reservations') {
       // Pré-remplir le formulaire
       this.reservationForm.patchValue({
         statutReservation: item.statutReservation,
       });
     }
-    else if (section ==='emprunts'){
-      this.empruntForm.patchValue({
-         statutEmprunt: item.statutLocation
-      })
-     
-    }
   }
   supprimer(section: string, item: any) {
     if (!item?.id) return;
+    const confirmation = window.confirm(`Voulez-vous vraiment supprimer cet élément ?`);
+    if (!confirmation) return;
     switch (section) {
       case 'jeux':
         this.jeuService.deleteById(item.id);
@@ -232,28 +333,83 @@ export class AdminPage implements OnInit {
         break;
     }
   }
-  private removeFromData(section: string, id: number) {
+  /*private removeFromData(section: string, id: number) {
     this.data[section] = this.data[section].filter((i) => i.id !== id);
     this.filteredItems[section] = this.filteredItems[section].filter((i) => i.id !== id);
-  }
+  }*/
 
   sauvergarder(section: string, item: any) {
-    console.log('sauvegarder called', section, item, this.reservationForm.value);
     switch (section) {
       case 'jeu':
-        this.jeuService.save(item.id);
+        const formDataJeu = this.jeuForm.getRawValue();
+        const jeuId = this.currentEdit['jeux'] ? this.currentEdit['jeux'].id : 0;
+        const jeuModifiee = new Jeu(
+          jeuId, // si null, id sera undefined => création
+          formDataJeu.nom,
+          formDataJeu.typesJeux,
+          formDataJeu.ageMinimum,
+          formDataJeu.nbJoueurMinimum,
+          formDataJeu.nbJoueurMaximum,
+          formDataJeu.duree,
+          formDataJeu.nbExemplaire,
+          formDataJeu.note,
+          formDataJeu.categoriesJeux,
+          formDataJeu.imgURL,
+          formDataJeu.besoinGameMaster ?? false,
+
+          
+        );
+        console.log(jeuModifiee.toJson());
+        console.log(jeuModifiee);
+        this.jeuService.save(jeuModifiee);
         break;
       case 'employe':
-        this.employeService.save(item.id);
+        const formDataEmploye = this.employeForm.getRawValue();
+        const employeId = this.currentEdit['employes'] ? this.currentEdit['employes'].id : 0;
+        const mdp = formDataEmploye.mdp || "123456";
+        const employeModifiee = new Employe(
+          employeId, // si null, id sera undefined => création
+          formDataEmploye.nom,
+          formDataEmploye.prenom,
+          formDataEmploye.mail,
+          mdp,
+          formDataEmploye.telephone,
+          formDataEmploye.job,
+          formDataEmploye.gameMaster ?? false
+        );
+        console.log(employeModifiee.toJson());
+        console.log(employeModifiee);
+        //console.log(mdp)
+        this.employeService.save(employeModifiee);
         break;
       case 'table':
-        this.tableJeuService.save(item.id);
+         const formDataTable = this.tableForm.getRawValue();
+        const tableId = this.currentEdit['tables'] ? this.currentEdit['tables'].id : 0;
+        const tableModifiee = new TableJeu(
+          tableId, // si null, id sera undefined => création
+          formDataTable.nomTable,
+          formDataTable.capacite,
+          formDataTable.imgUrl
+        );
+        console.log(tableModifiee.toJson());
+        console.log(tableModifiee);
+        this.tableJeuService.save(tableModifiee);
         break;
       case 'badge':
-        this.badgeService.save(item.id);
+        const formDataBadge = this.badgeForm.getRawValue();
+        const badgeId = this.currentEdit['badges'] ? this.currentEdit['badges'].id : 0;
+        const badgeModifiee = new Badge(
+          badgeId, // si null, id sera undefined => création
+          formDataBadge.nomBadge,
+          formDataBadge.pointMin,
+          formDataBadge.imgURL
+        );
+        console.log(badgeModifiee.toJson());
+        console.log(badgeModifiee);
+        this.badgeService.save(badgeModifiee);
         break;
       case 'reservation':
-        const formData = this.reservationForm.getRawValue();
+        const formDataReservation = this.reservationForm.getRawValue();
         const reservationModifiee = new Reservation(
           this.currentEdit['reservations'].id,
           new Date(this.currentEdit['reservations'].datetimeDebut),
@@ -261,7 +417,7 @@ export class AdminPage implements OnInit {
           this.currentEdit['reservations'].nbJoueur,
           this.currentEdit['reservations'].tableJeu,
           this.currentEdit['reservations'].jeu,
-          formData.statutReservation, // nouveau statut
+          formDataReservation.statutReservation, // nouveau statut
           this.currentEdit['reservations'].client,
           this.currentEdit['reservations'].gameMaster
         );
