@@ -4,12 +4,12 @@
   <form id="filtre_form" [formGroup]="filtreFormTable" (ngSubmit)="appliquerFiltreTable()">
     <div class="filtre_groupe">
       <label for="nbPersonne">Nombre de personnes</label>
-      <input type="number" id="nbPersonne" min="1" max="10" formControlName="nbPersonnes"/>
+      <input type="number" id="nbPersonne" min="1" max="10" formControlName="nbPersonnes" />
     </div>
 
     <div class="filtre_groupe">
       <label for="date">Date</label>
-      <input type="date" id="date" formControlName="date" [min]="today"/>
+      <input type="date" id="date" formControlName="date" [min]="today" />
       <!-- mettre minimum date du jour-->
     </div>
 
@@ -19,7 +19,7 @@
     </div>
     <div class="filtre_groupe">
       <label for="heureDepart">Heure de départ</label>
-      <input type="time" id="heureDepart" formControlName="heureDepart"/>
+      <input type="time" id="heureDepart" formControlName="heureDepart" />
     </div>
 
     <input type="submit" value="Appliquer les filtres" class="btn" />
@@ -43,20 +43,17 @@
         </div>
       </div>
     </div>
-
+    <br />
     <button class="nav-btn next" (click)="next()">&#10095;</button>
   </div>
 </section>
 
-
-
 <section id="filtre_section" class="block_white" *ngIf="tableChoisi">
   <h2>Filtrer les jeux</h2>
   <form id="filtre_form" [formGroup]="filtreFormJeu" (ngSubmit)="appliquerFiltreJeu()">
-
     <div class="filtre_groupe">
       <label for="ageMin">Age minimum</label>
-      <input type="number" id="ageMin" min="1" max="18" formControlName="ageMin"/>
+      <input type="number" id="ageMin" min="1" max="18" formControlName="ageMin" />
     </div>
 
     <input type="submit" value="Appliquer les filtres" class="btn" />
@@ -64,7 +61,7 @@
 </section>
 
 <section id="resultat_filtre" class="block_white" *ngIf="tableChoisi">
-  <h2>🎲 Nos jeux </h2>
+  <h2>🎲 Nos jeux</h2>
   <div class="carrousel-container">
     <button class="nav-btn prev" (click)="prev()">&#10094;</button>
 
@@ -74,9 +71,9 @@
         <div class="carte-info">
           <h3>{{ jeu.nom }}</h3>
           <p>âge minimum: {{ jeu.ageMinimum }}</p>
-          <p>Nombre de joueurs min : {{ jeu.nbJoueurMinimum }} </p>
-          <p> Nombre de joueurs max : {{jeu.nbJoueurMaximum}}</p>         
-          <p>durée : {{ jeu.duree }} minutes - note : {{jeu.note}}</p>
+          <p>Nombre de joueurs min : {{ jeu.nbJoueurMinimum }}</p>
+          <p>Nombre de joueurs max : {{ jeu.nbJoueurMaximum }}</p>
+          <p>durée : {{ jeu.duree }} minutes - note : {{ jeu.note }}</p>
 
           <div class="actions">
             <button class="btn btn-louer" (click)="choisirJeu(jeu)">Choisir</button>
@@ -89,25 +86,41 @@
   </div>
 </section>
 
-<section id = "formulaire reservation" class = "block_white" *ngIf = "jeuChoisi">
-  <h2> Formulaire de réservation </h2>
-  <form [formGroup]="reservationForm" (ngSubmit)="validerReservation()">
-    <input type="text" [value]="jeuSelectionne?.nom" disabled/>
-    <input type="number" formControlName="nbJoueur"/>
-    <input type="datetime-local" formControlName="dateDebutAffichage" readonly />
-<input type="datetime-local" formControlName="dateFinAffichage" readonly />
-  <label>
-  <input type="checkbox" formControlName="avecGameMaster" (change)="updateDispoIfNeeded()" /> Avec Game Master
-</label>
+<section id="formulaire reservation" class="block_white" *ngIf="jeuChoisi">
+  <h2>Formulaire de réservation</h2>
+  <form [formGroup]="reservationForm" id="reservationForm" (ngSubmit)="validerReservation()">
+    <div class="filtre_groupe">
+      <label>Jeu :</label>
+      <input type="text" [value]="jeuSelectionne?.nom" disabled />
+    </div>
 
-<div *ngIf="reservationForm.get('avecGameMaster')?.value">
-  <select formControlName="gameMasterId">
-    <option *ngFor="let gm of gameMastersDispo" [value]="gm.id">
-      {{ gm.nom }}
-    </option>
-  </select>
-</div>
-    <button type="submit">Réserver</button>
+    <div class="filtre_groupe">
+      <label>Nombre de joueurs :</label>
+      <input type="number" formControlName="nbJoueur" readonly />
+    </div>
+    <div class="filtre_groupe">
+      <label>Date et heure de début :</label>
+      <input type="datetime-local" formControlName="dateDebutAffichage" readonly />
+    </div>
+    <div class="filtre_groupe">
+      <label>Date et heure de fin : </label>
+      <input type="datetime-local" formControlName="dateFinAffichage" readonly />
+    </div>
+
+    <div class="filtre_groupe">
+      <label>Game Master : </label>
+      <input type="checkbox" formControlName="avecGameMaster" (change)="updateDispoIfNeeded()" />
+    </div>
+
+    <div *ngIf="reservationForm.get('avecGameMaster')?.value" class="filtre_groupe">
+      <select formControlName="gameMasterId">
+        <option *ngFor="let gm of gameMastersDispo" [value]="gm.id">
+          {{ gm.nom }}
+        </option>
+      </select>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn enregistrer">Réserver</button>
+    </div>
   </form>
-  
 </section>
