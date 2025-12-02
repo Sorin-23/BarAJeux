@@ -105,6 +105,7 @@ export class AdminPage implements OnInit {
     this.loadSection('reservations', this.reservationService);
     this.loadSection('emprunts', this.empruntService);
 
+
     Object.keys(this.searchControls).forEach((section) => {
       this.searchControls[section].valueChanges.subscribe((term) => {
         this.filter(section, term);

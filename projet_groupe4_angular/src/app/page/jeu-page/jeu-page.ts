@@ -181,6 +181,6 @@ export class JeuPage implements OnInit {
     alert('Emprunt créé avec succès !');
     this.formEmpruntVisible = false;
     this.jeuSelectionne = undefined;
-    this.appliquerFiltre();
+    this.filtreForm.reset();
   }
 }

@@ -268,6 +268,9 @@ export class TablePage implements OnInit {
       dateDebutAffichage: this.toInputFormat(this.dateDebut), // string pour l’affichage
       dateFinAffichage: this.toInputFormat(this.dateFin),
     });
+    this.reservationForm.get("nbJoueur")?.disable();
+    this.reservationForm.get("dateDebutAffichage")?.disable();
+    this.reservationForm.get("dateFinAffichage")?.disable();
   }
 
   validerReservation() {
@@ -295,7 +298,12 @@ export class TablePage implements OnInit {
     console.log(reservationDto instanceof Reservation); 
 
     this.reservationService.save(reservationDto);
-    console.log("ici ok");
+    alert('Réservation créée avec succès !');
+    this.tableChoisi = false;
+    this.tableSelectionne = undefined;
+    this.jeuChoisi = false;
+    this.jeuSelectionne = undefined;
+    this.filtreFormTable.reset();
 }
 private combineDateTime(dateStr: string, timeStr: string): Date {
   const [year, month, day] = dateStr.split('-').map(Number);
