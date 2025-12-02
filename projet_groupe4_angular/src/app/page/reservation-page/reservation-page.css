@@ -1,71 +1,115 @@
-.table-container {
-  overflow-x: auto;
-  background-color: white;
-  padding: 1rem;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+#reservation_page {
+  padding: 2rem 2.5rem;
 }
 
+/* White rounded card similar to your other sections (Filtrer / Nos tables) */
+.reservation-card {
+  padding: 2rem 2.5rem;
+  border-radius: 16px;
+  
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Header: back button + title */
+.reservation-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.reservation-header h2 {
+  margin: 0;
+}
+
+/* Optional: center "Aucune réservation" inside the card */
+.no-reservations {
+  text-align: center;
+  padding: 2rem 0;
+  color: #555;
+}
+
+/* Table container (for overflow if needed) */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* Table styling */
 .reservation-table {
   width: 100%;
   border-collapse: collapse;
+  font-size: 0.95rem;
 }
 
-.reservation-table th,
-.reservation-table td {
-  padding: 0.75rem 1rem;
+.reservation-table thead th {
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  border-bottom: 1px solid #e5e5e5;
+  white-space: nowrap;
 }
 
-.reservation-table th {
-  background-color: #007bff;
-  color: white;
-  position: sticky;
-  top: 0;
+.reservation-table tbody td {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: top;
 }
 
-.reservation-table tr.odd {
-  background-color: #f9f9f9;
+/* Light zebra + hover in the beige/white spirit of your site */
+.reservation-table tbody tr:nth-child(even),
+.reservation-table tbody tr.odd {
+  background-color: #fbfbfb;
 }
 
-.reservation-table tr:hover {
-  background-color: #e6f0ff;
+.reservation-table tbody tr:hover {
+  background-color: #f6f2ea; /* light beige tint */
 }
 
-.btn-validate {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  padding: 0.3rem 0.6rem;
-  border-radius: 5px;
+/* Inputs for avis */
+.input-avis {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 5px;
+  resize: vertical;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+.input-avis:disabled {
+  background-color: #f3f3f3;
+  color: #666;
+}
+
+/* Stars rating */
+.note-etoiles {
+  display: inline-flex;
   cursor: pointer;
+  color: #ccc;
+  font-size: 1.4rem;
 }
-
-.btn-validate:disabled {
-  background-color: #ccc;
-  cursor: default;
-}
-
-.btn-back {
-  margin-bottom: 1rem;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
 
 .note-etoiles span {
-  color: gray;
-  cursor: pointer;
+  transition: color 0.2s;
 }
+
 .note-etoiles span.active {
   color: gold;
 }
-.note-etoiles.disabled span.active {
-  color: gold; /* Ajoute cette règle */
+
+.note-etoiles.disabled {
+  pointer-events: none;
   cursor: default;
+  opacity: 0.7;
+}
+
+.btn-back {
+ 
+  min-width: 120px;
+}
+
+.btn-validate {
+  padding: 0.3rem 0.8rem;
 }

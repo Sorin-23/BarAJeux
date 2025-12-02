@@ -1,71 +1,91 @@
-<h2>Mes réservations</h2>
-<button class="btn btn-back" (click)="goBack()">← Revenir</button>
+<main id="reservation_page">
+  <section class="reservation-card block_white">
+    <div class="reservation-header">
+      <button class="btn btn-back" (click)="goBack()">← Revenir</button>
+      <h2>Mes réservations</h2>
+    </div>
 
-<div *ngIf="reservations.length === 0">
-  <p>Aucune réservation trouvée.</p>
-</div>
+    <div *ngIf="reservations.length === 0" class="no-reservations">
+      <p>Aucune réservation trouvée.</p>
+    </div>
 
-<div *ngIf="reservations.length > 0" class="table-container">
-  <table class="reservation-table">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Date début</th>
-        <th>Date fin</th>
-        <th>Jeu</th>
-        <th>Table</th>
-        <th>Statut</th>
-        <th>Titre Avis</th>
-        <th>Commentaire</th>
-        <th>Note</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let r of reservations; let i = index" [class.odd]="i % 2 === 1">
-        <td>{{ r.id }}</td>
-        <td>{{ r.datetimeDebut | date : 'dd/MM/yyyy HH:mm' }}</td>
-        <td>{{ r.datetimeFin | date : 'dd/MM/yyyy HH:mm' }}</td>
-        <td>{{ r.jeu?.nom }}</td>
-        <td>{{ r.tableJeu?.nomTable }}</td>
-        <td>{{ r.statutReservation }}</td>
+    <div *ngIf="reservations.length > 0" class="table-container">
+      <table class="reservation-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Date début</th>
+            <th>Date fin</th>
+            <th>Jeu</th>
+            <th>Table</th>
+            <th>Statut</th>
+            <th>Titre Avis</th>
+            <th>Commentaire</th>
+            <th>Note</th>
+            <th>Action</th>
+          </tr>
+        </thead>
 
-        <!-- Colonne Avis -->
-        <td>
-          <input
-            type="text"
-            [(ngModel)]="r.avis!.titre"
-            placeholder="Titre..."
-            [disabled]="!r.avisModifiable"
-          />
-        </td>
-        <td>
-          <textarea
-            [(ngModel)]="r.avis!.commentaire"
-            placeholder="Commentaire..."
-            [disabled]="!r.avisModifiable"
-          ></textarea>
-        </td>
+        <tbody>
+          <tr
+            *ngFor="let r of reservations; let i = index"
+            [class.odd]="i % 2 === 1"
+          >
+            <td>{{ r.id }}</td>
+            <td>{{ r.datetimeDebut | date : 'dd/MM/yyyy HH:mm' }}</td>
+            <td>{{ r.datetimeFin | date : 'dd/MM/yyyy HH:mm' }}</td>
+            <td>{{ r.jeu?.nom }}</td>
+            <td>{{ r.tableJeu?.nomTable }}</td>
+            <td>{{ r.statutReservation }}</td>
 
-        <!-- Colonne Note -->
-        <td>
-          <div class="note-etoiles" [class.disabled]="!r.avisModifiable">
-            <span
-              *ngFor="let star of [1, 2, 3, 4, 5]"
-              (click)="setRating(r, star)"
-              [class.active]="r.avis!.note >= star"
-              >★</span
-            >
-          </div>
-        </td>
+            <!-- Titre avis -->
+            <td>
+              <input
+                type="text"
+                class="input-avis"
+                [(ngModel)]="r.avis!.titre"
+                placeholder="Titre..."
+                [disabled]="!r.avisModifiable"
+              />
+            </td>
 
-        <!-- Bouton Valider Avis -->
-        <td>
-          <button class="btn btn-validate" (click)="saveAvis(r)" [disabled]="!r.avisModifiable">
-            ✔️
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+            <!-- Commentaire -->
+            <td>
+              <textarea
+                class="input-avis"
+                [(ngModel)]="r.avis!.commentaire"
+                placeholder="Commentaire..."
+                [disabled]="!r.avisModifiable"
+                rows="2"
+              ></textarea>
+            </td>
+
+            <!-- Note en étoiles -->
+            <td>
+              <div class="note-etoiles" [class.disabled]="!r.avisModifiable">
+                <span
+                  *ngFor="let star of [1, 2, 3, 4, 5]"
+                  (click)="setRating(r, star)"
+                  [class.active]="r.avis!.note >= star"
+                  >★</span
+                >
+              </div>
+            </td>
+
+            <!-- Bouton Valider Avis -->
+            <td>
+              <button
+                class="btn btn-validate"
+                (click)="saveAvis(r)"
+                [disabled]="!r.avisModifiable"
+              >
+                ✔️
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
