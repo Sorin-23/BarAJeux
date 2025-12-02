@@ -33,22 +33,6 @@
   background-color: #e6f0ff;
 }
 
-.note-etoiles span {
-  cursor: pointer;
-  color: #ccc;
-  font-size: 1.2rem;
-  user-select: none;
-}
-
-.note-etoiles span.active {
-  color: gold;
-}
-
-.note-etoiles.disabled span {
-  cursor: default;
-  color: #ccc;
-}
-
 .btn-validate {
   background-color: #28a745;
   color: white;
@@ -71,4 +55,17 @@
   padding: 0.5rem 1rem;
   border-radius: 5px;
   cursor: pointer;
+}
+
+
+.note-etoiles span {
+  color: gray;
+  cursor: pointer;
+}
+.note-etoiles span.active {
+  color: gold;
+}
+.note-etoiles.disabled span.active {
+  color: gold; /* Ajoute cette règle */
+  cursor: default;
 }

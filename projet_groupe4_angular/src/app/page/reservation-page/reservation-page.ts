@@ -36,7 +36,9 @@ export class ReservationPage implements OnInit {
             this.avisService.getAvisByReservation(r.id).subscribe({
               next: (avis) => {
                 if (avis) {
+                  avis.note = Number(avis.note);
                   r.avis = avis;
+                  console.log(avis)
                   r.avisModifiable = false; // pas modifiable, déjà existant
                 } else {
                   r.avis = new Avis(0, 0, '', '', r.id);
