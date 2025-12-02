@@ -29,8 +29,7 @@ public class ReservationRequest {
 
     @NotNull
     private Integer clientId;
-
-    @NotNull
+    
     private Integer gameMasterId;
 
     private StatutReservation statutReservation;

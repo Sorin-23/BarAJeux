@@ -44,7 +44,7 @@ public class Reservation {
 	@JoinColumn(name = "client", nullable = false)
 	private Client client;
 	@ManyToOne
-	@JoinColumn(name = "game_master", nullable = false)
+	@JoinColumn(name = "game_master", nullable = true)
 	private Employe gameMaster;
 
 	// Constructors

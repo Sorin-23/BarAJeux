@@ -15,6 +15,7 @@ import projet_groupe4.exception.IdNotFoundException;
 import projet_groupe4.model.Client;
 import projet_groupe4.model.Employe;
 import projet_groupe4.model.Jeu;
+import projet_groupe4.model.Personne;
 import projet_groupe4.model.Reservation;
 
 @Service
@@ -72,8 +73,28 @@ public class ReservationService {
 		reservation.setNbJoueur(request.getNbJoueur());
 		reservation.setTableJeu(this.tableJeuDao.getReferenceById(request.getTableJeuId()));
 		reservation.setJeu(this.jeuDao.getReferenceById(request.getJeuId()));
-		reservation.setClient((Client) this.personneDao.getReferenceById(request.getClientId()));
-		reservation.setGameMaster((Employe) this.personneDao.getReferenceById(request.getGameMasterId()));
+		//reservation.setClient((Client) this.personneDao.getReferenceById(request.getClientId()));
+		Personne personne = this.personneDao.findById(request.getClientId())
+		        .orElseThrow(() -> new IdNotFoundException());
+
+		if (!(personne instanceof Client client)) {
+		    throw new RuntimeException("L'id ne correspond pas à un client");
+		}
+
+		reservation.setClient(client);
+		//reservation.setGameMaster((Employe) this.personneDao.getReferenceById(request.getGameMasterId()));
+		if (request.getGameMasterId() != null) {
+    Personne emp = this.personneDao.findById(request.getGameMasterId())
+            .orElseThrow(() -> new IdNotFoundException());
+
+    if (!(emp instanceof Employe employe)) {
+        throw new RuntimeException("L'id ne correspond pas à un employé");
+    }
+
+    reservation.setGameMaster(employe);
+} else {
+    reservation.setGameMaster(null);
+}
 		reservation.setStatutReservation(request.getStatutReservation());
 
 		return this.dao.save(reservation);

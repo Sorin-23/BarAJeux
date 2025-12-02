@@ -27,9 +27,10 @@ public class ReservationResponse {
 
     private StatutReservation statutReservation;
 
-    private Integer tableId; 
+    private Integer tableID; 
+    
 
-     public Integer getTableId() { return tableId; }
+    
 
 
     public Integer getId() {
@@ -98,22 +99,55 @@ public class ReservationResponse {
         this.statutReservation = statutReservation;
     }
 
+
+
     
 
     public static ReservationResponse convert(Reservation reservation) {
         ReservationResponse resp = new ReservationResponse();
-        
+
+        System.out.println(">>>>>>ICI problème<<<<<<<<<");
+
         resp.id = reservation.getId();
         resp.datetimeDebut = reservation.getDatetimeDebut();
         resp.datetimeFin = reservation.getDatetimeFin();
         resp.nbJoueur = reservation.getNbJoueur();
-        resp.tableId = reservation.getTableJeu() != null ? reservation.getTableJeu().getId() : null;
+        resp.tableID = reservation.getTableJeu() != null ? reservation.getTableJeu().getId() : null;
         resp.statutReservation = reservation.getStatutReservation();
+        System.out.println(reservation.getStatutReservation());
+
+        /*if(reservation.getTableJeu() != null){
+            resp.setTableJeu(TableResponse.convert(reservation.getTableJeu()));
+        }*/
+
+        if(reservation.getClient() != null){
+            resp.setClient(ClientResponse.convert(reservation.getClient()));
+        }
+
         if (reservation.getJeu() != null) {
             resp.setJeu(JeuResponse.convert(reservation.getJeu())); 
+        }
+        if (reservation.getGameMaster()!=null){
+            resp.setGameMaster(EmployeResponse.convert(reservation.getGameMaster()));
         }
 
         return resp;
 
     }
+
+    public Integer getTableID() {
+        return tableID;
+    }
+
+    public void setTableID(Integer tableID) {
+        this.tableID = tableID;
+    }
+
+    /*public TableResponse getTableJeu() {
+        return tableJeu;
+    }
+
+    public void setTableJeu(TableResponse tableJeu) {
+        this.tableJeu = tableJeu;
+    }*/
 }

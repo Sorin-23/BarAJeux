@@ -64,7 +64,7 @@
 </section>
 
 <section id="resultat_filtre" class="block_white" *ngIf="tableChoisi">
-  <h2>🎲 Nos jeux</h2>
+  <h2>🎲 Nos jeux </h2>
   <div class="carrousel-container">
     <button class="nav-btn prev" (click)="prev()">&#10094;</button>
 
@@ -73,13 +73,13 @@
         <img [src]="'assets/images/jeux/' + jeu.imgURL" [alt]="jeu.nom" />
         <div class="carte-info">
           <h3>{{ jeu.nom }}</h3>
-          <p>âge minimum : {{ jeu.ageMinimum }}</p>
+          <p>âge minimum: {{ jeu.ageMinimum }}</p>
           <p>Nombre de joueurs min : {{ jeu.nbJoueurMinimum }} </p>
           <p> Nombre de joueurs max : {{jeu.nbJoueurMaximum}}</p>         
           <p>durée : {{ jeu.duree }} minutes - note : {{jeu.note}}</p>
 
           <div class="actions">
-            <button class="btn btn-louer">Choisir</button>
+            <button class="btn btn-louer" (click)="choisirJeu(jeu)">Choisir</button>
           </div>
         </div>
       </div>
@@ -87,4 +87,16 @@
 
     <button class="nav-btn next" (click)="next()">&#10095;</button>
   </div>
+</section>
+
+<section id = "formulaire reservation" class = "block_white" *ngIf = "jeuChoisi">
+  <h2> Formulaire de réservation </h2>
+  <form [formGroup]="reservationForm" (ngSubmit)="validerReservation()">
+    <input type="text" [value]="jeuSelectionne?.nom" disabled/>
+    <input type="number" formControlName="nbJoueur"/>
+    <input type="datetime-local" formControlName="dateDebutAffichage"/>
+  <input type="datetime-local" formControlName="dateFinAffichage"/>
+    <button type="submit">Réserver</button>
+  </form>
+  
 </section>

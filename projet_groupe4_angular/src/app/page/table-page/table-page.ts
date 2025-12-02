@@ -11,6 +11,9 @@ import { Jeu } from '../../dto/jeu';
 import { JeuService } from '../../service/jeu-service';
 import { AuthService } from '../../service/auth-service';
 import { ClientService } from '../../service/client-service';
+import { ReservationService } from '../../service/reservation-service';
+import { Reservation } from '../../dto/reservation';
+import { StatutReservation } from '../../dto/enum/statut-reservation';
 @Component({
   selector: 'app-table-page',
   imports: [
@@ -29,18 +32,24 @@ export class TablePage implements OnInit {
   carouselIndex = 0;
   filtreFormTable: FormGroup;
   filtreFormJeu: FormGroup;
+  reservationForm: FormGroup;
   tableChoisi = false;
+  jeuChoisi = false;
   jeux: Jeu[] = [];
   tableSelectionne?: TableJeu;
+  jeuSelectionne?:Jeu;
   clientId?: any;
   filtresAppliques = false;
   today: string = new Date().toISOString().split('T')[0]; // yyyy-mm-dd
+  dateDebut: Date=new Date();  // stocke la date/heure d'arrivée
+  dateFin: Date=new Date();
 
   constructor(
     private tableJeuService: TableJeuService,
     private jeuService: JeuService,
     private authService: AuthService,
-    private clientService: ClientService
+    private clientService: ClientService,
+    private reservationService: ReservationService
   ) {
     this.filtreFormTable = new FormGroup({
       nbPersonnes: new FormControl(null, [Validators.required]),
@@ -50,6 +59,11 @@ export class TablePage implements OnInit {
     });
     this.filtreFormJeu = new FormGroup({
       ageMin: new FormControl(null),
+    });
+    this.reservationForm = new FormGroup({
+      nbJoueur: new FormControl(null, Validators.required),
+      dateDebutAffichage: new FormControl(null, Validators.required), // string pour <input>
+      dateFinAffichage: new FormControl(null, Validators.required)
     });
   }
 
@@ -73,6 +87,8 @@ export class TablePage implements OnInit {
       this.scrollCarousel();
       this.filtresAppliques = false;
     });
+    
+    
   }
   prev(): void {
     if (this.carouselIndex > 0) {
@@ -113,14 +129,14 @@ export class TablePage implements OnInit {
     const [hArrivee, mArrivee] = filtre.heureArrivee.split(':').map(Number);
     const [hDepart, mDepart] = filtre.heureDepart.split(':').map(Number);
 
-    const dateDebut = new Date(filtre.date);
-    dateDebut.setHours(hArrivee, mArrivee, 0, 0);
+    this.dateDebut = this.combineDateTime(filtre.date, filtre.heureArrivee);
+    //this.dateDebut.setHours(hArrivee, mArrivee, 0, 0);
 
-    const dateFin = new Date(filtre.date);
-    dateFin.setHours(hDepart, mDepart, 0, 0);
+    this.dateFin = this.combineDateTime(filtre.date, filtre.heureDepart);
+    //this.dateFin.setHours(hDepart, mDepart, 0, 0);
 
     // Vérifier que l'heure de départ est après l'heure d'arrivée
-    if (dateFin <= dateDebut) {
+    if (this.dateFin <= this.dateDebut) {
       alert("L'heure de départ doit être supérieure à l'heure d'arrivée !");
       return;
     }
@@ -155,7 +171,7 @@ export class TablePage implements OnInit {
         if (filtreDebut) {
           console.log('filtreDebut:', filtreDebut);
           const reservations = table.reservations || [];
-          console.log('Table:', table.nomTable, 'reservations:', table._reservations);
+          console.log('Table:', table.nomTable, 'reservations:', table.reservations);
 
           reservations.forEach((res) => {
             const debut = new Date(res.datetimeDebut);
@@ -187,6 +203,7 @@ export class TablePage implements OnInit {
     this.filtresAppliques = true;
   }
 
+
   choisirTable(tableJeu: TableJeu) {
     if (this.filtreFormTable.invalid || !this.filtresAppliques) {
       alert('Veuillez appliquer et remplir tous les champs avant de filtrer.');
@@ -194,15 +211,15 @@ export class TablePage implements OnInit {
     }
 
     const filtreTable = this.filtreFormTable.value;
-    const dateDebut = new Date(filtreTable.date);
+    /*const dateDebut = new Date(filtreTable.date);
     const dateFin = new Date(filtreTable.date);
     const [hArrivee, mArrivee] = filtreTable.heureArrivee.split(':').map(Number);
     dateDebut.setHours(hArrivee, mArrivee, 0, 0);
 
     const [hDepart, mDepart] = filtreTable.heureDepart.split(':').map(Number);
-    dateFin.setHours(hDepart, mDepart, 0, 0);
+    dateFin.setHours(hDepart, mDepart, 0, 0);*/
 
-    this.jeuService.findDisponibles(dateDebut.toISOString().substring(0, 10)).subscribe((data) => {
+    this.jeuService.findDisponibles(this.dateDebut.toISOString().substring(0, 10)).subscribe((data) => {
       this.jeux = data.filter((jeu) => {
         let ok = true;
         // nbPersonnes choisi sur table
@@ -211,7 +228,7 @@ export class TablePage implements OnInit {
           jeu.nbJoueurMinimum <= filtreTable.nbPersonnes &&
           jeu.nbJoueurMaximum >= filtreTable.nbPersonnes;
 
-        const dureeReservation = (dateFin.getTime() - dateDebut.getTime()) / (1000 * 60);
+        const dureeReservation = (this.dateFin.getTime() - this.dateDebut.getTime()) / (1000 * 60);
         ok = ok && jeu.duree <= dureeReservation;
         return ok;
       });
@@ -238,4 +255,65 @@ export class TablePage implements OnInit {
     this.carouselIndex = 0;
     this.scrollCarousel();
   }
+
+  choisirJeu(jeu: Jeu) {
+
+
+    this.jeuSelectionne = jeu;
+    this.jeuChoisi = true;
+    console.log("la date du jeu ", this.dateFin)
+
+    this.reservationForm.patchValue({
+      nbJoueur: this.filtreFormTable.value.nbPersonnes,
+      dateDebutAffichage: this.toInputFormat(this.dateDebut), // string pour l’affichage
+      dateFinAffichage: this.toInputFormat(this.dateFin),
+    });
+  }
+
+  validerReservation() {
+    if (this.reservationForm.invalid || !this.tableSelectionne || !this.jeuSelectionne) return;
+
+    const form = this.reservationForm.value;
+    console.log("Date debut AAAA", form.dateDebutAffichage);
+    console.log("type date debut ",this.dateDebut);
+    console.log("table jeu ",this.tableSelectionne);
+    console.log("Nb de joueur ",form.nbJoueur);
+    console.log("client id ",this.clientId);
+    console.log("Le jeu ",this.jeuSelectionne);
+    const reservationDto = new Reservation(
+      0,
+      this.dateDebut,
+      this.dateFin,
+      form.nbJoueur,
+      this.tableSelectionne,
+      this.jeuSelectionne,
+      StatutReservation.CONFIRMEE, // statutReservation
+      {id:this.clientId} as any, // clientId
+      null! // gameMasterId
+    );
+    console.log("Reservation : ",reservationDto);
+    console.log(reservationDto instanceof Reservation); 
+
+    this.reservationService.save(reservationDto);
+    console.log("ici ok");
+}
+private combineDateTime(dateStr: string, timeStr: string): Date {
+  const [year, month, day] = dateStr.split('-').map(Number);
+  const [hours, minutes] = timeStr.split(':').map(Number);
+
+  // mois -1 car Date utilise 0=janvier
+  return new Date(year, month - 1, day, hours, minutes, 0);
+}
+
+private toInputFormat(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+
+  return `${year}-${month}-${day} ${hours}:${minutes}`; // <-- espace ici
+}
+
+
 }
