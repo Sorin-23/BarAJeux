@@ -1,3 +1,4 @@
+import { Avis } from './avis';
 import { Client } from './client';
 import { Employe } from './employe';
 import { StatutReservation } from './enum/statut-reservation';
@@ -14,8 +15,7 @@ export class Reservation {
     public _jeu: Jeu,
     public _statutReservation: StatutReservation,
     public _client: Client,
-    public _gameMaster: Employe,
-    public _tableID?: number
+    public _gameMaster: Employe
   ) {}
 
   public get id(): number {
@@ -81,32 +81,28 @@ export class Reservation {
     this._gameMaster = value;
   }
 
-  public get tableID(): number | undefined {
-    return this._tableID;
-  }
-  public set tableID(value: number | undefined) {
-    this._tableID = value;
-  }
-
-    public toJson(): any {
+  public toJson(): any {
     return {
-        datetimeDebut: this._datetimeDebut ? this.toBackendFormat(this._datetimeDebut) : null,
-        datetimeFin: this._datetimeFin ? this.toBackendFormat(this._datetimeFin) : null,
-        nbJoueur: this._nbJoueur,
-        tableJeuId: this._tableJeu?.id ?? this._tableID?? null,
-        jeuId: this._jeu?.id ?? null,
-        statutReservation: this._statutReservation,
-        clientId: this._client?.id ?? null,
-        gameMasterId: this._gameMaster?.id ?? null
+      datetimeDebut: this._datetimeDebut ? this.toBackendFormat(this._datetimeDebut) : null,
+      datetimeFin: this._datetimeFin ? this.toBackendFormat(this._datetimeFin) : null,
+      nbJoueur: this._nbJoueur,
+      tableJeuId: this._tableJeu?.id ?? null,
+      jeuId: this._jeu?.id ?? null,
+      statutReservation: this._statutReservation,
+      clientId: this._client?.id ?? null,
+      gameMasterId: this._gameMaster?.id ?? null,
     };
-}
+  }
 
-    private toBackendFormat(date: Date): string {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        return `${year}-${month}-${day} ${hours}:${minutes}`; // format accepté par Spring
-    }
+  private toBackendFormat(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}`; // format accepté par Spring
+  }
+
+  public avis?: Avis;
+  public avisModifiable: boolean = true;
 }

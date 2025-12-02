@@ -8,12 +8,34 @@ import { JeuPage } from './page/jeu-page/jeu-page';
 import { LoginPage } from './page/login-page/login-page';
 import { InscriptionPage } from './page/inscription-page/inscription-page';
 import { roleGuard } from './guard/role-guard';
+import { ReservationPage } from './page/reservation-page/reservation-page';
 
 export const routes: Routes = [
-  { path: 'table', component: TablePage, canActivate: [authGuard, roleGuard], data: { role: 'ROLE_CLIENT' } },
-  { path: 'jeu', component: JeuPage, canActivate: [authGuard, roleGuard],data: { role: 'ROLE_CLIENT' } },
-  { path: 'client', component: ClientPage, canActivate: [authGuard, roleGuard],data: { role: 'ROLE_CLIENT' } },
-  { path: 'admin', component: AdminPage, canActivate: [authGuard, roleGuard],data: { role: 'ROLE_EMPLOYE' } },
+  {
+    path: 'table',
+    component: TablePage,
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'ROLE_CLIENT' },
+  },
+  {
+    path: 'jeu',
+    component: JeuPage,
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'ROLE_CLIENT' },
+  },
+  {
+    path: 'client',
+    component: ClientPage,
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'ROLE_CLIENT' },
+  },
+  { path: 'reservations/:id', component: ReservationPage },
+  {
+    path: 'admin',
+    component: AdminPage,
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'ROLE_EMPLOYE' },
+  },
   { path: 'home', component: HomePage },
   { path: 'login', component: LoginPage },
   { path: 'inscription', component: InscriptionPage },

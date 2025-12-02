@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject, Observable, startWith, switchMap, map } from 'rxjs';
 import { Client } from '../dto/client';
+import { ClientWithReservationResponse } from '../dto/client-with-reservation-response';
 
 @Injectable({
   providedIn: 'root',
@@ -18,9 +19,9 @@ export class ClientService {
     return this.refresh$.pipe(
       startWith(null),
       switchMap(() =>
-        this.http.get<any[]>(this.apiUrl).pipe(
-          map((data) => data.map((json) => this.mapJsonToClient(json)))
-        )
+        this.http
+          .get<any[]>(this.apiUrl)
+          .pipe(map((data) => data.map((json) => this.mapJsonToClient(json))))
       )
     );
   }
@@ -31,9 +32,9 @@ export class ClientService {
 
   // --- 2. FIND BY ID ---
   public findById(id: number): Observable<Client> {
-    return this.http.get<any>(`${this.apiUrl}/${id}`).pipe(
-      map((json) => this.mapJsonToClient(json))
-    );
+    return this.http
+      .get<any>(`${this.apiUrl}/${id}`)
+      .pipe(map((json) => this.mapJsonToClient(json)));
   }
 
   // --- 3. FIND BY USERNAME ---
@@ -67,9 +68,7 @@ export class ClientService {
       this.http.post<Client>(this.apiUrl, payload).subscribe(() => this.refresh());
     } else {
       // Update
-      this.http
-        .put<Client>(`${this.apiUrl}/${client.id}`, payload)
-        .subscribe(() => this.refresh());
+      this.http.put<Client>(`${this.apiUrl}/${client.id}`, payload).subscribe(() => this.refresh());
     }
   }
 
@@ -80,32 +79,17 @@ export class ClientService {
 
   // --- 6. RESERVATIONS & AVIS ---
   // matches @GetMapping("/reservations/{id}")
-  public getReservations(clientId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/reservations/${clientId}`);
+  public getReservations(clientId: number): Observable<ClientWithReservationResponse> {
+    return this.http.get<ClientWithReservationResponse>(`${this.apiUrl}/reservations/${clientId}`);
   }
 
   public saveAvis(reservationId: number, avisData: any): Observable<void> {
     // Make sure your backend mapping matches this path
-    return this.http.post<void>(`reservations/${reservationId}/avis`, avisData);
+    return this.http.post<void>(`${this.apiUrl}/avis`, avisData);
   }
 
   public createEmptyClient(): Client {
-    return new Client(
-      0,
-      '',
-      '',
-      '',
-      '',
-      undefined,
-      0,
-      new Date(),
-      new Date(),
-      [],
-      [],
-      '',
-      '',
-      ''
-    );
+    return new Client(0, '', '', '', '', undefined, 0, new Date(), new Date(), [], [], '', '', '');
   }
 
   // --- 7. HELPER: MAP JSON TO CLIENT CLASS ---
@@ -129,5 +113,4 @@ export class ClientService {
       json.adresse
     );
   }
-
 }
