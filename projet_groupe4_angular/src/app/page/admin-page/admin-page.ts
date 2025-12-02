@@ -9,7 +9,13 @@ import { EmployeService } from '../../service/employe-service';
 import { JeuService } from '../../service/jeu-service';
 import { ReservationService } from '../../service/reservation-service';
 import { TableJeuService } from '../../service/table-jeu-service';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { EmpruntService } from '../../service/emprunt-service';
@@ -22,7 +28,7 @@ import { TypeJeu } from '../../dto/enum/type-jeu';
 
 @Component({
   selector: 'app-admin-page',
-  imports: [CommonModule, ReactiveFormsModule, MatSortModule, MatDialogModule, MatButtonModule],
+  imports: [CommonModule, ReactiveFormsModule, MatSortModule, MatButtonModule],
   templateUrl: './admin-page.html',
   styleUrl: './admin-page.css',
 })
@@ -77,11 +83,9 @@ export class AdminPage implements OnInit {
   };
 
   reservationsDuJour: number = 0;
-
+  editMode = false;
   currentSection = 'dashboard';
-
-  modalForm!: FormGroup;
-  modalVisible: boolean = false;
+  reservationForm!: FormGroup;
 
   constructor(
     private jeuService: JeuService,
@@ -89,7 +93,8 @@ export class AdminPage implements OnInit {
     private tableJeuService: TableJeuService,
     private badgeService: BadgeService,
     private reservationService: ReservationService,
-    private empruntService: EmpruntService
+    private empruntService: EmpruntService,
+    private formBuilder: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -110,6 +115,10 @@ export class AdminPage implements OnInit {
         this.filter(section, this.searchControls[section].value);
       });
     });
+
+    this.reservationForm = new FormGroup({
+      statutReservation: new FormControl(null, { validators: Validators.required }),
+    });
   }
 
   private loadSection(section: string, service: any) {
@@ -118,7 +127,9 @@ export class AdminPage implements OnInit {
       this.filteredItems[section] = [...data];
 
       if (section === 'reservations') {
+
         this.loadResaDuJour();
+        this.loadTableJeuReservation();
       }
     });
   }
@@ -171,11 +182,18 @@ export class AdminPage implements OnInit {
 
   ajouter(section: string) {
     this.currentEdit[section] = null;
-    this.openModal(section);
+    this.editMode = true;
   }
   modifier(section: string, item: any) {
+    console.log('modifier called', section, item);
     this.currentEdit[section] = item;
-    this.openModal(section);
+    this.editMode = true;
+    if (section === 'reservations') {
+      // Pré-remplir le formulaire
+      this.reservationForm.patchValue({
+        statutReservation: item.statutReservation,
+      });
+    }
   }
   supprimer(section: string, item: any) {
     if (!item?.id) return;
@@ -205,34 +223,44 @@ export class AdminPage implements OnInit {
     this.filteredItems[section] = this.filteredItems[section].filter((i) => i.id !== id);
   }
 
-  openModal(section: string) {
-    //ouverture du modal en automatique pas ecnre réussi .... j'ai mis les dto en public pour récup données ??
-    this.currentSection = section;
-    const item = this.currentEdit[section];
+  sauvergarder(section: string, item: any) {
+    console.log('sauvegarder called', section, item, this.reservationForm.value);
+    switch (section) {
+      case 'jeu':
+        this.jeuService.save(item.id);
+        break;
+      case 'employe':
+        this.employeService.save(item.id);
+        break;
+      case 'table':
+        this.tableJeuService.save(item.id);
+        break;
+      case 'badge':
+        this.badgeService.save(item.id);
+        break;
+      case 'reservation':
+        const formData = this.reservationForm.getRawValue();
+        const reservationModifiee = new Reservation(
+          this.currentEdit['reservations'].id,
+          new Date(this.currentEdit['reservations'].datetimeDebut),
+          new Date(this.currentEdit['reservations'].datetimeFin),
+          this.currentEdit['reservations'].nbJoueur,
+          this.currentEdit['reservations'].tableJeu,
+          this.currentEdit['reservations'].jeu,
+          formData.statutReservation, // nouveau statut
+          this.currentEdit['reservations'].client,
+          this.currentEdit['reservations'].gameMaster
+        );
+        console.log(reservationModifiee.toJson());
+        this.reservationService.save(reservationModifiee);
+        break;
+      case 'emprunt':
+        this.empruntService.save(item.id);
+        break;
+    }
 
-    const data = this.data[section];
-
-    const fields = item ? Object.keys(item) : Object.keys(data[0] || {});
-
-    
-
-    console.log('Champs:', fields);
-
-
-    console.log('Ouverture du modal pour la section:', section);
-    console.log('Item actuel:', item);
-    this.modalForm = new FormGroup({});
-
-    this.modalVisible = true;
-  }
-
-  closeModal() {
-    this.modalVisible = false;
-  }
-
-  submitModal() {
-    console.log('Données du formulaire', this.modalForm.value);
-    this.closeModal();
+    this.currentEdit[section] = null;
+    this.editMode = false;
   }
 
   loadResaDuJour() {
@@ -247,14 +275,11 @@ export class AdminPage implements OnInit {
     }).length;
   }
 
-/* pour gérér les rendu de emprunt ? 
-  rendreJeu(location: Location) {
-  location.statutLocation = StatutLocation.RENDU;
-  location.dateRetourReel = new Date();
+  loadTableJeuReservation() {
+    this.filteredItems['reservations'].forEach((res: Reservation) => {
+      this.tableJeuService.findById(res.tableID as number).subscribe((table) => {
+        res.tableJeu = table;
+      });
+    });
+  }
 }
-*/
-
-
-
-}
-

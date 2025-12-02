@@ -324,7 +324,7 @@
         <option value="">Tous</option>
         <option *ngFor="let s of enumOptions['statutLocation']" [value]="s">{{ s }}</option>
       </select>
-      <button class="btn_crud btn_ajouter" title="Ajouter" (click)="ajouter('emprunts')">➕</button>
+      <!--<button class="btn_crud btn_ajouter" title="Ajouter" (click)="ajouter('emprunts')">➕</button>-->
     </section>
 
     <table matSort (matSortChange)="sortData('emprunts', $event)">
@@ -391,9 +391,9 @@
         <option value="">Tous</option>
         <option *ngFor="let s of enumOptions['statutReservation']" [value]="s">{{ s }}</option>
       </select>
-      <button class="btn_crud btn_ajouter" title="Ajouter" (click)="ajouter('reservations')">
+      <!--<button class="btn_crud btn_ajouter" title="Ajouter" (click)="ajouter('reservations')">
         ➕
-      </button>
+      </button>-->
     </section>
 
     <table matSort (matSortChange)="sortData('reservations', $event)">
@@ -445,19 +445,24 @@
   </div>
 </div>
 
+<div id="admin_form_section" class="block_white" *ngIf="editMode">
+  <div *ngIf="currentSection === 'jeu' "></div>
+  <div *ngIf="currentSection === 'table' "></div>
+  <div *ngIf="currentSection === 'employe' "></div>
+  <div *ngIf="currentSection === 'badge'"></div>
+  <div *ngIf="currentSection === 'emprunt' "></div>
+  <div *ngIf="currentSection === 'reservation' ">
+    
+  <h3>Modifier la réservation #{{ currentEdit['reservations'].id }}</h3>
+  <form [formGroup]="reservationForm" (ngSubmit)="sauvergarder('reservation', currentEdit['reservations'])">
+    <label>Statut :</label>
+    <select formControlName="statutReservation">
+      <option *ngFor="let s of enumOptions['statutReservation']" [value]="s">{{ s }}</option>
+    </select>
+    <button type="submit" [disabled]="reservationForm.invalid">Sauvegarder</button>
+    <button type="button" (click)="editMode = false;currentEdit['reservations'] = null">Annuler</button>
 
+  </form>
 
-<!-- ancien code pour le modal -->
-<div id="modal_crud" class="modal" style="display: none">
-          <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2 id="modal_title">Titre</h2>
-            <form id="modal_form">
-              <!-- Les champs seront ajoutés dynamiquement selon l'action et la table -->
-            </form>
-            <div class="modal-footer">
-              <button type="button" id="modal_cancel">Annuler</button>
-              <button type="submit" id="modal_confirm">Confirmer</button>
-            </div>
-          </div>
-        </div>
+  </div>
+</div>
