@@ -111,21 +111,32 @@
 <section id="emprunt_form" class="block_white" *ngIf="formEmpruntVisible">
   <h2>Confirmation d'emprunt</h2>
   <form [formGroup]="formEmprunt" (ngSubmit)="validerEmprunt()">
-    <label for="jeu">Jeu selectionné :</label>
-    <input type="text" formControlName="jeu"/>
+    <div class="filtre_groupe">
+      <label>Jeu sélectionné :</label>
+      <input type="text" formControlName="jeu" />
+    </div>
 
-    <label hidden>Client</label>
-    <input formControlName="client" type="hidden" />
+    <div class="filtre_groupe">
+      <label hidden>Client :</label>
+      <input type="hidden" formControlName="client" />
+    </div>
 
-    <label>Date d'emprunt</label>
-    <input type="date" formControlName="dateEmprunt" required />
+    <div class="filtre_groupe">
+      <label>Date d'emprunt :</label>
+      <input type="date" formControlName="dateEmprunt" required />
+    </div>
 
-    <label>Date de retour</label>
-    <input type="date" formControlName="dateRetour" />
 
-    <button type="submit" class="btn" [disabled]="formEmprunt.invalid">
-      Confirmer l’emprunt
-    </button>
+   <div class="filtre_groupe">
+      <label>Date de retour :</label>
+      <input type="date" formControlName="dateRetour" />
+    </div>
+
+    <div class="form-group">
+      <button type="submit" class="btn enregistrer" [disabled]="formEmprunt.invalid">
+        Confirmer l’emprunt
+      </button>
+    </div>
 
 
 

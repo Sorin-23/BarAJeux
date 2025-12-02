@@ -28,6 +28,7 @@ footer #footer_adresse {
 footer #footer_image #footer_logo {
     height: 15vh;
     object-fit: contain;
+    border-radius: 10%;
 }
 footer #footer_adresse p {
     margin: 0 0 8px;
