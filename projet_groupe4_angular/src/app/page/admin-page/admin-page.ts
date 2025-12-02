@@ -25,6 +25,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { CategorieJeu } from '../../dto/enum/categorie-jeu';
 import { TypeJeu } from '../../dto/enum/type-jeu';
+import { CdkPortal } from '@angular/cdk/portal';
+import { Emprunt } from '../../dto/emprunt';
 
 @Component({
   selector: 'app-admin-page',
@@ -86,6 +88,7 @@ export class AdminPage implements OnInit {
   editMode = false;
   currentSection = 'dashboard';
   reservationForm!: FormGroup;
+  empruntForm!:FormGroup;
 
   constructor(
     private jeuService: JeuService,
@@ -119,6 +122,10 @@ export class AdminPage implements OnInit {
 
     this.reservationForm = new FormGroup({
       statutReservation: new FormControl(null, { validators: Validators.required }),
+    });
+    this.empruntForm = new FormGroup({
+      statutEmprunt: new FormControl(null, { validators: Validators.required }),
+      dateRetourReel:new FormControl(null)
     });
   }
 
@@ -195,6 +202,12 @@ export class AdminPage implements OnInit {
         statutReservation: item.statutReservation,
       });
     }
+    else if (section ==='emprunts'){
+      this.empruntForm.patchValue({
+         statutEmprunt: item.statutLocation
+      })
+     
+    }
   }
   supprimer(section: string, item: any) {
     if (!item?.id) return;
@@ -256,7 +269,18 @@ export class AdminPage implements OnInit {
         this.reservationService.save(reservationModifiee);
         break;
       case 'emprunt':
-        this.empruntService.save(item.id);
+        const formEmprunt = this.empruntForm.getRawValue();
+        const empruntModifie = new Emprunt(
+          this.currentEdit["emprunts"].id,
+          this.currentEdit["emprunts"].dateEmprunt,
+          this.currentEdit["emprunts"].dateRetour,
+          formEmprunt.statutEmprunt,
+          this.currentEdit["emprunts"].client,
+          this.currentEdit["emprunts"].jeu,
+          formEmprunt.dateRetourReel
+        ) 
+        console.log(empruntModifie.toJson());
+        this.empruntService.save(empruntModifie);
         break;
     }
 

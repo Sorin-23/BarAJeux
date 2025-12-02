@@ -418,7 +418,7 @@
           <td>{{ res.datetimeDebut | date : 'yyyy-MM-dd HH:mm' }}</td>
           <td>{{ res.datetimeFin | date : 'yyyy-MM-dd HH:mm' }}</td>
           <td>{{ res.nbJoueur }}</td>
-          <td>{{ res.tableJeu }}</td>
+          <td>{{ res.tableJeu?.nomTable }}</td>
           <td>{{ res.jeu?.nom }}</td>
           <td>{{ res.statutReservation }}</td>
           <td>{{ res.client?.nom }} {{ res.client?.prenom }}</td>
@@ -450,7 +450,19 @@
   <div *ngIf="currentSection === 'table' "></div>
   <div *ngIf="currentSection === 'employe' "></div>
   <div *ngIf="currentSection === 'badge'"></div>
-  <div *ngIf="currentSection === 'emprunt' "></div>
+  <div *ngIf="currentSection === 'emprunt' ">
+    <h3>Modifier l'emprunt #{{ currentEdit['emprunts'].id }}</h3>
+  <form [formGroup]="empruntForm" (ngSubmit)="sauvergarder('emprunt', currentEdit['emprunts'])">
+    <label>Statut :</label>
+    <select formControlName="statutEmprunt">
+      <option *ngFor="let s of enumOptions['statutLocation']" [value]="s">{{ s }}</option>
+    </select>
+    <input type="date" formControlName="dateRetourReel"/>
+    <button type="submit" [disabled]="empruntForm.invalid">Sauvegarder</button>
+    <button type="button" (click)="editMode = false;currentEdit['emprunts'] = null">Annuler</button>
+
+  </form>
+</div>
   <div *ngIf="currentSection === 'reservation' ">
     
   <h3>Modifier la réservation #{{ currentEdit['reservations'].id }}</h3>
@@ -463,6 +475,8 @@
     <button type="button" (click)="editMode = false;currentEdit['reservations'] = null">Annuler</button>
 
   </form>
+
+  
 
   </div>
 </div>

@@ -2,8 +2,6 @@ package projet_groupe4.dto.response;
 
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import projet_groupe4.model.Emprunt;
 import projet_groupe4.model.StatutLocation;
 
