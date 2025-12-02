@@ -16,7 +16,9 @@ export class Reservation {
     public _statutReservation: StatutReservation,
     public _client: Client,
     public _gameMaster: Employe,
-    public _tableID?: number
+    public _tableID?: number,
+    public _avis?: Avis,
+    public _avisModifiable?: boolean
   ) {}
 
   public get id(): number {
@@ -25,14 +27,6 @@ export class Reservation {
   public set id(value: number) {
     this._id = value;
   }
-
-  public get tableID(): number | undefined {
-return this._tableID;
-}
-public set tableID(value: number | undefined) {
-this._tableID = value;
-}
-
 
   public get datetimeDebut(): Date {
     return this._datetimeDebut;
@@ -95,6 +89,18 @@ this._tableID = value;
   public set tableID(value: number | undefined) {
     this._tableID = value;
   }
+  public get avis(): Avis | undefined {
+    return this._avis;
+  }
+  public set avis(value: Avis | undefined) {
+    this._avis = value;
+  }
+    public get avisModifiable(): boolean| undefined{
+    return this._avisModifiable;
+  }
+  public set avisModifiable(value: boolean | undefined) {
+    this._avisModifiable = value;
+  }
 
   public toJson(): any {
     return {
@@ -119,6 +125,5 @@ this._tableID = value;
     return `${year}-${month}-${day} ${hours}:${minutes}`; // format accepté par Spring
   }
 
-  public avis?: Avis;
-  public avisModifiable: boolean = true;
+  
 }

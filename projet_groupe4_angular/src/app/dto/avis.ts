@@ -6,7 +6,8 @@ export class Avis {
         public _note:number,
         public _titre:string,
         public _commentaire?:string,
-        public _reservation? : Reservation
+        public _reservationId? : number
+
     ){}
 
     public get id(): number {
@@ -41,12 +42,12 @@ export class Avis {
         this._commentaire = value;
     }
 
-    public get reservation(): Reservation | undefined{
-        return this._reservation;
+    public get reservationId(): number | undefined{
+        return this._reservationId;
     }
 
-    public set reservation(value: Reservation | undefined) {
-        this._reservation = value;
+    public set reservationId(value: number | undefined) {
+        this._reservationId = value;
     }
 
     public toJson():any{
@@ -54,7 +55,8 @@ export class Avis {
             note: this._note,
             titre: this._titre,
             commentaire: this._commentaire,
-            reservation: this._reservation ? this._reservation.toJson?.() ?? this._reservation : undefined
+            //reservation: this._reservation ? this._reservation.toJson?.() ?? this._reservation : undefined
+            reservationId: this._reservationId
         };
     }
 }

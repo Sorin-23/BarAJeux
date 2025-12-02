@@ -42,14 +42,14 @@ public class AvisRestController {
 	}
 
 	@PostMapping
-	@PreAuthorize("hasRole('EMPLOYE')")
+	@PreAuthorize("hasRole('CLIENT')")
 	@ResponseStatus(HttpStatus.CREATED)
 	public EntityCreatedResponse ajouterAvis(@Valid @RequestBody AvisRequest request) {
 		return new EntityCreatedResponse(this.srv.create(request).getId());
 	}
 
 	@PutMapping("/{id}")
-	@PreAuthorize("hasRole('EMPLOYE')")
+	@PreAuthorize("hasRole('CLIENT')")
 	public EntityUpdatedResponse modifierAvis(@PathVariable int id, @Valid @RequestBody AvisRequest request) {
 		this.srv.update(id, request);
 
@@ -57,10 +57,19 @@ public class AvisRestController {
 	}
 
 	@DeleteMapping("/{id}")
-	@PreAuthorize("hasRole('EMPLOYE')")
+	@PreAuthorize("hasRole('CLIENT')")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteAvis(@PathVariable Integer id) {
 		this.srv.deleteById(id);
 	}
+	
+	@GetMapping("/by-reservation/{reservationId}")
+	@PreAuthorize("hasRole('CLIENT')")
+	public AvisResponse getAvisByReservation(@PathVariable Integer reservationId) {
+	    return this.srv.getByReservationId(reservationId)
+	        .map(AvisResponse::convert)
+	        .orElse(null);
+	}
+
 
 }

@@ -44,5 +44,9 @@ export class AvisService {
     this.http.delete<void>(`${this.apiUrl}/${id}`)
       .subscribe(() => this.refresh());
   }
+  public getAvisByReservation(reservationId: number): Observable<Avis | null> {
+  return this.http.get<Avis>(`${this.apiUrl}/by-reservation/${reservationId}`);
+}
+
   
 }

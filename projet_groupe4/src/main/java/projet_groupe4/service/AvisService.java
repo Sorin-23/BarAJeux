@@ -46,6 +46,9 @@ public class AvisService {
 	public void delete(Avis avis) {
 		this.dao.delete(avis);
 	}
+	public Optional<Avis> getByReservationId(Integer reservationId) {
+	    return dao.findByReservationId(reservationId);
+	}
 
 	private Avis save(Avis avis, AvisRequest request) {
 		avis.setNote(request.getNote());

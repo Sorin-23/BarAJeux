@@ -85,7 +85,7 @@ export class ClientService {
 
   public saveAvis(reservationId: number, avisData: any): Observable<void> {
     // Make sure your backend mapping matches this path
-    return this.http.post<void>(`${this.apiUrl}/avis`, avisData);
+    return this.http.post<void>(`/avis`, avisData);
   }
 
   public createEmptyClient(): Client {

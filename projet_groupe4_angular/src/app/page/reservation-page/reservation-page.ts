@@ -5,6 +5,8 @@ import { Reservation } from '../../dto/reservation';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Avis } from '../../dto/avis';
+import { AvisService } from '../../service/avis-service';
+import { TableJeuService } from '../../service/table-jeu-service';
 
 @Component({
   selector: 'app-reservation-page',
@@ -18,28 +20,45 @@ export class ReservationPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private clientService: ClientService,
-    private router: Router
+    private router: Router,
+    private avisService : AvisService ,
+    private tableJeuService : TableJeuService
   ) {}
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
 
     const clientId = Number(this.route.snapshot.paramMap.get('id'));
     if (clientId) {
       this.clientService.getReservations(clientId).subscribe({
         next: (data) => {
           this.reservations = data.reservations.map((r: Reservation) => {
-            // Crée un nouvel avis si inexistant
-            if (!r.avis) {
-              r.avis = new Avis(0, 0, '', '', r);
-            }
-            r.avisModifiable = true;
+            // Appel pour récupérer l'avis existant
+            this.avisService.getAvisByReservation(r.id).subscribe({
+              next: (avis) => {
+                if (avis) {
+                  r.avis = avis;
+                  r.avisModifiable = false; // pas modifiable, déjà existant
+                } else {
+                  r.avis = new Avis(0, 0, '', '', r.id);
+                  r.avisModifiable = true; // peut créer un avis
+                }
+              },
+              
+            });
+            if (r.tableID) {
+            this.tableJeuService.findById(r.tableID).subscribe({
+              next: (table) => r.tableJeu = table,
+              error: (err) => console.error(`Erreur récupération table réservation ${r.id}:`, err)
+            });
+          }
+            
+            
             return r;
           });
         },
-        error: (err) => console.error('Erreur chargement réservations :', err),
       });
-    }
+    };
+
   }
 
   goBack() {
@@ -57,7 +76,8 @@ export class ReservationPage implements OnInit {
     }
 
     // Créer le payload pour le backend
-    const payload = r.avis;
+    const payload = r.avis!.toJson();
+    console.log('Payload envoyé au backend :', payload);
 
     // Appel au service pour sauvegarder l'avis
     this.clientService.saveAvis(r.id, payload).subscribe({
@@ -72,4 +92,5 @@ export class ReservationPage implements OnInit {
       },
     });
   }
+  
 }
