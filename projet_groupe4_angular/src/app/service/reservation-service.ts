@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Subject, Observable, startWith, switchMap } from 'rxjs';
 import { Reservation } from '../dto/reservation';
 import { Top } from '../dto/top';
+import { Employe } from '../dto/employe';
 
 @Injectable({
   providedIn: 'root',
@@ -48,5 +49,8 @@ export class ReservationService {
 
   public getTopReservations(): Observable<Top[]>{
     return this.http.get<Top[]>(`/api/top/reservations`);
+}
+public findAllGameMasters(): Observable<Employe[]> {
+    return this.http.get<Employe[]>(`${this.apiUrl}/gamemasters`);
 }
 }

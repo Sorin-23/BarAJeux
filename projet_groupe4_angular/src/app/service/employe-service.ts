@@ -45,4 +45,8 @@ export class EmployeService {
       .subscribe(() => this.refresh());
   }
   
+  getAllGameMasters(): Observable<Employe[]> {
+    return this.http.get<Employe[]>(`${this.apiUrl}/gamemasters`);
+  }
+  
 }

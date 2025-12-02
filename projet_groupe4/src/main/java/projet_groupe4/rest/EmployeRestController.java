@@ -80,5 +80,14 @@ public class EmployeRestController {
         return EmployeResponse.convert(emp);
     }
 
+    @GetMapping("/gamemasters")
+    public List<EmployeResponse> allGameMasters() {
+    System.out.println("Appel de allGameMasters");
+    return this.srv.getAllEmployes().stream()
+            .filter(Employe::isGameMaster)           
+            .map(EmployeResponse::convert)         
+            .toList();
+}
+
 
 }

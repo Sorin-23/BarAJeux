@@ -94,8 +94,19 @@
   <form [formGroup]="reservationForm" (ngSubmit)="validerReservation()">
     <input type="text" [value]="jeuSelectionne?.nom" disabled/>
     <input type="number" formControlName="nbJoueur"/>
-    <input type="datetime-local" formControlName="dateDebutAffichage"/>
-  <input type="datetime-local" formControlName="dateFinAffichage"/>
+    <input type="datetime-local" formControlName="dateDebutAffichage" readonly />
+<input type="datetime-local" formControlName="dateFinAffichage" readonly />
+  <label>
+  <input type="checkbox" formControlName="avecGameMaster" (change)="updateDispoIfNeeded()" /> Avec Game Master
+</label>
+
+<div *ngIf="reservationForm.get('avecGameMaster')?.value">
+  <select formControlName="gameMasterId">
+    <option *ngFor="let gm of gameMastersDispo" [value]="gm.id">
+      {{ gm.nom }}
+    </option>
+  </select>
+</div>
     <button type="submit">Réserver</button>
   </form>
   

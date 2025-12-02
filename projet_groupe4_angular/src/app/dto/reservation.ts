@@ -26,6 +26,14 @@ export class Reservation {
     this._id = value;
   }
 
+  public get tableID(): number | undefined {
+return this._tableID;
+}
+public set tableID(value: number | undefined) {
+this._tableID = value;
+}
+
+
   public get datetimeDebut(): Date {
     return this._datetimeDebut;
   }
@@ -98,6 +106,7 @@ export class Reservation {
       statutReservation: this._statutReservation,
       clientId: this._client?.id ?? null,
       gameMasterId: this._gameMaster?.id ?? null,
+      
     };
   }
 

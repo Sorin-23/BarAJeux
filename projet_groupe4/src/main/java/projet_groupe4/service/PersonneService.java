@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 import projet_groupe4.dao.IDAOPersonne;
 import projet_groupe4.dto.request.SubscribeClientRequest;
 import projet_groupe4.dto.request.SubscribeEmployeRequest;
+import projet_groupe4.dto.request.UpdateClientRequest;
 import projet_groupe4.exception.IdNotFoundException;
 import projet_groupe4.exception.ResourceNotFoundException;
 import projet_groupe4.model.Client;
 import projet_groupe4.model.Employe;
 import projet_groupe4.model.Personne;
-import projet_groupe4.dto.request.UpdateClientRequest;
 
 @Service
 public class PersonneService {
@@ -188,5 +188,6 @@ public class PersonneService {
 
 		return this.dao.save(employe);
 	}
+
 
 }
