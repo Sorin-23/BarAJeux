@@ -35,7 +35,6 @@ pipeline {
                                                         ./node_modules/.bin/sonar-scanner \
                                                         -Dsonar.projectKey=projetJeux-angular \
                                                         -Dsonar.projectName=projetJeux-angular \
-                                                        -Dsonar.host.url=http://localhost:8081 \
                                                         -Dsonar.token=${SONAR_TOKEN} \
                                                         -Dsonar.sources=. \
                                                         -Dsonar.exclusions=**/node_modules/**,**/dist/**,**/*.spec.ts \
