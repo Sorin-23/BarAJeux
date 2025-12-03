@@ -35,7 +35,7 @@ pipeline {
         stage('Docker Deploy') {
             steps {
                 
-                sh 'docker compose up -d --no-deps --build boot'
+                sh 'docker compose up -d --build boot'
                 
             }
         }
