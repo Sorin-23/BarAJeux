@@ -8,7 +8,6 @@ import { Top } from '../dto/top';
   providedIn: 'root',
 })
 export class EmpruntService {
-  
   private apiUrl: string = '/emprunt';
   private refresh$: Subject<void> = new Subject<void>();
 
@@ -29,23 +28,20 @@ export class EmpruntService {
     return this.http.get<Emprunt>(`${this.apiUrl}/${id}`);
   }
 
-  public save(empruntDto: Emprunt): void {
-    const payload = empruntDto.toJson(); // { nom: this.nom }
+  public save(empruntDto: Emprunt): Observable<Emprunt> {
+    const payload = empruntDto.toJson();
 
     if (!empruntDto.id) {
-      this.http.post<Emprunt>(this.apiUrl, payload)
-        .subscribe(() => this.refresh());
+      return this.http.post<Emprunt>(this.apiUrl, payload);
     } else {
-      this.http.put<Emprunt>(`${this.apiUrl}/${empruntDto.id}`, payload)
-        .subscribe(() => this.refresh());
+      return this.http.put<Emprunt>(`${this.apiUrl}/${empruntDto.id}`, payload);
     }
   }
 
   public deleteById(id: number): void {
-    this.http.delete<void>(`${this.apiUrl}/${id}`)
-      .subscribe(() => this.refresh());
+    this.http.delete<void>(`${this.apiUrl}/${id}`).subscribe(() => this.refresh());
   }
-  public getTopEmprunts(): Observable<Top[]>{
+  public getTopEmprunts(): Observable<Top[]> {
     return this.http.get<Top[]>(`/api/top/emprunts`);
-}
+  }
 }
