@@ -34,15 +34,17 @@ pipeline {
             steps {
                 dir('projet_groupe4') {
 
-                    script {
-                        // Attendre que MySQL soit prêt
-                        retry(10) { // réessaye 10 fois
-                            sh '''
-                            echo "Waiting for MySQL..."
-                            mysqladmin ping -h jeux-mysql -uroot -proot --silent || exit 1
-                            '''
-                            sleep 5
-                        }
+                    
+                        // Attente que MySQL soit disponible
+            sh '''
+            echo "Waiting for MySQL to be ready..."
+            until nc -z -v -w30 jeux-mysql 3306
+            do
+              echo "Waiting for MySQL..."
+              sleep 2
+            done
+            echo "MySQL is up!"
+            '''
 
                         // Lancer Maven + SonarQube
                         withSonarQubeEnv('SonarQube') {
@@ -50,7 +52,7 @@ pipeline {
                         }
                     }
                 }
-            }
+            
         }
 	
 
