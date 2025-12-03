@@ -3,6 +3,7 @@ package projet_groupe4.rest;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import projet_groupe4.dto.request.PasswordEmployeRequest;
 import projet_groupe4.dto.request.SubscribeEmployeRequest;
 import projet_groupe4.dto.response.EmployeResponse;
 import projet_groupe4.dto.response.EntityCreatedResponse;
@@ -87,6 +89,30 @@ public class EmployeRestController {
             .filter(Employe::isGameMaster)           
             .map(EmployeResponse::convert)         
             .toList();
+    }
+
+    /*@GetMapping("/gamemaster/{id}")
+    @PreAuthorize("hasRole('EMPLOYE')")
+    public List<Reservation> getReservationsByGameMaster(@PathVariable int id) {
+        return this.srv.findByGameMasterId(id);
+    }*/
+
+    @PutMapping("/{id}/password")
+@PreAuthorize("hasRole('EMPLOYE')")
+public ResponseEntity<?> changePassword(
+        @PathVariable Integer id,
+        @RequestBody PasswordEmployeRequest req
+) {
+    boolean ok = srv.changePassword(id, req.getOldPassword(), req.getNewPassword());
+    System.out.println("OLD = " + req.getOldPassword());
+    System.out.println("NEW = " + req.getNewPassword());
+
+    if (!ok) {
+        return ResponseEntity.status(403)
+                             .body("Ancien mot de passe incorrect");
+    }
+
+    return ResponseEntity.ok(new EntityUpdatedResponse(id, true));
 }
 
 

@@ -75,4 +75,15 @@ public class ReservationRestController {
         this.srv.deleteById(id);
     }
 
+    @GetMapping("/gamemaster/{id}")
+    @PreAuthorize("hasRole('EMPLOYE')")
+    public List<ReservationResponse> getReservationByGameMaster(@PathVariable int id) {
+        return this.srv.findByGameMasterId(id)
+                    .stream()
+                    .map(ReservationResponse::convert)
+                    .toList();
+    }
+
+    
+
 }

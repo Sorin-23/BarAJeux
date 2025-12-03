@@ -9,6 +9,7 @@ import { LoginPage } from './page/login-page/login-page';
 import { InscriptionPage } from './page/inscription-page/inscription-page';
 import { roleGuard } from './guard/role-guard';
 import { ReservationPage } from './page/reservation-page/reservation-page';
+import { EmployePage } from './page/employe-page/employe-page';
 
 export const routes: Routes = [
   {
@@ -33,6 +34,12 @@ export const routes: Routes = [
   {
     path: 'admin',
     component: AdminPage,
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'ROLE_EMPLOYE' },
+  },
+  {
+    path: 'employe',
+    component: EmployePage,
     canActivate: [authGuard, roleGuard],
     data: { role: 'ROLE_EMPLOYE' },
   },

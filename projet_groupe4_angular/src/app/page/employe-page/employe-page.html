@@ -1,0 +1,19 @@
+<h2>Modifier votre mot de passe</h2>
+
+<form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+
+  <label>Ancien mot de passe :</label>
+  <input type="password" formControlName="oldPassword" />
+
+  <label>Nouveau mot de passe :</label>
+  <input type="password" formControlName="newPassword" />
+
+  <label>Confirmer le nouveau mot de passe :</label>
+  <input type="password" formControlName="confirmPassword" />
+
+  <button type="submit" [disabled]="passwordForm.invalid">
+    Modifier
+  </button>
+</form>
+
+<p>{{ msg }}</p>

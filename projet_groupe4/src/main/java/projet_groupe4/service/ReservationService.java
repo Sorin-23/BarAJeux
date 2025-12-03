@@ -99,5 +99,12 @@ public class ReservationService {
 
 		return this.dao.save(reservation);
 	}
+public List<Reservation> findByGameMasterId(int id) {
+    	return this.dao.findByGameMasterId(id);
+	}
+
+	
+
+	
 
 }

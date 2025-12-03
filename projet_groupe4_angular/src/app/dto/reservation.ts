@@ -28,6 +28,8 @@ export class Reservation {
     this._id = value;
   }
 
+
+
   public get datetimeDebut(): Date {
     return this._datetimeDebut;
   }

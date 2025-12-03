@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -30,7 +31,8 @@ public class SecurityConfig {
 
             // On autorise tout le monde sur connexion
             auth.requestMatchers("/api/auth", "/api/inscription/**","/api/top", "/api/top/**").permitAll();
-
+            auth.requestMatchers(HttpMethod.PUT, "/api/employe/*/password").permitAll();
+            
             // Sinon, accès restreint aux utilisateurs authentifiés
             auth.requestMatchers("/**").authenticated();
         });

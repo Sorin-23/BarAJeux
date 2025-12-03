@@ -18,6 +18,7 @@
       <a *ngIf="role == 'ROLE_CLIENT'" routerLink="/jeu" routerLinkActive="active">Emprunt de jeu</a>
       <a *ngIf="role == 'ROLE_CLIENT'" routerLink="/client" routerLinkActive="active">Compte</a>
       <a *ngIf="role == 'ROLE_EMPLOYE'" routerLink="/admin" routerLinkActive="active">Admin</a>
+      <a *ngIf="role == 'ROLE_EMPLOYE'" routerLink="/employe" routerLinkActive="active">Compte</a>
       <a (click)="logout()">Se déconnecter</a>
     </ng-container>
 

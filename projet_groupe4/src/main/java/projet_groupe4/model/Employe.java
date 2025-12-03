@@ -47,7 +47,6 @@ public class Employe extends Personne {
 	public void setGameMaster(Boolean gameMaster) {
 		this.gameMaster = gameMaster;
 	}
-
 	// toString
 	@Override
 	public String toString() {

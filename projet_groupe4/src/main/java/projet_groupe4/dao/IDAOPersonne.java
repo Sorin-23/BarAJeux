@@ -39,4 +39,9 @@ public interface IDAOPersonne extends JpaRepository<Personne, Integer> {
 	// public Personne findByLoginAndPassword(String mail, String mdp);
 	public Optional<Personne> findByMail(String mail);
 
+	/*public List<Reservation> findByGameMasterId(int id);*/
+
+	@Query("SELECT e FROM Employe e WHERE e.id = :id")
+	public Optional<Employe> findEmployeById(int id);
+
 }
