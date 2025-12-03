@@ -26,6 +26,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { CategorieJeu } from '../../dto/enum/categorie-jeu';
 import { TypeJeu } from '../../dto/enum/type-jeu';
 import { Emprunt } from '../../dto/emprunt';
+import { AvisService } from '../../service/avis-service';
 
 @Component({
   selector: 'app-admin-page',
@@ -41,6 +42,7 @@ export class AdminPage implements OnInit {
     badges: [],
     reservations: [],
     emprunts: [],
+    avis: [],
   };
 
   filteredItems: { [key: string]: any[] } = {
@@ -50,6 +52,7 @@ export class AdminPage implements OnInit {
     badges: [],
     reservations: [],
     emprunts: [],
+    avis: [],
   };
   lastSort: { [key: string]: Sort | null } = {};
 
@@ -60,6 +63,7 @@ export class AdminPage implements OnInit {
     badges: new FormControl(''),
     reservations: new FormControl(''),
     emprunts: new FormControl(''),
+    avis: new FormControl(''),
   };
 
   currentEdit: { [key: string]: any } = {
@@ -69,11 +73,13 @@ export class AdminPage implements OnInit {
     badge: null,
     reservation: null,
     emprunt: null,
+    avis: null,
   };
 
   statutControls: { [key: string]: FormControl } = {
     reservations: new FormControl(''),
     emprunts: new FormControl(''),
+    avis: new FormControl(''),
   };
 
   enumOptions: { [key: string]: any[] } = {
@@ -100,7 +106,8 @@ export class AdminPage implements OnInit {
     private badgeService: BadgeService,
     private reservationService: ReservationService,
     private empruntService: EmpruntService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private avisService: AvisService
   ) {}
 
   ngOnInit(): void {
@@ -110,6 +117,7 @@ export class AdminPage implements OnInit {
     this.loadSection('badges', this.badgeService);
     this.loadSection('reservations', this.reservationService);
     this.loadSection('emprunts', this.empruntService);
+    this.loadSection('avis', this.avisService);
 
     Object.keys(this.searchControls).forEach((section) => {
       this.searchControls[section].valueChanges.subscribe((term) => {
@@ -155,12 +163,11 @@ export class AdminPage implements OnInit {
       imgURL: new FormControl(null, { validators: Validators.required }),
       besoinGameMaster: new FormControl(false),
     });
-     this.tableForm = new FormGroup({
+    this.tableForm = new FormGroup({
       nomTable: new FormControl(null, { validators: Validators.required }),
       capacite: new FormControl(null, { validators: Validators.required }),
       imgUrl: new FormControl(null, { validators: Validators.required }),
     });
-
   }
 
   private loadSection(section: string, service: any) {
@@ -179,7 +186,7 @@ export class AdminPage implements OnInit {
     term = term?.toLowerCase() || '';
     const statutFilter = this.statutControls[section]?.value || '';
 
-    this.filteredItems[section] = this.data[section].filter((item) => {
+    /*this.filteredItems[section] = this.data[section].filter((item) => {
       const matchesTerm = (
         item.nom ||
         item.name ||
@@ -187,14 +194,44 @@ export class AdminPage implements OnInit {
         item.nomBadge ||
         item.client.nom ||
         item.client.prenom ||
+        item.titre ||
         ''
       )
         .toLowerCase()
         .includes(term);
       const matchesStatut = statutFilter
-        ? (item.statutReservation || item.statutLocation)?.toLowerCase() ===
+        ? (item.statutReservation || item.statutLocation || item.note)?.toLowerCase() ===
           statutFilter.toLowerCase()
         : true;
+      return matchesTerm && matchesStatut;
+    });*/
+    this.filteredItems[section] = this.data[section].filter((item) => {
+      // Recherche textuelle sur les champs disponibles
+      const searchableText = [
+        item.nom,
+        item.name,
+        item.nomTable,
+        item.nomBadge,
+        item.titre
+      
+      ]
+        .filter((v) => !!v) 
+        .join(' ')
+        .toLowerCase();
+
+      const matchesTerm = searchableText.includes(term);
+
+      // ----------- Gestion du filtre 'statut' ou 'note' selon section -----------
+      let matchesStatut = true;
+
+      if (section === 'avis' && statutFilter !== '') {
+        matchesStatut = item.note == statutFilter; // filtre sur la note
+      } else if (section === 'reservations' && statutFilter !== '') {
+        matchesStatut = item.statutReservation?.toLowerCase() === statutFilter.toLowerCase();
+      } else if (section === 'emprunts' && statutFilter !== '') {
+        matchesStatut = item.statutLocation?.toLowerCase() === statutFilter.toLowerCase();
+      }
+
       return matchesTerm && matchesStatut;
     });
     if (this.lastSort[section]) {
@@ -245,62 +282,54 @@ export class AdminPage implements OnInit {
     this.currentEdit[section] = item;
     this.editMode = true;
 
-   
     if (section === 'jeux') {
       // Pré-remplir le formulaire
       this.jeuForm.patchValue({
-       nom: item.nom,
-       typesJeux : item.typesJeux,
-       ageMinimum : item.ageMinimum,
-       nbJoueurMinimum : item.nbJoueurMinimum,
-       nbJoueurMaximum : item.nbJoueurMaximum,
-       duree : item.duree,
-       nbExemplaire : item.nbExemplaire,
-       note : item.note,
-       categoriesJeux : item.categoriesJeux,
-       imgURL : item.imgURL,
-       besoinGameMaster : item.besoinGameMaster,
-
+        nom: item.nom,
+        typesJeux: item.typesJeux,
+        ageMinimum: item.ageMinimum,
+        nbJoueurMinimum: item.nbJoueurMinimum,
+        nbJoueurMaximum: item.nbJoueurMaximum,
+        duree: item.duree,
+        nbExemplaire: item.nbExemplaire,
+        note: item.note,
+        categoriesJeux: item.categoriesJeux,
+        imgURL: item.imgURL,
+        besoinGameMaster: item.besoinGameMaster,
       });
-    }
-    else if(section === 'tables'){
-    // Pré-remplir le formulaire
+    } else if (section === 'tables') {
+      // Pré-remplir le formulaire
       this.tableForm.patchValue({
         nomTable: item.nomTable,
         capacite: item.capacite,
         imgUrl: item.imgUrl,
       });
-    }
-    else if (section === 'badges') {
+    } else if (section === 'badges') {
       // Pré-remplir le formulaire
       this.badgeForm.patchValue({
         imgURL: item.imgURL,
         pointMin: item.pointMin,
         nomBadge: item.nomBadge,
       });
-    }
-    else if (section === 'employes') {
+    } else if (section === 'employes') {
       // Pré-remplir le formulaire
       this.employeForm.patchValue({
-      nom:item.nom,
-      prenom:item.prenom,
-      mail: item.mail,
-      telephone: item.telephone,
-      job: item.job,
-      gameMaster: item.gameMaster
+        nom: item.nom,
+        prenom: item.prenom,
+        mail: item.mail,
+        telephone: item.telephone,
+        job: item.job,
+        gameMaster: item.gameMaster,
       });
-    }
-    else if (section === 'reservations') {
+    } else if (section === 'reservations') {
       // Pré-remplir le formulaire
       this.reservationForm.patchValue({
         statutReservation: item.statutReservation,
       });
-    }
-    else if (section ==='emprunts'){
+    } else if (section === 'emprunts') {
       this.empruntForm.patchValue({
-         statutEmprunt: item.statutLocation
-      })
-     
+        statutEmprunt: item.statutLocation,
+      });
     }
   }
   supprimer(section: string, item: any) {
@@ -350,9 +379,7 @@ export class AdminPage implements OnInit {
           formDataJeu.note,
           formDataJeu.categoriesJeux,
           formDataJeu.imgURL,
-          formDataJeu.besoinGameMaster ?? false,
-
-          
+          formDataJeu.besoinGameMaster ?? false
         );
         console.log(jeuModifiee.toJson());
         console.log(jeuModifiee);
@@ -361,7 +388,7 @@ export class AdminPage implements OnInit {
       case 'employe':
         const formDataEmploye = this.employeForm.getRawValue();
         const employeId = this.currentEdit['employes'] ? this.currentEdit['employes'].id : 0;
-        const mdp = formDataEmploye.mdp || "123456";
+        const mdp = formDataEmploye.mdp || '123456';
         const employeModifiee = new Employe(
           employeId, // si null, id sera undefined => création
           formDataEmploye.nom,
@@ -378,7 +405,7 @@ export class AdminPage implements OnInit {
         this.employeService.save(employeModifiee);
         break;
       case 'table':
-         const formDataTable = this.tableForm.getRawValue();
+        const formDataTable = this.tableForm.getRawValue();
         const tableId = this.currentEdit['tables'] ? this.currentEdit['tables'].id : 0;
         const tableModifiee = new TableJeu(
           tableId, // si null, id sera undefined => création
@@ -422,14 +449,14 @@ export class AdminPage implements OnInit {
       case 'emprunt':
         const formEmprunt = this.empruntForm.getRawValue();
         const empruntModifie = new Emprunt(
-          this.currentEdit["emprunts"].id,
-          this.currentEdit["emprunts"].dateEmprunt,
-          this.currentEdit["emprunts"].dateRetour,
+          this.currentEdit['emprunts'].id,
+          this.currentEdit['emprunts'].dateEmprunt,
+          this.currentEdit['emprunts'].dateRetour,
           formEmprunt.statutEmprunt,
-          this.currentEdit["emprunts"].client,
-          this.currentEdit["emprunts"].jeu,
+          this.currentEdit['emprunts'].client,
+          this.currentEdit['emprunts'].jeu,
           formEmprunt.dateRetourReel
-        ) 
+        );
         console.log(empruntModifie.toJson());
         this.empruntService.save(empruntModifie);
         break;

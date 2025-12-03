@@ -4,7 +4,7 @@
     class="btn btn_admin"
     [class.active]="currentSection === 'dashboard'"
     data-table="bdd_dashboard"
-    (click)="editMode=false;currentSection = 'dashboard'"
+    (click)="editMode = false; currentSection = 'dashboard'"
   >
     Dashboard
   </button>
@@ -12,7 +12,7 @@
     class="btn btn_admin"
     [class.active]="currentSection === 'jeu'"
     data-table="bdd_jeux"
-    (click)="editMode=false;currentSection = 'jeu'"
+    (click)="editMode = false; currentSection = 'jeu'"
   >
     Jeux
   </button>
@@ -20,7 +20,7 @@
     class="btn btn_admin"
     [class.active]="currentSection === 'table'"
     data-table="bdd_table"
-    (click)="editMode=false;currentSection = 'table'"
+    (click)="editMode = false; currentSection = 'table'"
   >
     Tables
   </button>
@@ -28,7 +28,7 @@
     class="btn btn_admin"
     [class.active]="currentSection === 'employe'"
     data-table="bdd_employe"
-    (click)="editMode=false;currentSection = 'employe'"
+    (click)="editMode = false; currentSection = 'employe'"
   >
     Employés
   </button>
@@ -36,7 +36,7 @@
     class="btn btn_admin"
     [class.active]="currentSection === 'badge'"
     data-table="bdd_badge"
-    (click)="editMode=false;currentSection = 'badge'"
+    (click)="editMode = false; currentSection = 'badge'"
   >
     Badges
   </button>
@@ -44,7 +44,7 @@
     class="btn btn_admin"
     [class.active]="currentSection === 'emprunt'"
     data-table="bdd_emprunt"
-    (click)="editMode=false;currentSection = 'emprunt'"
+    (click)="editMode = false; currentSection = 'emprunt'"
   >
     Emprunts
   </button>
@@ -53,9 +53,17 @@
     class="btn btn_admin"
     [class.active]="currentSection === 'reservation'"
     data-table="bdd_reservation"
-    (click)="editMode=false;currentSection = 'reservation'"
+    (click)="editMode = false; currentSection = 'reservation'"
   >
     Reservations
+  </button>
+  <button
+    class="btn btn_admin"
+    [class.active]="currentSection === 'avis'"
+    data-table="bdd_avis"
+    (click)="editMode = false; currentSection = 'avis'"
+  >
+    Avis
   </button>
 </div>
 
@@ -443,6 +451,45 @@
       </tbody>
     </table>
   </div>
+
+  <div *ngIf="currentSection === 'avis'">
+    <section id="bdd_recherche_ajout">
+      <input
+        type="text"
+        id="recherche_avis"
+        class="barre_recherche"
+        placeholder="🔍 Rechercher..."
+        [formControl]="searchControls['avis']"
+      />
+      <select [formControl]="statutControls['avis']">
+        <option value="">Tous</option>
+        <option *ngFor="let s of [1, 2, 3, 4, 5]" [value]="s">{{ s }}</option>
+      </select>
+      <!--<button class="btn_crud btn_ajouter" title="Ajouter" (click)="ajouter('reservations')">
+        ➕
+      </button>-->
+    </section>
+
+    <table matSort (matSortChange)="sortData('avis', $event)">
+      <thead>
+        <tr>
+          <th data-type="number" mat-sort-header="id">ID</th>
+          <th data-type="text" mat-sort-header="titre">Titre</th>
+          <th data-type="number" mat-sort-header="note">Note</th>
+          <th data-type="text" mat-sort-header="commentaire">Commentaire</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let res of filteredItems['avis']">
+          <td>{{ res.id }}</td>
+          <td>{{ res.titre }}</td>
+          <td>{{ res.note }}</td>
+          <td>{{ res.commentaire }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <div id="admin_form_section" class="block_white" *ngIf="editMode">
@@ -585,45 +632,53 @@
   <div *ngIf="currentSection === 'badge'">
     <h3>Modifier le badge #{{ currentEdit['badges']?.id || 'nouveau' }}</h3>
     <form [formGroup]="badgeForm" (ngSubmit)="sauvergarder('badge', currentEdit['badges'])">
-      <div class="filtre_groupe"> <label>nom du badge :</label>
-      <input type="text" formControlName="nomBadge" /></div>
-     <div class="filtre_groupe"> <label>point minimum :</label>
-      <input type="number" formControlName="pointMin" /></div>
-     <div class="filtre_groupe">  <label>img URL :</label>
-      <input type="text" formControlName="imgURL" /></div>
-     <div class="form-group"> <button type="submit" class="btn enregistrer" [disabled]="badgeForm.invalid">
-        Sauvegarder
-      </button>
-      <button
-        type="button"
-        class="btn annuler"
-        (click)="editMode = false; currentEdit['badges'] = null"
-      >
-        Annuler
-      </button></div>
-     
+      <div class="filtre_groupe">
+        <label>nom du badge :</label> <input type="text" formControlName="nomBadge" />
+      </div>
+      <div class="filtre_groupe">
+        <label>point minimum :</label> <input type="number" formControlName="pointMin" />
+      </div>
+      <div class="filtre_groupe">
+        <label>img URL :</label> <input type="text" formControlName="imgURL" />
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn enregistrer" [disabled]="badgeForm.invalid">
+          Sauvegarder
+        </button>
+        <button
+          type="button"
+          class="btn annuler"
+          (click)="editMode = false; currentEdit['badges'] = null"
+        >
+          Annuler
+        </button>
+      </div>
     </form>
   </div>
   <div *ngIf="currentSection === 'emprunt'">
     <h3>Modifier l'emprunt #{{ currentEdit['emprunts'].id }}</h3>
     <form [formGroup]="empruntForm" (ngSubmit)="sauvergarder('emprunt', currentEdit['emprunts'])">
-       <div class="filtre_groupe"><label>Statut :</label>
-      <select formControlName="statutEmprunt">
-        <option *ngFor="let s of enumOptions['statutLocation']" [value]="s">{{ s }}</option>
-      </select></div>
-       <div class="filtre_groupe"><label>Date retour réel :</label>
-      <input type="date" formControlName="dateRetourReel" /></div>
-      <div class="form-group"> <button type="submit" class="btn enregistrer" [disabled]="empruntForm.invalid">
-        Sauvegarder
-      </button>
-      <button
-        type="button"
-        class="btn annuler"
-        (click)="editMode = false; currentEdit['emprunts'] = null"
-      >
-        Annuler
-      </button></div>
-     
+      <div class="filtre_groupe">
+        <label>Statut :</label>
+        <select formControlName="statutEmprunt">
+          <option *ngFor="let s of enumOptions['statutLocation']" [value]="s">{{ s }}</option>
+        </select>
+      </div>
+      <div class="filtre_groupe">
+        <label>Date retour réel :</label> <input type="date" formControlName="dateRetourReel" />
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn enregistrer" [disabled]="empruntForm.invalid">
+          Sauvegarder
+        </button>
+        <button
+          type="button"
+          class="btn annuler"
+          (click)="editMode = false; currentEdit['emprunts'] = null"
+        >
+          Annuler
+        </button>
+      </div>
     </form>
   </div>
   <div *ngIf="currentSection === 'reservation'">
@@ -632,21 +687,24 @@
       [formGroup]="reservationForm"
       (ngSubmit)="sauvergarder('reservation', currentEdit['reservations'])"
     >
-    <div class="filtre_groupe"><label>Statut :</label>
-      <select formControlName="statutReservation">
-        <option *ngFor="let s of enumOptions['statutReservation']" [value]="s">{{ s }}</option>
-      </select></div>
-      <div class="form-group"> <button type="submit" class="btn enregistrer" [disabled]="reservationForm.invalid">
-        Sauvegarder
-      </button>
-      <button
-        type="button"
-        class="btn annuler"
-        (click)="editMode = false; currentEdit['reservations'] = null"
-      >
-        Annuler
-      </button></div>
-     
+      <div class="filtre_groupe">
+        <label>Statut :</label>
+        <select formControlName="statutReservation">
+          <option *ngFor="let s of enumOptions['statutReservation']" [value]="s">{{ s }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn enregistrer" [disabled]="reservationForm.invalid">
+          Sauvegarder
+        </button>
+        <button
+          type="button"
+          class="btn annuler"
+          (click)="editMode = false; currentEdit['reservations'] = null"
+        >
+          Annuler
+        </button>
+      </div>
     </form>
   </div>
 </div>
