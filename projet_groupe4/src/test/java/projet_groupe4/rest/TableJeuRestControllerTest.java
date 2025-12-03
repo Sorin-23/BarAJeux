@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import projet_groupe4.dao.IDAOPersonne;
 import projet_groupe4.dto.request.TableRequest;
 import projet_groupe4.model.TableJeu;
+import projet_groupe4.service.PersonneService;
 import projet_groupe4.service.TableJeuService;
 
 @WebMvcTest(TableJeuRestController.class)
@@ -44,6 +45,9 @@ public class TableJeuRestControllerTest {
 
     @MockitoBean
     private IDAOPersonne dao;
+
+    @MockitoBean
+    private PersonneService personneService;
 
     @Test
     void shouldGetAllStatusUnauthorized() throws Exception {

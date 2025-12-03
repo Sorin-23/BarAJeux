@@ -3,11 +3,6 @@ package projet_groupe4.rest;
 import java.util.List;
 import java.util.Optional;
 
-import projet_groupe4.dao.IDAOPersonne;
-import projet_groupe4.dto.request.AvisRequest;
-import projet_groupe4.model.Avis;
-import projet_groupe4.service.AvisService;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -27,6 +22,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import projet_groupe4.dao.IDAOPersonne;
+import projet_groupe4.dto.request.AvisRequest;
+import projet_groupe4.model.Avis;
+import projet_groupe4.service.AvisService;
+import projet_groupe4.service.PersonneService;
+
 @WebMvcTest(AvisRestController.class)
 public class AvisRestControllerTest {
     private static final int AVIS_ID = 1;
@@ -44,6 +45,9 @@ public class AvisRestControllerTest {
 
     @MockitoBean
     private IDAOPersonne dao;
+
+    @MockitoBean
+    private PersonneService personneService;
 
     @Test
     void shouldGetAllStatusUnauthorized() throws Exception {

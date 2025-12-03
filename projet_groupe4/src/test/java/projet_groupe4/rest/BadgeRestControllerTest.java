@@ -26,6 +26,7 @@ import projet_groupe4.dao.IDAOPersonne;
 import projet_groupe4.dto.request.BadgeRequest;
 import projet_groupe4.model.Badge;
 import projet_groupe4.service.BadgeService;
+import projet_groupe4.service.PersonneService;
 
 @WebMvcTest(BadgeRestController.class)
 public class BadgeRestControllerTest {
@@ -44,6 +45,10 @@ public class BadgeRestControllerTest {
 
     @MockitoBean
     private IDAOPersonne dao;
+
+    @MockitoBean
+    private PersonneService personneService;
+
 
     @Test
     void shouldGetAllStatusUnauthorized() throws Exception {

@@ -28,12 +28,13 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import projet_groupe4.dao.IDAOPersonne;
 import projet_groupe4.dto.request.ReservationRequest;
-import projet_groupe4.model.Jeu;
 import projet_groupe4.model.Client;
-import projet_groupe4.model.TableJeu;
 import projet_groupe4.model.Employe;
+import projet_groupe4.model.Jeu;
 import projet_groupe4.model.Reservation;
 import projet_groupe4.model.StatutReservation;
+import projet_groupe4.model.TableJeu;
+import projet_groupe4.service.PersonneService;
 import projet_groupe4.service.ReservationService;
 
 @WebMvcTest(ReservationRestController.class)
@@ -58,6 +59,9 @@ public class ReservationRestControllerTest {
 
     @MockitoBean
     private IDAOPersonne dao;
+
+    @MockitoBean
+    private PersonneService personneService;
 
     @Test
     void shouldGetAllStatusUnauthorized() throws Exception {
@@ -112,6 +116,7 @@ public class ReservationRestControllerTest {
         TableJeu tj = new TableJeu();
         tj.setId(TABLE_ID);
         r1.setTableJeu(tj);
+        
 
         Employe e = new Employe();
         e.setId(GM_ID);
@@ -135,12 +140,13 @@ public class ReservationRestControllerTest {
         result.andExpect(MockMvcResultMatchers.jsonPath("$[0].id").exists())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].datetimeDebut").exists())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].datetimeFin").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].statut").exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].statutReservation").exists())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].nbJoueur").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].tableJeuId").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].jeuId").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].clientId").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].gameMasterId").exists());
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].jeu").exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].client").exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].tableID").exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].gameMaster").exists());
+                
 
     }
 
@@ -228,27 +234,25 @@ public class ReservationRestControllerTest {
         result.andExpect(MockMvcResultMatchers.jsonPath("$.id").exists())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.datetimeDebut").exists())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.datetimeFin").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.statut").exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.statutReservation").exists())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.nbJoueur").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.tableJeuId").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.jeuId").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.clientId").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.gameMasterId").exists());
+                .andExpect(MockMvcResultMatchers.jsonPath("$.tableID").exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.jeu").exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.client").exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.gameMaster").exists());
         ;
 
     }
 
-    @Test
-    void shouldCreateStatusUnauthorized() throws Exception {
-        // given
-
-        // when
-        ResultActions result = this.createAndPost(RESA_DEBUT, RESA_FIN, RESA_NBJ, RESA_STATUT, TABLE_ID, JEU_ID,
-                CLIENT_ID, GM_ID);
-
-        // then
-        result.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+    @Test void shouldCreateStatusUnauthorized() throws Exception { 
+        // given 
+        // // when 
+        ResultActions result = this.createAndPost(RESA_DEBUT, RESA_FIN, RESA_NBJ, RESA_STATUT, TABLE_ID, JEU_ID, CLIENT_ID, GM_ID); 
+        // then 
+        result.andExpect(MockMvcResultMatchers.status().isUnauthorized()); 
     }
+
+   
 
     @Test
     @WithMockUser
@@ -265,6 +269,34 @@ public class ReservationRestControllerTest {
 
         // then
         result.andExpect(MockMvcResultMatchers.status().isCreated());
+    }
+    private ResultActions createAndPost(LocalDateTime dateDebut, LocalDateTime dateFin, int nbJoueur, String statut,
+            int tableId, int jeuId, int clientId, int gmId)
+            throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+
+        ReservationRequest request = new ReservationRequest();
+
+        request.setDatetimeDebut(dateDebut);
+        request.setDatetimeFin(dateFin);
+        request.setNbJoueur(nbJoueur);
+        request.setClientId(clientId);
+        request.setJeuId(jeuId);
+        request.setGameMasterId(gmId);
+        request.setTableJeuId(tableId);
+
+        if (statut == null || statut.isBlank()) {
+            request.setStatutReservation(null);
+        } else {
+            request.setStatutReservation(StatutReservation.valueOf(statut));
+        }
+
+        return this.mockMvc.perform(MockMvcRequestBuilders
+                .post(API_URL)
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(mapper.writeValueAsString(request)));
     }
 
     @Test
@@ -351,34 +383,7 @@ public class ReservationRestControllerTest {
         Mockito.verify(this.srv, Mockito.never()).create(Mockito.any());
     }
 
-    private ResultActions createAndPost(LocalDateTime dateDebut, LocalDateTime dateFin, int nbJoueur, String statut,
-            int tableId, int jeuId, int clientId, int gmId)
-            throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-
-        ReservationRequest request = new ReservationRequest();
-
-        request.setDatetimeDebut(dateDebut);
-        request.setDatetimeFin(dateFin);
-        request.setNbJoueur(nbJoueur);
-        request.setClientId(clientId);
-        request.setJeuId(jeuId);
-        request.setGameMasterId(gmId);
-        request.setTableJeuId(tableId);
-
-        if (statut == null || statut.isBlank()) {
-            request.setStatutReservation(null);
-        } else {
-            request.setStatutReservation(StatutReservation.valueOf(statut));
-        }
-
-        return this.mockMvc.perform(MockMvcRequestBuilders
-                .post(API_URL)
-                .with(SecurityMockMvcRequestPostProcessors.csrf())
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(mapper.writeValueAsString(request)));
-    }
+    
 
     @Test
     void shouldUpdateStatusUnauthorized() throws Exception {

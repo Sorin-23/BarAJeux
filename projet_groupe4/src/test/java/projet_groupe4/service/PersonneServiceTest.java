@@ -21,6 +21,7 @@ import projet_groupe4.model.Client;
 import projet_groupe4.model.Employe;
 import projet_groupe4.model.Personne;
 
+
 @ExtendWith(MockitoExtension.class)
 public class PersonneServiceTest {
 
@@ -121,11 +122,11 @@ public class PersonneServiceTest {
 
     @Test
     void testCreatePersonne() {
-        Personne p = new Client();
-        p.setMdp("motDePasse");
+        SubscribeClientRequest request = new SubscribeClientRequest();
+        request.setMdp("motDePasse");
         when(passwordEncoder.encode("motDePasse")).thenReturn("encoded");
         when(dao.save(any(Personne.class))).thenAnswer(i -> i.getArguments()[0]);
-        Personne result = service.create(p);
+        Personne result = service.create(request);
         assertThat(result.getMdp()).isEqualTo("encoded");
     }
 

@@ -30,6 +30,7 @@ import projet_groupe4.dto.request.EmpruntRequest;
 import projet_groupe4.model.Emprunt;
 import projet_groupe4.model.StatutLocation;
 import projet_groupe4.service.EmpruntService;
+import projet_groupe4.service.PersonneService;
 
 @WebMvcTest(EmpruntRestController.class)
 public class EmpruntRestControllerTest {
@@ -49,6 +50,9 @@ public class EmpruntRestControllerTest {
 
     @MockitoBean
     private IDAOPersonne dao;
+
+    @MockitoBean
+    private PersonneService personneService;
 
     @Test
     void shouldGetAllStatusUnauthorized() throws Exception {

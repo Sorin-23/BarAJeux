@@ -29,6 +29,7 @@ import projet_groupe4.model.CategorieJeu;
 import projet_groupe4.model.Jeu;
 import projet_groupe4.model.TypeJeu;
 import projet_groupe4.service.JeuService;
+import projet_groupe4.service.PersonneService;
 
 @WebMvcTest(JeuRestController.class)
 public class JeuRestControllerTest {
@@ -53,6 +54,9 @@ public class JeuRestControllerTest {
 
     @MockitoBean
     private IDAOPersonne dao;
+
+    @MockitoBean
+    private PersonneService personneService;
 
     @Test
     void shouldGetAllStatusUnauthorized() throws Exception {
