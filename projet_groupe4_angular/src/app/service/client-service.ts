@@ -45,6 +45,8 @@ export class ClientService {
       .pipe(map((json) => this.mapJsonToClient(json)));
   }
 
+
+
   //  SAVE (POST vs PUT)
   public save(client: Client): void {
     const payload: any = client.toJson();
@@ -71,6 +73,12 @@ export class ClientService {
       this.http.put<Client>(`${this.apiUrl}/${client.id}`, payload).subscribe(() => this.refresh());
     }
   }
+
+public changePassword(clientId: number, oldPassword: string, newPassword: string): Observable<string> {
+  const payload = { oldPassword, newPassword };
+  return this.http.put<string>(`${this.apiUrl}/${clientId}/password`, payload, { responseType: 'text' as 'json' });
+}
+
 
   // DELETE 
   public deleteById(id: number): void {

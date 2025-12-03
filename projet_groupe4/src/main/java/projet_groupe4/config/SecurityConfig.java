@@ -32,6 +32,7 @@ public class SecurityConfig {
             // On autorise tout le monde sur connexion
             auth.requestMatchers("/api/auth", "/api/inscription/**","/api/top", "/api/top/**").permitAll();
             auth.requestMatchers(HttpMethod.PUT, "/api/employe/*/password").permitAll();
+            //auth.requestMatchers(HttpMethod.PUT, "/api/client/*/password").permitAll();
             
             // Sinon, accès restreint aux utilisateurs authentifiés
             auth.requestMatchers("/**").authenticated();

@@ -2,47 +2,52 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { map } from 'rxjs';
-
 import { ClientService } from '../../service/client-service';
 import { Client } from '../../dto/client';
 import { Reservation } from '../../dto/reservation';
 import { ClientWithReservationResponse } from '../../dto/client-with-reservation-response';
 import { Router, RouterModule } from '@angular/router';
-
-interface ReservationDisplay {
-  original: Reservation;
-  titreAvis: string;
-  commentaire: string;
-  note: number;
-  avisModifiable: boolean;
-}
+import { FormGroup, FormControl, Validators, AbstractControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-client-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule],
   templateUrl: './client-page.html',
-  styleUrl: './client-page.css',
+  styleUrls: ['./client-page.css'],
 })
 export class ClientPage implements OnInit {
   currentView: 'info' | 'reservation' = 'info';
   isEditing: boolean = false;
+  isChangingPassword: boolean = false;
 
-  // Initialize empty to avoid crashes on load
   client: Client;
   clientBackup: Client | null = null;
-  reservationsList: ReservationDisplay[] = [];
+  reservationsList: Reservation[] = [];
   clientWithResa: ClientWithReservationResponse | null = null;
 
+  oldPassword: string = "";
+  newPassword: string = "";
+  confirmPassword: string = "";
+  passwordError: string = "";
+  passwordSuccess: string = "";
+
+  passwordForm: FormGroup;
+
   constructor(private clientService: ClientService, private router: Router) {
-    // Ensure createEmptyClient exists in your Service, or initialize manually
     this.client = this.clientService.createEmptyClient();
+    this.passwordForm = new FormGroup(
+      {
+        oldPassword: new FormControl('', Validators.required),
+        newPassword: new FormControl('', [Validators.required, Validators.minLength(6)]),
+        confirmPassword: new FormControl('', Validators.required),
+      },
+      { validators: this.passwordMatchValidator }
+    );
   }
 
   ngOnInit(): void {
-    // Check LocalStorage first (where Login Page saved it)
     const username = localStorage.getItem('username');
-
     if (username) {
       this.loadClientData(username);
     } else {
@@ -54,8 +59,6 @@ export class ClientPage implements OnInit {
     this.clientService.findByUsername(username).subscribe({
       next: (clientObj) => {
         this.client = clientObj;
-
-        // Load reservations only if we have a valid ID
         if (this.client.id) {
           this.loadReservations(this.client.id);
         }
@@ -65,38 +68,63 @@ export class ClientPage implements OnInit {
   }
 
   loadReservations(clientId: number) {
-    this.clientService
-      .getReservations(clientId)
-      .pipe(
-        map((data: any) => {
-          const list = data.reservations ?? []; // extraction du tableau
+  this.clientService.getReservations(clientId).pipe(
+    map((data: any) => {
+      const list = data.reservations ?? [];
+      return list.map((item: any) => ({
+        original: item,
+        titreAvis: '',
+        commentaire: '',
+        note: 0,
+        avisModifiable: true,
+      }) as unknown as Reservation); // Type assertion to `Reservation`
+    })
+  ).subscribe({
+    next: (list) => (this.reservationsList = list),
+    error: (err) => console.error('Error loading reservations', err),
+  });
+}
+  
 
-          return list.map(
-            (item: any) =>
-              ({
-                original: item,
-                titreAvis: '',
-                commentaire: '',
-                note: 0,
-                avisModifiable: true,
-              } as ReservationDisplay)
-          );
-        })
-      )
-      .subscribe({
-        next: (list) => (this.reservationsList = list),
-        error: (err) => console.error('Error loading reservations', err),
-      });
+  passwordMatchValidator(group: AbstractControl): { [key: string]: boolean } | null {
+    const password = group.get('newPassword')?.value;
+    const confirm = group.get('confirmPassword')?.value;
+    return password === confirm ? null : { passwordMismatch: true };
   }
 
-  switchView(view: 'info' | 'reservation') {
-    this.currentView = view;
+  changePassword(): void {
+    if (this.passwordForm.invalid) {
+      this.passwordError = 'Veuillez corriger le formulaire.';
+      return;
+    }
+
+    const oldPassword = this.passwordForm.value.oldPassword.trim();
+    const newPassword = this.passwordForm.value.newPassword.trim();
+
+    this.clientService.changePassword(this.client.id, oldPassword, newPassword).subscribe({
+      next: (response) => {
+        this.passwordSuccess = 'Mot de passe mis à jour';
+        this.passwordError = '';
+        this.passwordForm.reset();
+        this.isChangingPassword = false;
+      },
+      error: (err) => {
+        if (err.status === 403) {
+          this.passwordError = 'Ancien mot de passe incorrect';
+        } else {
+          this.passwordError = 'Erreur serveur.';
+        }
+      }
+    });
   }
 
+  toggleChangePasswordForm() {
+    this.isChangingPassword = !this.isChangingPassword;
+  }
+
+  // --- Edit Client Profile ---
   enableEdit() {
-    // Deep copy using JSON to avoid reference issues
-    const jsonCopy = this.client.toJson();
-
+    // Create a backup of the current client data
     this.clientBackup = new Client(
       this.client.id,
       this.client.nom,
@@ -118,53 +146,31 @@ export class ClientPage implements OnInit {
 
   cancelEdit() {
     if (this.clientBackup) {
+      // Restore the client data from the backup
       this.client = this.clientBackup;
     }
     this.isEditing = false;
   }
 
   saveProfile() {
-    console.log('Saving profile for ID:', this.client.id);
     this.clientService.save(this.client);
     this.isEditing = false;
     alert('Modifications envoyées !');
   }
 
-  // --- AVIS ---
-  setRating(item: ReservationDisplay, starValue: number) {
-    if (item.avisModifiable) item.note = starValue;
-  }
-
-  saveAvis(item: ReservationDisplay) {
-    if (!item.titreAvis || !item.commentaire || item.note === 0) {
-      alert('Veuillez tout remplir.');
-      return;
+  // --- Navigation Methods ---
+  goToReservations() {
+    if (this.client?.id) {
+      this.router.navigate(['/reservations', this.client.id]);
     }
-    const payload = {
-      titre: item.titreAvis,
-      commentaire: item.commentaire,
-      note: item.note,
-    };
-    // Ensure item.original has an 'id'
-    this.clientService.saveAvis(item.original.id, payload).subscribe({
-      next: () => {
-        alert('Avis publié !');
-        item.avisModifiable = false;
-      },
-    });
   }
 
+  // --- Badge Level Method ---
   getBadgeLevel(points: number): string {
     if (!points) return 'novice';
     if (points >= 500) return 'maitre';
     if (points >= 200) return 'expert';
     if (points >= 100) return 'apprenti';
     return 'novice';
-  }
-
-  goToReservations() {
-    if (this.client?.id) {
-      this.router.navigate(['/reservations', this.client.id]);
-    }
   }
 }

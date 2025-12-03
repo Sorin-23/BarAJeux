@@ -120,8 +120,6 @@
   opacity: 0.7;
 }
 
-
-
 #client_formulaire #informations input {
     padding: 0.5em 0.7em;
     border-radius: 6px;
@@ -129,4 +127,26 @@
     width: 100%;
     box-sizing: border-box;
 
+}
+#change_password {
+  margin-top: 20px;
+}
+
+.change-password-btn {
+  background-color: #e67e22;
+  color: white;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.change-password-btn:hover {
+  background-color: #e67e22;
+}
+
+#change_password form {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
 }

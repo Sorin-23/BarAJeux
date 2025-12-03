@@ -102,9 +102,16 @@ public class PersonneService {
 		client.setCodePostale(request.getCodePostale());
 		client.setAdresse(request.getAdresse());
 
+		 // Si un nouveau mot de passe est fourni, on l’encode et on le sauvegarde
+    if (request.getMdp() != null && !request.getMdp().isBlank()) {
+        client.setMdp(passwordEncoder.encode(request.getMdp()));
+    }
+
 		// On NE touche PAS au mot de passe, ni aux dates ici
 		return this.dao.save(client);
 	}
+
+
 
 	public Personne update(Integer id, Object request) {
 		// 1. Nouveau cas : mise à jour du profil client avec UpdateClientRequest
@@ -217,6 +224,8 @@ public class PersonneService {
 		});
 	}
 
+	
+/* 
 	public boolean changePassword(int id, String oldPassword, String newPassword) {
 		Employe emp = this.dao.findEmployeById(id)
 				.orElseThrow(() -> new RuntimeException("Employé introuvable"));
@@ -235,5 +244,40 @@ public class PersonneService {
 
 	}
 
+*/
+
+public boolean changePassword(int id, String oldPassword, String newPassword) {
+    
+    Object entity = this.dao.findById(id).orElseThrow(() -> new RuntimeException("Entity not found"));
+
+   
+    if (entity instanceof Employe) {
+        Employe emp = (Employe) entity;
+        
+        if (!passwordEncoder.matches(oldPassword, emp.getMdp())) {
+            return false; 
+        }
+       
+        emp.setMdp(passwordEncoder.encode(newPassword));
+        dao.save(emp);
+        return true;
+    }
+
+  
+    if (entity instanceof Client) {
+        Client client = (Client) entity;
+       
+        if (!passwordEncoder.matches(oldPassword, client.getMdp())) {
+            return false; 
+        }
+       
+        client.setMdp(passwordEncoder.encode(newPassword));
+        dao.save(client);
+        return true;
+    }
+
+   
+    return false;
+}
 
 }

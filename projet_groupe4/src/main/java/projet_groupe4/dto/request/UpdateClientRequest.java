@@ -19,6 +19,9 @@ public class UpdateClientRequest {
     @Email
     private String mail;
 
+    
+    private String mdp;
+
     @NotBlank
     private String telephone;
 
@@ -51,6 +54,10 @@ public class UpdateClientRequest {
     }
 
     // --- Getters / Setters ---
+
+    public String getMdp() { return mdp; }
+    public void setMdp(String mdp) { this.mdp = mdp; }
+
 
     public String getNom() {
         return nom;

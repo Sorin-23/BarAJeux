@@ -3,6 +3,7 @@ package projet_groupe4.rest;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
+import projet_groupe4.dto.request.ChangePasswordRequest;
 import projet_groupe4.dto.request.SubscribeClientRequest;
 import projet_groupe4.dto.request.UpdateClientRequest;
 import projet_groupe4.dto.response.ClientResponse;
@@ -91,6 +93,20 @@ public class ClientRestController {
         }
         return ClientResponse.convert(client);
     }
+
+@PutMapping("/{id}/password")
+@PreAuthorize("hasAnyRole('EMPLOYE', 'CLIENT')")
+public ResponseEntity<String> changePassword(@PathVariable int id, 
+                                            @Valid @RequestBody ChangePasswordRequest request) {
+    boolean isPasswordChanged = this.srv.changePassword(id, request.getOldPassword(), request.getNewPassword());
+    
+    if (isPasswordChanged) {
+        return ResponseEntity.ok("Password updated successfully");
+    } else {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body("Old password is incorrect");
+    }
+}
     
 
 }
