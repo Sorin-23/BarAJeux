@@ -2,20 +2,7 @@ pipeline {
     agent any
 
     stages {
-	stage('Start MySQL') {
-            steps {
-                echo "Starting MySQL container..."
-                sh '''
-                    docker compose up -d mysql
-                    # Boucle simple pour attendre que MySQL accepte les connexions
-                    until docker exec jeux-mysql mysqladmin ping -uroot -proot --silent; do
-                        echo "Waiting for MySQL..."
-                        sleep 5
-                    done
-                    echo "MySQL is ready!"
-                '''
-            }
-        }
+	
 	
         stage('Maven package') {
             agent {

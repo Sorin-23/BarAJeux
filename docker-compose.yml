@@ -13,7 +13,7 @@ services:
       retries: 10
     volumes:
       - db_data:/var/lib/mysql
-      - ./bar-a-jeux.sql:/docker-entrypoint-initdb.d/setup.sql
+      - /var/jenkins_home/workspace/projetJeux/bar-a-jeux.sql:/docker-entrypoint-initdb.d/setup.sql
     networks:
       - projetJeux
 
