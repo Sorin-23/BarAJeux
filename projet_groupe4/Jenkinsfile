@@ -2,19 +2,18 @@ pipeline {
     agent any
 
     stages {
-	stage('Clean MySQL volume') {
+	stage('Start MySQL') {
             steps {
-                script {
-                    // Supprime le volume si il existe
-                    sh '''
-                    if docker volume inspect projetJeux-db-data >/dev/null 2>&1; then
-                        echo "Removing existing MySQL volume..."
-                        docker volume rm projetJeux-db-data
-                    else
-                        echo "No existing MySQL volume found."
-                    fi
-                    '''
-                }
+                echo "Starting MySQL container..."
+                sh '''
+                    docker compose up -d mysql
+                    # Boucle simple pour attendre que MySQL accepte les connexions
+                    until docker exec jeux-mysql mysqladmin ping -uroot -proot --silent; do
+                        echo "Waiting for MySQL..."
+                        sleep 5
+                    done
+                    echo "MySQL is ready!"
+                '''
             }
         }
 	
@@ -33,10 +32,10 @@ pipeline {
 
             steps {
                 dir('projet_groupe4') {
-                    retry(3) { // 3 tentatives si MySQL pas encore prêt
+                    
                         withSonarQubeEnv('SonarQube') {
                             sh "mvn clean verify sonar:sonar -Dsonar.projectKey=projetJeux-boot  -Dsonar.projectName=projetJeux-boot"
-                        }
+                        
                     }
                 }
             }
