@@ -21,7 +21,7 @@ services:
     image: ajc/projetjeux:boot
     container_name: projetJeux-boot
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/projetJeux
+      SPRING_DATASOURCE_URL: jdbc:mysql://jeux-mysql:3306/projetJeux
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
     depends_on:
