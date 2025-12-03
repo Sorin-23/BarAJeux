@@ -81,8 +81,8 @@ export class InscriptionPage implements OnInit {
           this.villeCtrl.value,
           this.codePostaleCtrl.value,
           this.adresseCtrl.value,
-          new Date().toISOString().split('T')[0], // dateCreation
-          new Date().toISOString().split('T')[0], // dateLastConnexion
+          new Date(), // dateCreation
+          new Date(), // dateLastConnexion
           0 // pointFidelite
         )
       );

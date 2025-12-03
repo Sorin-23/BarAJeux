@@ -8,24 +8,24 @@ export class SubscribeClientRequest {
     private _ville: string,
     private _codePostale: string,
     private _adresse: string,
-    private _dateCreation: string,
-    private _dateLastConnexion: string,
+    private _dateCreation: Date,
+    private _dateLastConnexion: Date,
     private _pointFidelite: number
   ) {}
 
-  public get dateCreation(): string {
+  public get dateCreation(): Date {
     return this._dateCreation;
   }
 
-  public set dateCreation(value: string) {
+  public set dateCreation(value: Date) {
     this._dateCreation = value;
   }
 
-  public get dateLastConnexion(): string {
+  public get dateLastConnexion(): Date {
     return this._dateLastConnexion;
   }
 
-  public set dateLastConnexion(value: string) {
+  public set dateLastConnexion(value: Date) {
     this._dateLastConnexion = value;
   }
 
@@ -111,9 +111,20 @@ export class SubscribeClientRequest {
       ville: this.ville,
       codePostale: this.codePostale,
       adresse: this.adresse,
-      dateCreation: this.dateCreation,
-      dateLastConnexion: this.dateLastConnexion,
+      dateCreation: this.dateCreation ? this.toBackendFormat(this.dateCreation) : null,
+      dateLastConnexion: this.dateLastConnexion
+        ? this.toBackendFormat(this.dateLastConnexion)
+        : null,
       pointFidelite: this.pointFidelite,
     };
+  }
+
+  private toBackendFormat(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}`; // format accepté par Spring
   }
 }
