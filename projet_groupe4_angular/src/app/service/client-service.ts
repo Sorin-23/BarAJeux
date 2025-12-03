@@ -14,7 +14,7 @@ export class ClientService {
 
   constructor(private http: HttpClient) {}
 
-  // --- 1. FIND ALL (With Mapping) ---
+  //  FIND ALL
   public findAll(): Observable<Client[]> {
     return this.refresh$.pipe(
       startWith(null),
@@ -30,14 +30,14 @@ export class ClientService {
     this.refresh$.next();
   }
 
-  // --- 2. FIND BY ID ---
+  //  FIND BY ID 
   public findById(id: number): Observable<Client> {
     return this.http
       .get<any>(`${this.apiUrl}/${id}`)
       .pipe(map((json) => this.mapJsonToClient(json)));
   }
 
-  // --- 3. FIND BY USERNAME ---
+  // FIND BY USERNAME 
   public findByUsername(username: string): Observable<Client> {
     const encodedUsername = encodeURIComponent(username);
     return this.http
@@ -45,7 +45,7 @@ export class ClientService {
       .pipe(map((json) => this.mapJsonToClient(json)));
   }
 
-  // --- 4. SAVE (POST vs PUT) ---
+  //  SAVE (POST vs PUT)
   public save(client: Client): void {
     const payload: any = client.toJson();
 
@@ -57,7 +57,7 @@ export class ClientService {
       return d.toISOString().substring(0, 10); // "2025-10-13"
     };
 
-    // Only set these if they exist in your DTO / backend request
+    // Only set if they exist in DTO / backend request
     payload.dateCreation = formatDateOnly(client.dateCreation);
     payload.dateLastConnexion = formatDateOnly(client.dateLastConnexion);
 
@@ -72,19 +72,19 @@ export class ClientService {
     }
   }
 
-  // --- 5. DELETE ---
+  // DELETE 
   public deleteById(id: number): void {
     this.http.delete<void>(`${this.apiUrl}/${id}`).subscribe(() => this.refresh());
   }
 
-  // --- 6. RESERVATIONS & AVIS ---
-  // matches @GetMapping("/reservations/{id}")
+  // RESERVATIONS et AVIS 
+  // matche @GetMapping("/reservations/{id}")
   public getReservations(clientId: number): Observable<ClientWithReservationResponse> {
     return this.http.get<ClientWithReservationResponse>(`${this.apiUrl}/reservations/${clientId}`);
   }
 
   public saveAvis(reservationId: number, avisData: any): Observable<void> {
-    // Make sure your backend mapping matches this path
+    
     return this.http.post<void>(`/avis`, avisData);
   }
 
@@ -92,7 +92,7 @@ export class ClientService {
     return new Client(0, '', '', '', '', undefined, 0, new Date(), new Date(), [], [], '', '', '');
   }
 
-  // --- 7. HELPER: MAP JSON TO CLIENT CLASS ---
+  // MAP JSON TO CLIENT CLASS
   private mapJsonToClient(json: any): Client {
     if (!json) return this.createEmptyClient();
 

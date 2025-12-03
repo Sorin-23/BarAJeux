@@ -17,6 +17,7 @@ import projet_groupe4.model.Employe;
 import projet_groupe4.model.Jeu;
 import projet_groupe4.model.Personne;
 import projet_groupe4.model.Reservation;
+import projet_groupe4.model.StatutReservation;
 
 @Service
 public class ReservationService {
@@ -66,45 +67,66 @@ public class ReservationService {
     
 	}
 	
-
-	private Reservation save(Reservation reservation, ReservationRequest request) {
-		reservation.setDatetimeDebut(request.getDatetimeDebut());
-		reservation.setDatetimeFin(request.getDatetimeFin());
-		reservation.setNbJoueur(request.getNbJoueur());
-		reservation.setTableJeu(this.tableJeuDao.getReferenceById(request.getTableJeuId()));
-		reservation.setJeu(this.jeuDao.getReferenceById(request.getJeuId()));
-		//reservation.setClient((Client) this.personneDao.getReferenceById(request.getClientId()));
-		Personne personne = this.personneDao.findById(request.getClientId())
-		        .orElseThrow(() -> new IdNotFoundException());
-
-		if (!(personne instanceof Client client)) {
-		    throw new RuntimeException("L'id ne correspond pas à un client");
-		}
-
-		reservation.setClient(client);
-		//reservation.setGameMaster((Employe) this.personneDao.getReferenceById(request.getGameMasterId()));
-		if (request.getGameMasterId() != null) {
-    Personne emp = this.personneDao.findById(request.getGameMasterId())
-            .orElseThrow(() -> new IdNotFoundException());
-
-    if (!(emp instanceof Employe employe)) {
-        throw new RuntimeException("L'id ne correspond pas à un employé");
-    }
-
-    reservation.setGameMaster(employe);
-} else {
-    reservation.setGameMaster(null);
-}
-		reservation.setStatutReservation(request.getStatutReservation());
-
-		return this.dao.save(reservation);
-	}
-public List<Reservation> findByGameMasterId(int id) {
+	public List<Reservation> findByGameMasterId(int id) {
     	return this.dao.findByGameMasterId(id);
 	}
 
-	
 
-	
+private Reservation save(Reservation reservation, ReservationRequest request) {
+    StatutReservation oldStatus = reservation.getStatutReservation();
 
+    
+    reservation.setDatetimeDebut(request.getDatetimeDebut());
+    reservation.setDatetimeFin(request.getDatetimeFin());
+    reservation.setNbJoueur(request.getNbJoueur());
+    reservation.setTableJeu(this.tableJeuDao.getReferenceById(request.getTableJeuId()));
+    reservation.setJeu(this.jeuDao.getReferenceById(request.getJeuId()));
+
+    
+    Personne personne = this.personneDao.findById(request.getClientId())
+            .orElseThrow(IdNotFoundException::new);
+
+    if (!(personne instanceof Client)) {
+        throw new RuntimeException("L'id ne correspond pas à un client");
+    }
+    Client client = (Client) personne;  
+    reservation.setClient(client);
+
+   
+    if (request.getGameMasterId() != null) {
+        Personne emp = this.personneDao.findById(request.getGameMasterId())
+                .orElseThrow(IdNotFoundException::new);
+
+        if (!(emp instanceof Employe employe)) {
+            throw new RuntimeException("L'id ne correspond pas à un employé");
+        }
+
+        reservation.setGameMaster(employe);
+    } else {
+        reservation.setGameMaster(null);
+    }
+
+   
+    StatutReservation newStatus = request.getStatutReservation();
+    reservation.setStatutReservation(newStatus);
+
+   
+    Reservation saved = this.dao.save(reservation);
+
+    boolean justBecameConfirmed =
+            newStatus == StatutReservation.confirmée &&      
+            (oldStatus == null || oldStatus != StatutReservation.confirmée);
+
+    if (justBecameConfirmed) {
+        Integer currentPoints = client.getPointFidelite();
+        if (currentPoints == null) {
+            currentPoints = 0;
+        }
+       
+        client.setPointFidelite(currentPoints + 5); //+5 points pour une réservation confirmée
+        this.personneDao.save(client);
+    }
+
+    return saved;
+}
 }
