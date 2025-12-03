@@ -1,6 +1,6 @@
 package projet_groupe4.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,12 +15,15 @@ public class Client extends Personne {
 	@Column(name = "point_fidelite")
 
 	private int pointFidelite;
-	@Column(name = "date_creation")
+	@Column(name = "date_creation", columnDefinition = "TIMESTAMP(0)")
 
-	private LocalDate dateCreation;
-	@Column(name = "date_derniere_connexion")
+	private LocalDateTime dateCreation;
+	@Column(name = "date_derniere_connexion", columnDefinition = "TIMESTAMP(0)")
 
-	private LocalDate dateLastConnexion;
+	private LocalDateTime dateLastConnexion;
+
+	@Column(name = "date_derniere_reservation", columnDefinition = "TIMESTAMP(0)")
+	private LocalDateTime dateLastReservation;
 
 	@OneToMany(mappedBy = "client")
 	private List<Reservation> reservations = new ArrayList<Reservation>();
@@ -40,11 +43,13 @@ public class Client extends Personne {
 	}
 
 	public Client(Integer id, String nom, String prenom, String mail, String mdp, String telephone, int pointFidelite,
-			LocalDate dateCreation, LocalDate dateLastConnexion, String ville, String codePostale, String adresse) {
+			LocalDateTime dateCreation, LocalDateTime dateLastConnexion, LocalDateTime dateLastReservation,
+			String ville, String codePostale, String adresse) {
 		super(id, nom, prenom, mail, mdp, telephone);
 		this.pointFidelite = pointFidelite;
 		this.dateCreation = dateCreation;
 		this.dateLastConnexion = dateLastConnexion;
+		this.dateLastReservation = dateLastReservation;
 		this.ville = ville;
 		this.codePostale = codePostale;
 		this.adresse = adresse;
@@ -54,8 +59,8 @@ public class Client extends Personne {
 			String codePostale, String adresse) {
 		super(nom, prenom, mail, mdp, telephone);
 		this.pointFidelite = 0;
-		this.dateCreation = LocalDate.now();
-		this.dateLastConnexion = LocalDate.now();
+		this.dateCreation = LocalDateTime.now();
+		this.dateLastConnexion = LocalDateTime.now();
 		this.ville = ville;
 		this.codePostale = codePostale;
 		this.adresse = adresse;
@@ -70,19 +75,19 @@ public class Client extends Personne {
 		this.pointFidelite = pointFidelite;
 	}
 
-	public LocalDate getDateCreation() {
+	public LocalDateTime getDateCreation() {
 		return dateCreation;
 	}
 
-	public void setDateCreation(LocalDate dateCreation) {
+	public void setDateCreation(LocalDateTime dateCreation) {
 		this.dateCreation = dateCreation;
 	}
 
-	public LocalDate getDateLastConnexion() {
+	public LocalDateTime getDateLastConnexion() {
 		return dateLastConnexion;
 	}
 
-	public void setDateLastConnexion(LocalDate dateLastConnexion) {
+	public void setDateLastConnexion(LocalDateTime dateLastConnexion) {
 		this.dateLastConnexion = dateLastConnexion;
 	}
 
@@ -150,7 +155,7 @@ public class Client extends Personne {
 	}
 
 	public void mettreAJourConnexion() {
-		this.dateLastConnexion = LocalDate.now();
+		this.dateLastConnexion = LocalDateTime.now();
 	}
 
 	public int calculerPointsFidelite() {
@@ -221,5 +226,13 @@ public class Client extends Personne {
 				+ ", ville=" + ville
 				+ ", CP=" + codePostale
 				+ "]";
+	}
+
+	public LocalDateTime getDateDerniereReservation() {
+		return dateLastReservation;
+	}
+
+	public void setDateDerniereReservation(LocalDateTime dateLastReservation) {
+		this.dateLastReservation = dateLastReservation;
 	}
 }
