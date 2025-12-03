@@ -9,7 +9,7 @@ pipeline {
                     args '''
                         -v $HOME/.npm:/root/.npm:z
                         -u root
-                        --network devops
+                        --network projetJeux
                     '''
                     reuseNode true // Sans ça, il y aura un 2eme workspace
                 }
@@ -19,6 +19,7 @@ pipeline {
                 stage('Installation dependances') {
                     steps {
                         dir('projet-groupe4-angular') {
+                            sh 'ls -l'
                             sh 'npm install'
                         }
                     }
