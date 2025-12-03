@@ -3,10 +3,10 @@ pipeline {
 
     stages {
 	
-	stage('Start MySQL') {
+	/*stage('Start MySQL') {
             steps {
                 // Lancer MySQL avec Docker Compose
-                sh 'docker compose up -d mysql'
+                //sh 'docker compose up -d mysql'
 
                 // Attendre que MySQL soit prêt
                 sh '''
@@ -30,7 +30,7 @@ pipeline {
     steps {
         sh 'docker network ls'
     }
-}
+}*/
         stage('Maven package') {
             agent {
                 docker {
@@ -46,8 +46,9 @@ pipeline {
 
             steps {
                 dir('projet_groupe4') {
+                    withCredentials([string(credentialsId: 'TOKEN_BOOT', variable: 'SONAR_TOKEN')]) {
                         withSonarQubeEnv('SonarQube') {
-                            sh "mvn clean verify sonar:sonar -Dsonar.projectKey=projetJeux-boot  -Dsonar.projectName=projetJeux-boot"
+                            sh "mvn clean verify sonar:sonar -Dsonar.projectKey=projetJeux-boot  -Dsonar.projectName=projetJeux-boot -Dsonar.token=${SONAR_TOKEN}"
                         
                     }
                 }
