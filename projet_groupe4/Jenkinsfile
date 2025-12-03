@@ -33,8 +33,21 @@ pipeline {
 
             steps {
                 dir('projet_groupe4') {
-                    withSonarQubeEnv('SonarQube') {
-                        sh "mvn clean verify sonar:sonar -Dsonar.projectKey=projetJeux-boot -Dsonar.projectName='projetJeux-boot'"
+
+                    script {
+                        // Attendre que MySQL soit prêt
+                        retry(10) { // réessaye 10 fois
+                            sh '''
+                            echo "Waiting for MySQL..."
+                            mysqladmin ping -h jeux-mysql -uroot -proot --silent || exit 1
+                            '''
+                            sleep 5
+                        }
+
+                        // Lancer Maven + SonarQube
+                        withSonarQubeEnv('SonarQube') {
+                            sh "mvn clean verify sonar:sonar -Dsonar.projectKey=projetJeux-boot -Dsonar.projectName='projetJeux-boot'"
+                        }
                     }
                 }
             }
