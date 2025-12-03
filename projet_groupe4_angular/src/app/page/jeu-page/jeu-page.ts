@@ -57,13 +57,15 @@ export class JeuPage implements OnInit {
   }
 
   ngOnInit(): void {
-    this.jeuService.findAll().subscribe((data) => {
-      this.jeux = data;
-    });
+    this.loadJeux();
     const username = this.authService.username;
-
     this.clientService.findByUsername(username).subscribe((client) => {
       this.clientId = client.id;
+    });
+
+    this.filtreForm.valueChanges.subscribe(() => {
+      this.jeuSelectionne = undefined;
+      this.formEmpruntVisible = false;
     });
   }
   prev(): void {
@@ -163,7 +165,7 @@ export class JeuPage implements OnInit {
   }
 
   validerEmprunt() {
-    if (this.formEmprunt.invalid) return;
+    if (this.formEmprunt.invalid || !this.jeuSelectionne) return;
 
     const empruntData = this.formEmprunt.getRawValue();
 
@@ -177,11 +179,20 @@ export class JeuPage implements OnInit {
       undefined // _dateRetourReel
     );
 
-    this.empruntService.save(nouveauEmprunt);
+    this.empruntService.save(nouveauEmprunt).subscribe(() => {
+      alert('Emprunt créé avec succès !');
+      this.formEmpruntVisible = false;
+      this.jeuSelectionne = undefined;
+      this.filtreForm.reset();
+      this.loadJeux();
+    });
+  }
 
-    alert('Emprunt créé avec succès !');
-    this.formEmpruntVisible = false;
-    this.jeuSelectionne = undefined;
-    this.filtreForm.reset();
+  loadJeux() {
+    this.jeuService.findAll().subscribe((data) => {
+      this.jeux = data;
+      this.carouselIndex = 0;
+      this.scrollCarousel();
+    });
   }
 }
