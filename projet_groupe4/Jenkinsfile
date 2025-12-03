@@ -2,23 +2,22 @@ pipeline {
     agent any
 
     stages {
-	stage('Check MySQL') {
-    steps {
-        script {
-            // Teste la connexion MySQL sur le réseau Docker
-            sh '''
-            for i in {1..30}; do
-              if docker exec jeux-mysql mysqladmin ping -uroot -proot --silent; then
-                echo "MySQL is up!"
-                break
-              fi
-              echo "Waiting for MySQL..."
-              sleep 2
-            done
-            '''
+	stage('Clean MySQL volume') {
+            steps {
+                script {
+                    // Supprime le volume si il existe
+                    sh '''
+                    if docker volume inspect projetJeux-db-data >/dev/null 2>&1; then
+                        echo "Removing existing MySQL volume..."
+                        docker volume rm projetJeux-db-data
+                    else
+                        echo "No existing MySQL volume found."
+                    fi
+                    '''
+                }
+            }
         }
-    }
-}
+	
         stage('Maven package') {
             agent {
                 docker {
