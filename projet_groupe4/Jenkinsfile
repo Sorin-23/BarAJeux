@@ -35,7 +35,7 @@ pipeline {
                 dir('projet_groupe4') {
                     retry(3) { // 3 tentatives si MySQL pas encore prêt
                         withSonarQubeEnv('SonarQube') {
-                            sh "mvn clean verify sonar:sonar -Dsonar.projectKey=${SONAR_PROJECT_KEY} -Dsonar.projectName=projetJeux-boot'"
+                            sh "mvn clean verify sonar:sonar -Dsonar.projectKey=projetJeux-boot  -Dsonar.projectName=projetJeux-boot'"
                         }
                     }
                 }
