@@ -19,6 +19,7 @@ pipeline {
                 stage('Installation dependances') {
                     steps {
                         dir('projet-groupe4-angular') {
+                            sh 'ls -R $WORKSPACE'
                             sh 'ls -l'
                             sh 'npm install'
                         }
