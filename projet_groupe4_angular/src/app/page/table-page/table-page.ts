@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CarouselModule } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
@@ -31,7 +31,11 @@ import { EmployeService } from '../../service/employe-service';
 })
 export class TablePage implements OnInit {
   tables: TableJeu[] = [];
-  carouselIndex = 0;
+  @ViewChild('carrouselTables') carrouselTables!: ElementRef<HTMLDivElement>;
+  @ViewChild('carrouselJeux') carrouselJeux!: ElementRef<HTMLDivElement>;
+  carouselIndexTables = 0;
+  carouselIndexJeux = 0;
+  //carouselIndex = 0;
   filtreFormTable: FormGroup;
   filtreFormJeu: FormGroup;
   reservationForm: FormGroup;
@@ -102,8 +106,10 @@ export class TablePage implements OnInit {
       this.tableChoisi = false;
       this.tableSelectionne = undefined;
       this.jeux = [];
-      this.carouselIndex = 0;
-      this.scrollCarousel();
+      this.carouselIndexTables = 0;
+      this.carouselIndexJeux = 0;
+      this.scrollCarousel(this.carrouselTables.nativeElement, this.carouselIndexTables);
+      this.scrollCarousel(this.carrouselJeux.nativeElement, this.carouselIndexJeux);
       this.filtresAppliques = false;
     });
     this.reservationForm.valueChanges.subscribe((form) => {
@@ -117,7 +123,7 @@ export class TablePage implements OnInit {
       }
     });
   }
-  prev(): void {
+  /*prev(): void {
     if (this.carouselIndex > 0) {
       this.carouselIndex--;
     }
@@ -135,6 +141,30 @@ export class TablePage implements OnInit {
     const carousel = document.querySelector('.carrousel') as HTMLElement;
     const cardWidth = carousel.children[0]?.clientWidth || 0;
     carousel.scrollLeft = this.carouselIndex * (cardWidth + 20); // 20 = gap
+  }*/
+  prevTables() {
+    if (this.carouselIndexTables > 0) this.carouselIndexTables--;
+    this.scrollCarousel(this.carrouselTables.nativeElement, this.carouselIndexTables);
+  }
+
+  nextTables() {
+    if (this.carouselIndexTables < this.tables.length - 1) this.carouselIndexTables++;
+    this.scrollCarousel(this.carrouselTables.nativeElement, this.carouselIndexTables);
+  }
+
+  prevJeux() {
+    if (this.carouselIndexJeux > 0) this.carouselIndexJeux--;
+    this.scrollCarousel(this.carrouselJeux.nativeElement, this.carouselIndexJeux);
+  }
+
+  nextJeux() {
+    if (this.carouselIndexJeux < this.jeux.length - 1) this.carouselIndexJeux++;
+    this.scrollCarousel(this.carrouselJeux.nativeElement, this.carouselIndexJeux);
+  }
+
+  scrollCarousel(carousel: HTMLElement, index: number) {
+    const cardWidth = carousel.children[0]?.clientWidth || 0;
+    carousel.scrollLeft = index * (cardWidth + 20); // 20 = gap
   }
 
   appliquerFiltreTable() {
@@ -299,8 +329,10 @@ export class TablePage implements OnInit {
     });
 
     // reset carousel après filtrage
-    this.carouselIndex = 0;
-    this.scrollCarousel();
+    this.carouselIndexTables = 0;
+    this.carouselIndexJeux = 0;
+    this.scrollCarousel(this.carrouselTables.nativeElement, this.carouselIndexTables);
+    this.scrollCarousel(this.carrouselJeux.nativeElement, this.carouselIndexJeux);
   }
 
   choisirJeu(jeu: Jeu) {
@@ -362,6 +394,7 @@ export class TablePage implements OnInit {
     this.jeuChoisi = false;
     this.jeuSelectionne = undefined;
     this.filtreFormTable.reset();
+    this.loadTables();
   }
   private combineDateTime(dateStr: string, timeStr: string): Date {
     const [year, month, day] = dateStr.split('-').map(Number);
@@ -426,5 +459,25 @@ export class TablePage implements OnInit {
     } else {
       this.gameMastersDispo = [];
     }
+  }
+
+  loadTables() {
+    this.tableJeuService.findAll().subscribe((data) => {
+      this.tables = data;
+      this.carouselIndexTables = 0;
+      this.carouselIndexJeux = 0;
+      this.scrollCarousel(this.carrouselTables.nativeElement, this.carouselIndexTables);
+      this.scrollCarousel(this.carrouselJeux.nativeElement, this.carouselIndexJeux);
+    });
+  }
+  resetFiltreTable() {
+    this.filtreFormTable.reset();
+    this.tableChoisi = false;
+    this.tableSelectionne = undefined;
+    this.jeux = [];
+    this.carouselIndexTables = 0;
+    this.carouselIndexJeux = 0;
+    this.filtresAppliques = false;
+    this.loadTables();
   }
 }

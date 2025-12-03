@@ -29,9 +29,9 @@
 <section id="resultat_filtre" class="block_white">
   <h2>🎲 Nos tables</h2>
   <div class="carrousel-container">
-    <button class="nav-btn prev" (click)="prev()">&#10094;</button>
+    <button class="nav-btn prev" (click)="prevTables()">&#10094;</button>
 
-    <div class="carrousel">
+    <div class="carrousel" #carrouselTables>
       <div class="carte-table" *ngFor="let table of tables">
         <img [src]="'assets/images/table/' + table.imgUrl" [alt]="table.nomTable" />
         <div class="carte-info">
@@ -44,7 +44,7 @@
       </div>
     </div>
     <br />
-    <button class="nav-btn next" (click)="next()">&#10095;</button>
+    <button class="nav-btn next" (click)="nextTables()">&#10095;</button>
   </div>
 </section>
 
@@ -63,9 +63,9 @@
 <section id="resultat_filtre" class="block_white" *ngIf="tableChoisi">
   <h2>🎲 Nos jeux</h2>
   <div class="carrousel-container">
-    <button class="nav-btn prev" (click)="prev()">&#10094;</button>
+    <button class="nav-btn prev" (click)="prevJeux()">&#10094;</button>
 
-    <div class="carrousel">
+    <div class="carrousel" #carrouselJeux>
       <div class="carte-jeu" *ngFor="let jeu of jeux">
         <img [src]="'assets/images/jeux/' + jeu.imgURL" [alt]="jeu.nom" />
         <div class="carte-info">
@@ -82,7 +82,7 @@
       </div>
     </div>
 
-    <button class="nav-btn next" (click)="next()">&#10095;</button>
+    <button class="nav-btn next" (click)="nextJeux()">&#10095;</button>
   </div>
 </section>
 
@@ -121,6 +121,7 @@
     </div>
     <div class="form-group">
       <button type="submit" class="btn enregistrer">Réserver</button>
+      <button type="button" (click)="resetFiltreTable()" class="btn annuler">Annuler</button>
     </div>
   </form>
 </section>
