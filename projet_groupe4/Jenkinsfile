@@ -3,15 +3,27 @@ pipeline {
 
     stages {
 	
-	stage('Start MySQL & Boot') {
+	stage('Start MySQL') {
             steps {
-                 // dossier où est ton docker-compose.yml
-                    // Lancer MySQL et Boot
-                    sh 'docker compose up -d mysql boot'
-                    
-                    // Petite pause pour s'assurer que MySQL est prêt (10s)
-                    sh 'echo "Waiting 10s for MySQL to be ready..." && sleep 10'
-                
+                // Lancer MySQL avec Docker Compose
+                sh 'docker compose up -d mysql'
+
+                // Attendre que MySQL soit prêt
+                sh '''
+                echo "Waiting for MySQL to be ready..."
+                MAX_RETRIES=30
+                COUNT=0
+                until docker exec jeux-mysql mysql -uroot -proot -e "SELECT 1;" >/dev/null 2>&1
+                do
+                    COUNT=$((COUNT+1))
+                    if [ $COUNT -ge $MAX_RETRIES ]; then
+                        echo "MySQL did not start in time!"
+                        exit 1
+                    fi
+                    sleep 2
+                done
+                echo "MySQL is ready!"
+                '''
             }
         }
         stage('Maven package') {
