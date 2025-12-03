@@ -25,8 +25,9 @@ services:
     container_name: projetJeux-boot
 
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: projetJeux
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/projetJeux
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
 
     depends_on:
       mysql:
