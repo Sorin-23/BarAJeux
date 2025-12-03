@@ -77,7 +77,7 @@
               <button
                 class="btn btn-validate"
                 (click)="saveAvis(r)"
-                [disabled]="!r.avisModifiable"
+                *ngIf="r.avisModifiable"
               >
                 ✔️
               </button>

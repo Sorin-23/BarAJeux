@@ -34,6 +34,7 @@ export class JeuPage implements OnInit {
   formEmprunt: FormGroup;
   clientId?: any;
   formEmpruntVisible = false;
+  today: string = new Date().toISOString().substring(0, 10);
 
   constructor(
     private jeuService: JeuService,

@@ -39,14 +39,14 @@ export class TablePage implements OnInit {
   jeuChoisi = false;
   jeux: Jeu[] = [];
   tableSelectionne?: TableJeu;
-  jeuSelectionne?:Jeu;
+  jeuSelectionne?: Jeu;
   clientId?: any;
   filtresAppliques = false;
   today: string = new Date().toISOString().split('T')[0]; // yyyy-mm-dd
-  dateDebut: Date=new Date();  // stocke la date/heure d'arrivée
-  dateFin: Date=new Date();
+  dateDebut: Date = new Date(); // stocke la date/heure d'arrivée
+  dateFin: Date = new Date();
   gameMasters: Employe[] = [];
-  reservations: Reservation[]=[];
+  reservations: Reservation[] = [];
   gameMastersDispo: Employe[] = [];
 
   constructor(
@@ -70,9 +70,8 @@ export class TablePage implements OnInit {
       nbJoueur: new FormControl(null, Validators.required),
       dateDebutAffichage: new FormControl(null, Validators.required), // string pour <input>
       dateFinAffichage: new FormControl(null, Validators.required),
-      avecGameMaster: new FormControl(false),  
-      gameMasterId: new FormControl(null)
-      
+      avecGameMaster: new FormControl(false),
+      gameMasterId: new FormControl(null),
     });
   }
 
@@ -90,15 +89,15 @@ export class TablePage implements OnInit {
     });
 
     this.employeService.getAllGameMasters().subscribe((gms) => {
-    this.gameMasters = gms;
-    console.log('Tous les Game Masters:', this.gameMasters);
-  });
+      this.gameMasters = gms;
+      console.log('Tous les Game Masters:', this.gameMasters);
+    });
 
-  // Récupérer toutes les réservations pour calculer les indisponibilités
-  this.reservationService.findAll().subscribe((res) => {
-    this.reservations = res;
-    console.log('Toutes les réservations:', this.reservations);
-  });
+    // Récupérer toutes les réservations pour calculer les indisponibilités
+    this.reservationService.findAll().subscribe((res) => {
+      this.reservations = res;
+      console.log('Toutes les réservations:', this.reservations);
+    });
     this.filtreFormTable.valueChanges.subscribe(() => {
       this.tableChoisi = false;
       this.tableSelectionne = undefined;
@@ -107,15 +106,16 @@ export class TablePage implements OnInit {
       this.scrollCarousel();
       this.filtresAppliques = false;
     });
-    this.reservationForm.valueChanges.subscribe(form => {
-    if (form.avecGameMaster && form.dateDebutAffichage && form.dateFinAffichage) {
-      this.updateGameMastersDispo(new Date(form.dateDebutAffichage), new Date(form.dateFinAffichage));
-    } else {
-      this.gameMastersDispo = [];
-    }
-  });
-    
-    
+    this.reservationForm.valueChanges.subscribe((form) => {
+      if (form.avecGameMaster && form.dateDebutAffichage && form.dateFinAffichage) {
+        this.updateGameMastersDispo(
+          new Date(form.dateDebutAffichage),
+          new Date(form.dateFinAffichage)
+        );
+      } else {
+        this.gameMastersDispo = [];
+      }
+    });
   }
   prev(): void {
     if (this.carouselIndex > 0) {
@@ -152,6 +152,27 @@ export class TablePage implements OnInit {
       return;
     }
 
+    const now = new Date();
+
+    if (dateChoisie.getTime() === today.getTime()) {
+      const heureActuelle = now.getHours() * 60 + now.getMinutes();
+
+      const [hA, mA] = filtre.heureArrivee.split(':').map(Number);
+      const arriveeMin = hA * 60 + mA;
+
+      if (arriveeMin < heureActuelle) {
+        alert("L'heure d'arrivée doit être supérieure à l'heure actuelle.");
+        return;
+      }
+
+      const [hD, mD] = filtre.heureDepart.split(':').map(Number);
+      const departMin = hD * 60 + mD;
+
+      if (departMin <= heureActuelle) {
+        alert("L'heure de départ doit être supérieure à l'heure actuelle.");
+        return;
+      }
+    }
 
     const [hArrivee, mArrivee] = filtre.heureArrivee.split(':').map(Number);
     const [hDepart, mDepart] = filtre.heureDepart.split(':').map(Number);
@@ -167,9 +188,6 @@ export class TablePage implements OnInit {
       alert("L'heure de départ doit être supérieure à l'heure d'arrivée !");
       return;
     }
-
-
-
 
     //convertir la date et heures du formulaire en type date-heure
     let filtreDebut: Date | null = null;
@@ -230,7 +248,6 @@ export class TablePage implements OnInit {
     this.filtresAppliques = true;
   }
 
-
   choisirTable(tableJeu: TableJeu) {
     if (this.filtreFormTable.invalid || !this.filtresAppliques) {
       alert('Veuillez appliquer et remplir tous les champs avant de filtrer.');
@@ -246,20 +263,23 @@ export class TablePage implements OnInit {
     const [hDepart, mDepart] = filtreTable.heureDepart.split(':').map(Number);
     dateFin.setHours(hDepart, mDepart, 0, 0);*/
 
-    this.jeuService.findDisponibles(this.dateDebut.toISOString().substring(0, 10)).subscribe((data) => {
-      this.jeux = data.filter((jeu) => {
-        let ok = true;
-        // nbPersonnes choisi sur table
-        ok =
-          ok &&
-          jeu.nbJoueurMinimum <= filtreTable.nbPersonnes &&
-          jeu.nbJoueurMaximum >= filtreTable.nbPersonnes;
+    this.jeuService
+      .findDisponibles(this.dateDebut.toISOString().substring(0, 10))
+      .subscribe((data) => {
+        this.jeux = data.filter((jeu) => {
+          let ok = true;
+          // nbPersonnes choisi sur table
+          ok =
+            ok &&
+            jeu.nbJoueurMinimum <= filtreTable.nbPersonnes &&
+            jeu.nbJoueurMaximum >= filtreTable.nbPersonnes;
 
-        const dureeReservation = (this.dateFin.getTime() - this.dateDebut.getTime()) / (1000 * 60);
-        ok = ok && jeu.duree <= dureeReservation;
-        return ok;
+          const dureeReservation =
+            (this.dateFin.getTime() - this.dateDebut.getTime()) / (1000 * 60);
+          ok = ok && jeu.duree <= dureeReservation;
+          return ok;
+        });
       });
-    });
 
     this.tableSelectionne = tableJeu;
     this.tableChoisi = true;
@@ -284,19 +304,17 @@ export class TablePage implements OnInit {
   }
 
   choisirJeu(jeu: Jeu) {
-
-
     this.jeuSelectionne = jeu;
     this.jeuChoisi = true;
-    console.log("la date du jeu ", this.dateFin)
+    console.log('la date du jeu ', this.dateFin);
 
     this.reservationForm.patchValue({
-    nbJoueur: this.filtreFormTable.value.nbPersonnes,
-    dateDebutAffichage: this.toInputFormat(this.dateDebut),
-    dateFinAffichage: this.toInputFormat(this.dateFin),
+      nbJoueur: this.filtreFormTable.value.nbPersonnes,
+      dateDebutAffichage: this.toInputFormat(this.dateDebut),
+      dateFinAffichage: this.toInputFormat(this.dateFin),
     });
 
-// Met à jour les GM disponibles si la checkbox est cochée
+    // Met à jour les GM disponibles si la checkbox est cochée
     this.updateDispoIfNeeded();
   }
 
@@ -304,24 +322,24 @@ export class TablePage implements OnInit {
     if (this.reservationForm.invalid || !this.tableSelectionne || !this.jeuSelectionne) return;
 
     const form = this.reservationForm.value;
-    console.log("Date debut AAAA", form.dateDebutAffichage);
-    console.log("type date debut ",this.dateDebut);
-    console.log("table jeu ",this.tableSelectionne);
-    console.log("Nb de joueur ",form.nbJoueur);
-    console.log("client id ",this.clientId);
-    console.log("Le jeu ",this.jeuSelectionne);
+    console.log('Date debut AAAA', form.dateDebutAffichage);
+    console.log('type date debut ', this.dateDebut);
+    console.log('table jeu ', this.tableSelectionne);
+    console.log('Nb de joueur ', form.nbJoueur);
+    console.log('client id ', this.clientId);
+    console.log('Le jeu ', this.jeuSelectionne);
 
     let gameMasterSelectionne: Employe | null = null;
     if (form.avecGameMaster) {
-  const gmId = Number(form.gameMasterId); // <-- conversion
-  gameMasterSelectionne = this.gameMastersDispo.find(gm => gm.id === gmId) || null;
+      const gmId = Number(form.gameMasterId); // <-- conversion
+      gameMasterSelectionne = this.gameMastersDispo.find((gm) => gm.id === gmId) || null;
 
-  if (!gameMasterSelectionne) {
-    alert("Veuillez sélectionner un Game Master valide !");
-    return;
-  }
-}
-    console.log("AAAAA",form.avecGameMaster);
+      if (!gameMasterSelectionne) {
+        alert('Veuillez sélectionner un Game Master valide !');
+        return;
+      }
+    }
+    console.log('AAAAA', form.avecGameMaster);
 
     const reservationDto = new Reservation(
       0,
@@ -330,12 +348,12 @@ export class TablePage implements OnInit {
       form.nbJoueur,
       this.tableSelectionne,
       this.jeuSelectionne,
-      StatutReservation.CONFIRMEE, 
-      {id:this.clientId} as any, 
-      gameMasterSelectionne! 
+      StatutReservation.CONFIRMEE,
+      { id: this.clientId } as any,
+      gameMasterSelectionne!
     );
-    console.log("Reservation : ",reservationDto);
-    console.log(reservationDto instanceof Reservation); 
+    console.log('Reservation : ', reservationDto);
+    console.log(reservationDto instanceof Reservation);
 
     this.reservationService.save(reservationDto);
     alert('Réservation créée avec succès !');
@@ -344,67 +362,69 @@ export class TablePage implements OnInit {
     this.jeuChoisi = false;
     this.jeuSelectionne = undefined;
     this.filtreFormTable.reset();
-}
-private combineDateTime(dateStr: string, timeStr: string): Date {
-  const [year, month, day] = dateStr.split('-').map(Number);
-  const [hours, minutes] = timeStr.split(':').map(Number);
+  }
+  private combineDateTime(dateStr: string, timeStr: string): Date {
+    const [year, month, day] = dateStr.split('-').map(Number);
+    const [hours, minutes] = timeStr.split(':').map(Number);
 
-  // mois -1 car Date utilise 0=janvier
-  return new Date(year, month - 1, day, hours, minutes, 0);
-}
+    // mois -1 car Date utilise 0=janvier
+    return new Date(year, month - 1, day, hours, minutes, 0);
+  }
 
-private toInputFormat(date: Date): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
+  private toInputFormat(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
 
-  return `${year}-${month}-${day} ${hours}:${minutes}`; // <-- espace ici
-}
+    return `${year}-${month}-${day} ${hours}:${minutes}`; // <-- espace ici
+  }
 
-getGameMastersDisponibles(dateDebut:Date, dateFin:Date): Employe[] {
-  if (!this.gameMasters || !this.reservations) return [];
+  getGameMastersDisponibles(dateDebut: Date, dateFin: Date): Employe[] {
+    if (!this.gameMasters || !this.reservations) return [];
 
-  return this.gameMasters.filter(gm => {
-    // Vérifie si ce game master est libre pendant le créneau choisi
-    const estOccupe = this.reservations.some(res => {
-      if (!res.gameMaster) return false; // pas de GM affecté
-      if (res.gameMaster.id !== gm.id) return false;
+    return this.gameMasters.filter((gm) => {
+      // Vérifie si ce game master est libre pendant le créneau choisi
+      const estOccupe = this.reservations.some((res) => {
+        if (!res.gameMaster) return false; // pas de GM affecté
+        if (res.gameMaster.id !== gm.id) return false;
 
-      const resDebut = new Date(res.datetimeDebut);
-      const resFin = new Date(res.datetimeFin);
+        const resDebut = new Date(res.datetimeDebut);
+        const resFin = new Date(res.datetimeFin);
 
-      // Vérifie le chevauchement
-      return dateDebut < resFin && dateFin > resDebut;
+        // Vérifie le chevauchement
+        return dateDebut < resFin && dateFin > resDebut;
+      });
+
+      return !estOccupe; // on garde ceux qui ne sont pas occupés
+    });
+  }
+
+  updateGameMastersDispo(dateDebut: Date, dateFin: Date) {
+    this.gameMastersDispo = this.gameMasters.filter((gm) => {
+      const estOccupe = this.reservations.some(
+        (res) =>
+          res.gameMaster?.id === gm.id &&
+          dateDebut < new Date(res.datetimeFin) &&
+          dateFin > new Date(res.datetimeDebut)
+      );
+      return !estOccupe;
     });
 
-    return !estOccupe; // on garde ceux qui ne sont pas occupés
-  });
-}
-
-updateGameMastersDispo(dateDebut: Date, dateFin: Date) {
-  this.gameMastersDispo = this.gameMasters.filter(gm => {
-    const estOccupe = this.reservations.some(res => 
-      res.gameMaster?.id === gm.id &&
-      dateDebut < new Date(res.datetimeFin) &&
-      dateFin > new Date(res.datetimeDebut)
-    );
-    return !estOccupe;
-  });
-
-  if (this.gameMastersDispo.length === 0) {
-    console.warn('Aucun Game Master disponible pour ce créneau !');
+    if (this.gameMastersDispo.length === 0) {
+      console.warn('Aucun Game Master disponible pour ce créneau !');
+    }
   }
-}
-updateDispoIfNeeded() {
-  const form = this.reservationForm.value;
-  if (form.avecGameMaster && form.dateDebutAffichage && form.dateFinAffichage) {
-    this.updateGameMastersDispo(new Date(form.dateDebutAffichage), new Date(form.dateFinAffichage));
-  } else {
-    this.gameMastersDispo = [];
+  updateDispoIfNeeded() {
+    const form = this.reservationForm.value;
+    if (form.avecGameMaster && form.dateDebutAffichage && form.dateFinAffichage) {
+      this.updateGameMastersDispo(
+        new Date(form.dateDebutAffichage),
+        new Date(form.dateFinAffichage)
+      );
+    } else {
+      this.gameMastersDispo = [];
+    }
   }
-}
-
-
 }
