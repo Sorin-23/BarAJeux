@@ -28,14 +28,14 @@ pipeline {
                                     steps {
                                         dir('projet_groupe4_angular') {
                                             // Injection sécurisée du token SonarQube depuis Jenkins Credentials
-                                            //withCredentials([string(credentialsId: 'SONAR_AUTH_TOKEN', variable: 'SONAR_TOKEN')]) {-Dsonar.login=${SONAR_TOKEN}
+                                            withCredentials([string(credentialsId: 'SONAR_AUTH_TOKEN_ANGULAR', variable: 'SONAR_TOKEN')]) {-Dsonar.login=${SONAR_TOKEN}
                                                 withSonarQubeEnv('SonarQube') {
                                                     sh """
-                                                        ./node_modules/.bin/sonar-scanner -Dsonar.projectKey=projetJeux-angular -Dsonar.projectName=projetJeux-angular 
+                                                        ./node_modules/.bin/sonar-scanner -Dsonar.projectKey=projetJeux-angular -Dsonar.projectName=projetJeux-angular -Dsonar.login=${SONAR_TOKEN}
                                                     """
                                                 }
                                             }
-                                        //}
+                                        }
                                     }
                                 }
 
