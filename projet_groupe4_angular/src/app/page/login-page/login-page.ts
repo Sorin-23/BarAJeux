@@ -23,6 +23,8 @@ export class LoginPage implements OnInit {
   protected usernameCtrl!: FormControl;
   protected passwordCtrl!: FormControl;
 
+  protected passwordVisible: boolean = false;
+
   constructor(
     private authService: AuthService,
     private formBuilder: FormBuilder,
@@ -42,6 +44,10 @@ export class LoginPage implements OnInit {
     });
   }
 
+  togglePasswordVisibility() {
+    this.passwordVisible = !this.passwordVisible;
+  }
+
   public async connecter() {
     try {
       // 1. Authenticate with the backend
@@ -54,18 +60,15 @@ export class LoginPage implements OnInit {
       if (response && response.token) {
         localStorage.setItem('token', response.token);
       }
-      
-      
+
       localStorage.setItem('username', this.usernameCtrl.value);
 
-     
       // Removing window.location.reload() prevents variables from being wiped out
       this.router.navigate(['/home']).then(() => {
-    window.location.reload(); // reload uniquement après navigation
-  });
-      
+        window.location.reload(); // reload uniquement après navigation
+      });
     } catch (error) {
-      console.error("Login failed:", error);
+      console.error('Login failed:', error);
       this.loginError = true;
     }
   }

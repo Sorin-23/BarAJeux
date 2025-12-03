@@ -32,6 +32,8 @@ export class InscriptionPage implements OnInit {
   protected codePostaleCtrl!: FormControl;
   protected adresseCtrl!: FormControl;
 
+  protected passwordVisible: boolean = false;
+
   constructor(
     private personneService: PersonneService,
     private formBuilder: FormBuilder,
@@ -69,6 +71,11 @@ export class InscriptionPage implements OnInit {
       }
     );
   }
+
+  togglePasswordVisibility() {
+    this.passwordVisible = !this.passwordVisible;
+  }
+
   public async connecter() {
     try {
       await this.personneService.subscribe(

@@ -27,8 +27,7 @@
 }
 
 /* Titres des cartes */
-#connexion_main .card_title,
-#inscription_main .card_title {
+#connexion_main .card_title {
   position: absolute;
   top: -0.9rem;
   left: 50%;
@@ -44,8 +43,7 @@
 }
 
 /* Formulaires */
-#connexion_main form,
-#inscription_main form {
+#connexion_main form {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -53,26 +51,56 @@
   width: 100%;
 }
 
-#connexion_main form label,
-#inscription_main form label {
-  align-self: flex-start;
-  margin-left: 1rem;
+#connexion_main form .form-field {
+  width: 80%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+#connexion_main form label {
   font-weight: bold;
   color: var(--couleur-principale);
 }
 
-#connexion_main form input,
-#inscription_main form input {
-  width: 80%;
+#connexion_main form .form-field > input:not([type='submit']) {
+  width: 100%;
   padding: 0.5rem 0.75rem;
   border-radius: 8px;
   border: 2px solid var(--couleur-tertiaire);
   font-size: 1rem;
+  box-sizing: border-box;
+}
+
+#connexion_main form .input-with-icon {
+  position: relative;
+  width: 100%;
+}
+
+#connexion_main form .input-with-icon input {
+  width: 100%;
+  padding: 0.5rem 2.1rem 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: 2px solid var(--couleur-tertiaire);
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+#connexion_main form .input-with-icon i {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: var(--couleur-principale);
+  font-size: 1.25rem;
+  padding: 0.25rem 0 0.25rem 0.5rem;
+  border-left: 1px solid var(--couleur-tertiaire);
 }
 
 /* Boutons */
-#connexion_main .btn,
-#inscription_main .btn {
+#connexion_main .btn {
   width: 48%;
   font-weight: bold;
   padding: 0.5rem 0;
@@ -83,12 +111,11 @@
   font-size: 1rem;
   cursor: pointer;
   text-align: center;
-  text-decoration: none; /* pour le <a> */
+  text-decoration: none;
   display: inline-block;
 }
 
-#connexion_main .btn:hover,
-#inscription_main .btn:hover {
+#connexion_main .btn:hover {
   background-color: var(--couleur-tertiaire);
   color: var(--couleur-principale);
 }
