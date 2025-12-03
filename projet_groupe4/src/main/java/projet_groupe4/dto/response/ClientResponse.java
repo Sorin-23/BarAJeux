@@ -1,6 +1,8 @@
 package projet_groupe4.dto.response;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import projet_groupe4.model.Client;
 
@@ -22,9 +24,14 @@ public class ClientResponse {
 
     private int pointFidelite;
 
-    private LocalDate dateCreation;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime dateCreation;
 
-    private LocalDate dateLastConnexion;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime dateLastConnexion;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime dateLastReservation;
 
     private String ville;
 
@@ -40,19 +47,19 @@ public class ClientResponse {
         this.pointFidelite = pointFidelite;
     }
 
-    public LocalDate getDateCreation() {
+    public LocalDateTime getDateCreation() {
         return dateCreation;
     }
 
-    public void setDateCreation(LocalDate dateCreation) {
+    public void setDateCreation(LocalDateTime dateCreation) {
         this.dateCreation = dateCreation;
     }
 
-    public LocalDate getDateLastConnexion() {
+    public LocalDateTime getDateLastConnexion() {
         return dateLastConnexion;
     }
 
-    public void setDateLastConnexion(LocalDate dateLastConnexion) {
+    public void setDateLastConnexion(LocalDateTime dateLastConnexion) {
         this.dateLastConnexion = dateLastConnexion;
     }
 
@@ -140,11 +147,20 @@ public class ClientResponse {
         resp.setPointFidelite(client.getPointFidelite());
         resp.setDateCreation(client.getDateCreation());
         resp.setDateLastConnexion(client.getDateLastConnexion());
+        resp.setDateLastReservation(client.getDateDerniereReservation());
         resp.setVille(client.getVille());
         resp.setCodePostale(client.getCodePostale());
         resp.setAdresse(client.getAdresse());
 
         return resp;
+    }
+
+    public LocalDateTime getDateLastReservation() {
+        return dateLastReservation;
+    }
+
+    public void setDateLastReservation(LocalDateTime dateLastReservation) {
+        this.dateLastReservation = dateLastReservation;
     }
 
 }

@@ -1,6 +1,6 @@
 package projet_groupe4.rest;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
@@ -39,8 +39,8 @@ public class ClientRestControllerTest {
     private static final String CLIENT_MDP = "mdp";
     private static final String CLIENT_TEL = "00000000";
     private static final int CLIENT_POINT_FDT = 10;
-    private static final LocalDate CLIENT_CREATION = LocalDate.now();
-    private static final LocalDate CLIENT_LAST_CONNEX = LocalDate.now();
+    private static final LocalDateTime CLIENT_CREATION = LocalDateTime.now();
+    private static final LocalDateTime CLIENT_LAST_CONNEX = LocalDateTime.now();
     private static final String CLIENT_VILLE = "Nice";
     private static final String CLIENT_CP = "06";
     private static final String CLIENT_ADRESSE = "1 rue de Nice";
@@ -456,16 +456,16 @@ public class ClientRestControllerTest {
             int pointFidelite,
             String creation, String connexion, String ville, String cp, String adresse) throws Exception {
         // given
-        LocalDate dateCreation = null;
-        LocalDate dateConnexion = null;
+        LocalDateTime dateCreation = null;
+        LocalDateTime dateConnexion = null;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         if (creation != null && !creation.isBlank()) {
-            dateCreation = LocalDate.parse(creation, formatter);
+            dateCreation = LocalDateTime.parse(creation, formatter);
         }
 
         if (connexion != null && !connexion.isBlank()) {
-            dateConnexion = LocalDate.parse(connexion, formatter);
+            dateConnexion = LocalDateTime.parse(connexion, formatter);
         }
         // when
         ResultActions result = this.createAndPost(nom, prenom, mail, tel, pointFidelite, dateCreation,
@@ -479,7 +479,8 @@ public class ClientRestControllerTest {
 
     private ResultActions createAndPost(String nom, String prenom, String mail, String tel,
             int pointFidelite,
-            LocalDate dateCreation, LocalDate dateConnexion, String ville, String cp, String adresse) throws Exception {
+            LocalDateTime dateCreation, LocalDateTime dateConnexion, String ville, String cp, String adresse)
+            throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
 
@@ -595,16 +596,16 @@ public class ClientRestControllerTest {
     void shouldUpdateStatusBadRequest(String nom, String prenom, String mail, String tel, int pointFidelite,
             String creation, String connexion, String ville, String cp, String adresse) throws Exception {
         // given
-        LocalDate dateCreation = null;
-        LocalDate dateConnexion = null;
+        LocalDateTime dateCreation = null;
+        LocalDateTime dateConnexion = null;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         if (creation != null && !creation.isBlank()) {
-            dateCreation = LocalDate.parse(creation, formatter);
+            dateCreation = LocalDateTime.parse(creation, formatter);
         }
 
         if (connexion != null && !connexion.isBlank()) {
-            dateConnexion = LocalDate.parse(connexion, formatter);
+            dateConnexion = LocalDateTime.parse(connexion, formatter);
         }
 
         // when
@@ -619,7 +620,8 @@ public class ClientRestControllerTest {
 
     private ResultActions updateAndPut(String nom, String prenom, String mail, String tel,
             int pointFidelite,
-            LocalDate dateCreation, LocalDate dateConnexion, String ville, String cp, String adresse) throws Exception {
+            LocalDateTime dateCreation, LocalDateTime dateConnexion, String ville, String cp, String adresse)
+            throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
 

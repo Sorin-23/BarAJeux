@@ -1,6 +1,6 @@
 package projet_groupe4.service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,59 +69,64 @@ public class PersonneService {
 			throw new IllegalArgumentException("Type de requête inconnu pour la création d'une personne");
 		}
 	}
-	/* *
+
+	/*
+	 * *
+	 * public Personne update(Integer id, Object request) {
+	 * if (request instanceof SubscribeClientRequest clientRequest) {
+	 * Client client = this.getClientById(id).orElseThrow(IdNotFoundException::new);
+	 * return saveClient(client, clientRequest);
+	 * }
+	 * 
+	 * else if (request instanceof SubscribeEmployeRequest employeRequest) {
+	 * Employe employe =
+	 * this.getEmployeById(id).orElseThrow(IdNotFoundException::new);
+	 * return saveEmploye(employe, employeRequest);
+	 * } else {
+	 * 
+	 * throw new
+	 * IllegalArgumentException("Type de requête non supporté pour l'update");
+	 * }
+	 * }
+	 */
+	private Client updateClient(Client client, UpdateClientRequest request) {
+		// On met à jour uniquement les infos de profil modifiables depuis la page
+		// client
+		client.setNom(request.getNom());
+		client.setPrenom(request.getPrenom());
+		client.setMail(request.getMail());
+		client.setTelephone(request.getTelephone());
+		client.setVille(request.getVille());
+		client.setCodePostale(request.getCodePostale());
+		client.setAdresse(request.getAdresse());
+
+		// On NE touche PAS au mot de passe, ni aux dates ici
+		return this.dao.save(client);
+	}
+
 	public Personne update(Integer id, Object request) {
+		// 1. Nouveau cas : mise à jour du profil client avec UpdateClientRequest
+		if (request instanceof UpdateClientRequest updateReq) {
+			Client client = this.getClientById(id).orElseThrow(IdNotFoundException::new);
+			return updateClient(client, updateReq);
+		}
+
+		// 2. Ancien cas : inscription / mise à jour complète avec
+		// SubscribeClientRequest
 		if (request instanceof SubscribeClientRequest clientRequest) {
 			Client client = this.getClientById(id).orElseThrow(IdNotFoundException::new);
 			return saveClient(client, clientRequest);
 		}
 
-		else if (request instanceof SubscribeEmployeRequest employeRequest) {
+		// 3. Cas employé inchangé
+		if (request instanceof SubscribeEmployeRequest employeRequest) {
 			Employe employe = this.getEmployeById(id).orElseThrow(IdNotFoundException::new);
 			return saveEmploye(employe, employeRequest);
-		} else {
-
-			throw new IllegalArgumentException("Type de requête non supporté pour l'update");
 		}
-	}*/
-	private Client updateClient(Client client, UpdateClientRequest request) {
-    // On met à jour uniquement les infos de profil modifiables depuis la page client
-    client.setNom(request.getNom());
-    client.setPrenom(request.getPrenom());
-    client.setMail(request.getMail());
-    client.setTelephone(request.getTelephone());
-    client.setVille(request.getVille());
-    client.setCodePostale(request.getCodePostale());
-    client.setAdresse(request.getAdresse());
 
-    // On NE touche PAS au mot de passe, ni aux dates ici
-    return this.dao.save(client);
-}
-
-
-	public Personne update(Integer id, Object request) {
-    // 1. Nouveau cas : mise à jour du profil client avec UpdateClientRequest
-    if (request instanceof UpdateClientRequest updateReq) {
-        Client client = this.getClientById(id).orElseThrow(IdNotFoundException::new);
-        return updateClient(client, updateReq);
-    }
-
-    // 2. Ancien cas : inscription / mise à jour complète avec SubscribeClientRequest
-    if (request instanceof SubscribeClientRequest clientRequest) {
-        Client client = this.getClientById(id).orElseThrow(IdNotFoundException::new);
-        return saveClient(client, clientRequest);
-    }
-
-    // 3. Cas employé inchangé
-    if (request instanceof SubscribeEmployeRequest employeRequest) {
-        Employe employe = this.getEmployeById(id).orElseThrow(IdNotFoundException::new);
-        return saveEmploye(employe, employeRequest);
-    }
-
-    // 4. Fallback
-    throw new IllegalArgumentException("Type de requête non supporté pour l'update");
-}
-
+		// 4. Fallback
+		throw new IllegalArgumentException("Type de requête non supporté pour l'update");
+	}
 
 	public Personne updateInfosConnect(Integer id, String login, String password) {
 		Personne personne = this.dao.findById(id).orElseThrow(IdNotFoundException::new);
@@ -171,8 +176,8 @@ public class PersonneService {
 		client.setVille(request.getVille());
 		client.setCodePostale(request.getCodePostale());
 		client.setAdresse(request.getAdresse());
-		client.setDateCreation(LocalDate.now());
-		client.setDateLastConnexion(LocalDate.now());
+		client.setDateCreation(LocalDateTime.now());
+		client.setDateLastConnexion(LocalDateTime.now());
 
 		return this.dao.save(client);
 	}
@@ -189,5 +194,24 @@ public class PersonneService {
 		return this.dao.save(employe);
 	}
 
+	public void updateLastConnexion(String mail) {
+		this.dao.findByMail(mail)
+				.filter(p -> p instanceof Client) // optionnel si tu veux seulement les clients
+				.map(p -> (Client) p)
+				.ifPresent(client -> {
+					client.setDateLastConnexion(LocalDateTime.now());
+					this.dao.save(client);
+				});
+	}
+
+	public void updateDerniereReservation(String mail) {
+		this.dao.findByMail(mail)
+				.filter(p -> p instanceof Client)
+				.map(p -> (Client) p)
+				.ifPresent(client -> {
+					client.setDateDerniereReservation(LocalDateTime.now());
+					this.dao.save(client);
+				});
+	}
 
 }

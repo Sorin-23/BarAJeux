@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,7 @@ import projet_groupe4.dto.response.EntityCreatedResponse;
 import projet_groupe4.dto.response.EntityUpdatedResponse;
 import projet_groupe4.dto.response.ReservationResponse;
 import projet_groupe4.exception.IdNotFoundException;
+import projet_groupe4.service.PersonneService;
 import projet_groupe4.service.ReservationService;
 
 @RestController
@@ -27,9 +29,11 @@ import projet_groupe4.service.ReservationService;
 @PreAuthorize("hasAnyRole('EMPLOYE', 'CLIENT')")
 public class ReservationRestController {
     private final ReservationService srv;
+    private final PersonneService personneService;
 
-    public ReservationRestController(ReservationService srv) {
+    public ReservationRestController(ReservationService srv, PersonneService personneService) {
         this.srv = srv;
+        this.personneService = personneService;
     }
 
     @GetMapping
@@ -46,6 +50,12 @@ public class ReservationRestController {
     @PreAuthorize("hasRole('CLIENT')")
     @ResponseStatus(HttpStatus.CREATED)
     public EntityCreatedResponse ajouterReservation(@Valid @RequestBody ReservationRequest request) {
+        String clientMail = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName();
+
+        // ⏰ Mise à jour date dernière réservation
+        this.personneService.updateDerniereReservation(clientMail);
         return new EntityCreatedResponse(this.srv.create(request).getId());
     }
 

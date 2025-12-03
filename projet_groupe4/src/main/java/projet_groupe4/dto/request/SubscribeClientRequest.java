@@ -1,6 +1,6 @@
 package projet_groupe4.dto.request;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -33,28 +33,31 @@ public class SubscribeClientRequest {
     @NotBlank
     private String adresse;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate dateCreation;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime dateCreation;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate dateLastConnexion;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime dateLastConnexion;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime dateLastReservation;
 
     @Min(0)
     private int pointFidelite;
 
-    public LocalDate getDateCreation() {
+    public LocalDateTime getDateCreation() {
         return dateCreation;
     }
 
-    public void setDateCreation(LocalDate dateCreation) {
+    public void setDateCreation(LocalDateTime dateCreation) {
         this.dateCreation = dateCreation;
     }
 
-    public LocalDate getDateLastConnexion() {
+    public LocalDateTime getDateLastConnexion() {
         return dateLastConnexion;
     }
 
-    public void setDateLastConnexion(LocalDate dateLastConnexion) {
+    public void setDateLastConnexion(LocalDateTime dateLastConnexion) {
         this.dateLastConnexion = dateLastConnexion;
     }
 
@@ -128,6 +131,14 @@ public class SubscribeClientRequest {
 
     public void setAdresse(String adresse) {
         this.adresse = adresse;
+    }
+
+    public LocalDateTime getDateLastReservation() {
+        return dateLastReservation;
+    }
+
+    public void setDateLastReservation(LocalDateTime dateLastReservation) {
+        this.dateLastReservation = dateLastReservation;
     }
 
 }
