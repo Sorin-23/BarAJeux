@@ -23,6 +23,18 @@ pipeline {
                 }
             }
         }
+	stage('Wait for MySQL') {
+            steps {
+                sh '''
+                echo "Waiting for MySQL to be ready..."
+                until docker exec jeux-mysql mysql -uroot -proot -e "SHOW DATABASES LIKE 'projetJeux';" | grep projetJeux; do
+                    echo "MySQL not ready yet..."
+                    sleep 2
+                done
+                echo "MySQL is ready!"
+                '''
+            }
+        }
 
         stage('Docker Build') {
             steps {
