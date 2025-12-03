@@ -6,47 +6,37 @@ services:
     container_name: jeux-mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
-
+      MYSQL_DATABASE: projetJeux
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       timeout: 10s
       retries: 10
-
     volumes:
       - db_data:/var/lib/mysql
       - ./bar-a-jeux.sql:/docker-entrypoint-initdb.d/setup.sql
-
     networks:
       - projetJeux
-
 
   boot:
     image: ajc/projetjeux:boot
     container_name: projetJeux-boot
-
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/projetJeux
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
-
     depends_on:
       mysql:
         condition: service_healthy
-
     networks:
       - projetJeux
-
 
   angular:
     image: ajc/projetjeux:angular
     container_name: projetJeux-angular
-
     ports:
       - 4200:80
-
     depends_on:
       - boot
-
     networks:
       - projetJeux
 
