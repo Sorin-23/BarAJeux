@@ -57,7 +57,7 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                dir('projet-groupe4-angular') {
+                dir('projet_groupe4_angular') {
                     sh 'docker build -t ajc/projetjeux:angular .'
                 }
             }
