@@ -32,7 +32,14 @@ pipeline {
                                             withCredentials([string(credentialsId: 'SONAR_AUTH_TOKEN_ANGULAR', variable: 'SONAR_TOKEN')]) {
                                                 withSonarQubeEnv('SonarQube') {
                                                     sh """
-                                                        ./node_modules/.bin/sonar-scanner -Dsonar.projectKey=projetJeux-angular -Dsonar.projectName=projetJeux-angular -Dsonar.login=${SONAR_TOKEN} -Dsonar.sourceEncoding=UTF-8 -Dsonar.exclusions=**/node_modules/**,**/dist/**,**/*.spec.ts -Dsonar.javascript.internal.skip=true
+                                                        ./node_modules/.bin/sonar-scanner \
+                                                        -Dsonar.projectKey=projetJeux-angular \
+                                                        -Dsonar.projectName=projetJeux-angular \
+                                                        -Dsonar.host.url=http://localhost:8081 \
+                                                        -Dsonar.token=${SONAR_TOKEN} \
+                                                        -Dsonar.sources=. \
+                                                        -Dsonar.exclusions=**/node_modules/**,**/dist/**,**/*.spec.ts \
+                                                        -Dsonar.javascript.internal.skip=true
                                                     """
                                                 }
                                             }
