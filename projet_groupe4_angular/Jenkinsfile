@@ -18,10 +18,7 @@ pipeline {
             stages {
                 stage('Installation dependances') {
                     steps {
-                        dir('projet-groupe4-angular') {
-                            sh 'chmod 644 package.json'
-                            sh 'ls -R $WORKSPACE'
-                            sh 'ls -l'
+                        dir('projet_groupe4_angular') {
                             sh 'npm install'
                         }
                     }
@@ -29,7 +26,7 @@ pipeline {
 
                 stage('Analyse Sonar') {
                     steps {
-                        dir('projet-groupe4-angular') {
+                        dir('projet_groupe4_angular') {
                             withSonarQubeEnv('SonarQube') {
                                 sh './node_modules/.bin/sonar-scanner -Dsonar.projectKey=projetJeux-angular'
                             }
@@ -39,7 +36,7 @@ pipeline {
 
                 stage('Build Angular') {
                     steps {
-                        dir('projet-groupe4-angular') {
+                        dir('projet_groupe4_angular') {
                             sh './node_modules/.bin/ng build'
                         }
                     }
