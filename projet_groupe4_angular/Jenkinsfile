@@ -21,6 +21,7 @@ pipeline {
                         dir('projet_groupe4_angular') {
                             sh 'npm install'
                             sh 'npm install primeicons --save'
+                            sh 'npm run build'
                         }
                     }
                 }
