@@ -1,0 +1,63 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            agent {
+                docker {
+                    image 'node:lts-bullseye'
+                    args '''
+                        -v $HOME/.npm:/root/.npm:z
+                        -u root
+                        --network devops
+                    '''
+                    reuseNode true // Sans ça, il y aura un 2eme workspace
+                }
+            }
+
+            stages {
+                stage('Installation dependances') {
+                    steps {
+                        dir('projet-groupe4-angular') {
+                            sh 'npm install'
+                        }
+                    }
+                }
+
+                stage('Analyse Sonar') {
+                    steps {
+                        dir('projet-groupe4-angular') {
+                            withSonarQubeEnv('SonarQube') {
+                                sh './node_modules/.bin/sonar-scanner -Dsonar.projectKey=projetJeux-angular'
+                            }
+                        }
+                    }
+                }
+
+                stage('Build Angular') {
+                    steps {
+                        dir('projet-groupe4-angular') {
+                            sh './node_modules/.bin/ng build'
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                dir('projet-groupe4-angular') {
+                    sh 'docker build -t ajc/projetjeux:angular .'
+                }
+            }
+        }
+
+        stage('Docker Deploy') {
+            steps {
+                
+                sh 'docker compose up -d --no-deps --build angular'
+                
+            }
+        }
+    }
+}
