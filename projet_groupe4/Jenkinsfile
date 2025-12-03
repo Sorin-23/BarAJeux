@@ -33,25 +33,13 @@ pipeline {
 
             steps {
                 dir('projet_groupe4') {
-
-                    
-                        // Attente que MySQL soit disponible
-            sh '''
-            echo "Waiting for MySQL to be ready..."
-            until nc -z -v -w30 jeux-mysql 3306
-            do
-              echo "Waiting for MySQL..."
-              sleep 2
-            done
-            echo "MySQL is up!"
-            '''
-
-                        // Lancer Maven + SonarQube
+                    retry(3) { // 3 tentatives si MySQL pas encore prêt
                         withSonarQubeEnv('SonarQube') {
-                            sh "mvn clean verify sonar:sonar -Dsonar.projectKey=projetJeux-boot -Dsonar.projectName='projetJeux-boot'"
+                            sh "mvn clean verify sonar:sonar -Dsonar.projectKey=${SONAR_PROJECT_KEY} -Dsonar.projectName='${SONAR_PROJECT_NAME}'"
                         }
                     }
                 }
+            }
             
         }
 	
