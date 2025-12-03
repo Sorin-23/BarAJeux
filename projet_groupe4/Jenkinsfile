@@ -41,7 +41,7 @@ pipeline {
 
             steps {
                 dir('projet_groupe4') {
-                    
+                    	sh 'ping -c 3 mysql'
                         withSonarQubeEnv('SonarQube') {
                             sh "mvn clean verify sonar:sonar -Dsonar.projectKey=projetJeux-boot  -Dsonar.projectName=projetJeux-boot"
                         
