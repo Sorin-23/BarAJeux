@@ -2,6 +2,23 @@ pipeline {
     agent any
 
     stages {
+	stage('Check MySQL') {
+    steps {
+        script {
+            // Teste la connexion MySQL sur le réseau Docker
+            sh '''
+            for i in {1..30}; do
+              if docker exec jeux-mysql mysqladmin ping -uroot -proot --silent; then
+                echo "MySQL is up!"
+                break
+              fi
+              echo "Waiting for MySQL..."
+              sleep 2
+            done
+            '''
+        }
+    }
+}
         stage('Maven package') {
             agent {
                 docker {
@@ -23,18 +40,7 @@ pipeline {
                 }
             }
         }
-	stage('Wait for MySQL') {
-            steps {
-                sh '''
-                echo "Waiting for MySQL to be ready..."
-                until docker exec jeux-mysql mysql -uroot -proot -e "SHOW DATABASES LIKE 'projetJeux';" | grep projetJeux; do
-                    echo "MySQL not ready yet..."
-                    sleep 2
-                done
-                echo "MySQL is ready!"
-                '''
-            }
-        }
+	
 
         stage('Docker Build') {
             steps {
