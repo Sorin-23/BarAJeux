@@ -46,10 +46,12 @@
 }
 
 #inscription_main form label {
-  align-self: flex-start;
-  margin-left: 1rem;
+  align-self: center; /* Centrer dans le conteneur flex */
+  margin-left: 0; /* Enlever le décalage gauche */
   font-weight: bold;
   color: var(--couleur-principale);
+  text-align: center; /* Centrer le texte */
+  width: 100%; /* Important pour centrer le texte */
 }
 
 #inscription_main form input {
@@ -67,33 +69,54 @@
 #inscription_main .invalid-feedback {
   color: #dc3545;
   font-size: 0.85rem;
-  text-align: left;
-  margin-left: 1rem;
+  align-self: center; /* Centrer dans le conteneur flex */
+  margin-left: 0;
+  text-align: center; /* Centrer le texte */
+  width: 100%;
 }
 
-#inscription_main .btn {
-  width: 48%;
-  font-weight: bold;
-  padding: 0.5rem 0;
+/* Groupe de boutons côte à côte */
+#inscription_main .btn-group {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 1rem;
+}
+
+/* Styles communs pour les boutons (submit + lien <a>) */
+#inscription_main .btn-group .btn {
+  all: unset; /* Supprime tous les styles par défaut et Bootstrap */
+  box-sizing: border-box;
+
+  flex: 1;
+  padding: 0.7rem 0;
+
   border-radius: 12px;
   border: 2px solid var(--couleur-tertiaire);
+
   background-color: var(--couleur-principale);
   color: #fff;
+
   font-size: 1rem;
-  cursor: pointer;
+  font-weight: bold;
   text-align: center;
-  text-decoration: none; /* pour le <a> */
-  display: inline-block;
+  cursor: pointer;
+  text-decoration: none;
+
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
 }
 
-#inscription_main .btn:hover {
+/* Hover */
+#inscription_main .btn-group .btn:hover:not(:disabled) {
   background-color: var(--couleur-tertiaire);
   color: var(--couleur-principale);
+  border-color: var(--couleur-principale);
 }
 
-#inscription_main .btn:disabled {
-  background-color: #ccc; /* gris clair */
-  color: #666; /* texte gris */
+/* Disabled */
+#inscription_main .btn-group .btn:disabled {
+  background-color: #ccc;
+  color: #666;
   border-color: #999;
   cursor: not-allowed;
 }
