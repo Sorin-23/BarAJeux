@@ -5,12 +5,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.stereotype.Service;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 
 import projet_groupe4.dto.request.AuthRequest;
 import projet_groupe4.dto.response.AuthResponse;
+import projet_groupe4.model.Client;
 import projet_groupe4.model.Personne;
 import projet_groupe4.service.PersonneService;
 
@@ -43,7 +44,11 @@ public class SecurityService {
             Personne personne = this.srv.getByMail(authRequest.getUsername())
                     .orElseThrow(() -> new RuntimeException("Utilisateur introuvable après authentification"));
 
-            log.debug("Successfuly authenticated!");
+            if (personne instanceof Client client) {
+                this.srv.updateLastConnexion(client.getMail());
+            }
+
+            log.debug("Successfully authenticated!");
 
             String token = JwtUtils.generate(authentication);
             return new AuthResponse(token, personne);
