@@ -23,7 +23,7 @@ public class PersonneService {
 	private final IDAOPersonne dao;
 	private final PasswordEncoder passwordEncoder;
 
-	
+
 
 	public PersonneService(IDAOPersonne dao, PasswordEncoder passwordEncoder) {
 		this.dao = dao;
@@ -198,40 +198,42 @@ public class PersonneService {
 
 	public void updateLastConnexion(String mail) {
 		this.dao.findByMail(mail)
-				.filter(p -> p instanceof Client) // optionnel si tu veux seulement les clients
-				.map(p -> (Client) p)
-				.ifPresent(client -> {
-					client.setDateLastConnexion(LocalDateTime.now());
-					this.dao.save(client);
-				});
+		.filter(p -> p instanceof Client) // optionnel si tu veux seulement les clients
+		.map(p -> (Client) p)
+		.ifPresent(client -> {
+			client.setDateLastConnexion(LocalDateTime.now());
+			this.dao.save(client);
+		});
 	}
-	
+
 
 	public void updateDerniereReservation(String mail) {
 		this.dao.findByMail(mail)
-				.filter(p -> p instanceof Client)
-				.map(p -> (Client) p)
-				.ifPresent(client -> {
-					client.setDateDerniereReservation(LocalDateTime.now());
-					this.dao.save(client);
-				});
+		.filter(p -> p instanceof Client)
+		.map(p -> (Client) p)
+		.ifPresent(client -> {
+			client.setDateDerniereReservation(LocalDateTime.now());
+			this.dao.save(client);
+		});
 	}
 
 	public boolean changePassword(int id, String oldPassword, String newPassword) {
-    Employe emp = this.dao.findEmployeById(id)
-                     .orElseThrow(() -> new RuntimeException("Employé introuvable"));
+		Employe emp = this.dao.findEmployeById(id)
+				.orElseThrow(() -> new RuntimeException("Employé introuvable"));
 
-    // Vérifier l’ancien mot de passe
-    if (!passwordEncoder.matches(oldPassword, emp.getMdp())) {
-        return false; // ancien mot de passe incorrect
-    }
+		// Vérifier l’ancien mot de passe
+		if (!passwordEncoder.matches(oldPassword, emp.getMdp())) {
+			
+			return false; // ancien mot de passe incorrect
+		}
 
-    // Encoder le nouveau
-    emp.setMdp(passwordEncoder.encode(newPassword));
-    dao.save(emp);
+		// Encoder le nouveau
+		emp.setMdp(passwordEncoder.encode(newPassword));
+		dao.save(emp);
 
-    return true;
-}
+		return true;
+
+	}
 
 
 }

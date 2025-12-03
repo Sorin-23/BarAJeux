@@ -52,7 +52,9 @@ export class EmployePage implements OnInit {
     return;
   }
 
-  const { oldPassword, newPassword } = this.passwordForm.value;
+  //const { oldPassword, newPassword } = this.passwordForm.value;
+  const oldPassword = this.passwordForm.value.oldPassword.trim();
+  const newPassword = this.passwordForm.value.newPassword.trim();
 
   this.employeService.updatePassword(this.employeID, oldPassword, newPassword)
     .subscribe({

@@ -1,19 +1,19 @@
-<h2>Modifier votre mot de passe</h2>
+<div id="informations" class="block_white">
+  <h2>Modifier votre mot de passe</h2>
 
-<form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+  <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+    <div class="form-group"><label>Ancien mot de passe :</label>
+    <input type="password" formControlName="oldPassword" /></div>
+    
+<div class="form-group">  <label>Nouveau mot de passe :</label>
+    <input type="password" formControlName="newPassword" /></div>
+  
+<div class="form-group"> <label>Confirmer le nouveau mot de passe :</label>
+    <input type="password" formControlName="confirmPassword" />
+</div>
+   
+    <button type="submit"  class="btn modifier" [disabled]="passwordForm.invalid">Modifier</button>
+  </form>
 
-  <label>Ancien mot de passe :</label>
-  <input type="password" formControlName="oldPassword" />
-
-  <label>Nouveau mot de passe :</label>
-  <input type="password" formControlName="newPassword" />
-
-  <label>Confirmer le nouveau mot de passe :</label>
-  <input type="password" formControlName="confirmPassword" />
-
-  <button type="submit" [disabled]="passwordForm.invalid">
-    Modifier
-  </button>
-</form>
-
-<p>{{ msg }}</p>
+  <p>{{ msg }}</p>
+</div>
