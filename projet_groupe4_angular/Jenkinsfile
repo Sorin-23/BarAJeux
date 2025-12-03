@@ -22,7 +22,7 @@ pipeline {
                             sh 'rm -rf node_modules dist'
                             sh 'npm install'
                             sh 'npm install primeicons --save'
-                            sh 'npm run build -- --no-esbuild'
+                            sh 'npm run build'
                         }
                     }
                 }
