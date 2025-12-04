@@ -1,5 +1,6 @@
 package projet_groupe4.rest;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -533,5 +534,38 @@ public class JeuRestControllerTest {
 
         Mockito.verify(this.srv).deleteById(JEU_ID);
     }
+    
+    @Test
+    @WithMockUser
+    void shouldReturnJeuxDisponibles() throws Exception {
+        // --- GIVEN ---
+        LocalDate dateDebut = LocalDate.of(2025, 12, 10);
+        
+        Jeu jeu1 = new Jeu();
+        jeu1.setId(1);
+        jeu1.setNom("Catan");
+        
+        Jeu jeu2 = new Jeu();
+        jeu2.setId(2);
+        jeu2.setNom("Carcassonne");
+        
+        Mockito.when(srv.getDisponibles(dateDebut)).thenReturn(List.of(jeu1, jeu2));
+        
+        // --- WHEN ---
+        ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get("/api/jeu/disponibles")
+                .param("dateDebut", dateDebut.toString())
+                .contentType(MediaType.APPLICATION_JSON));
+        
+        // --- THEN ---
+        result.andExpect(MockMvcResultMatchers.status().isOk())
+              .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(1))
+              .andExpect(MockMvcResultMatchers.jsonPath("$[0].nom").value("Catan"))
+              .andExpect(MockMvcResultMatchers.jsonPath("$[1].id").value(2))
+              .andExpect(MockMvcResultMatchers.jsonPath("$[1].nom").value("Carcassonne"));
+        
+        // Vérifie que le service a été appelé avec la bonne date
+        Mockito.verify(srv).getDisponibles(dateDebut);
+    }
+
 
 }

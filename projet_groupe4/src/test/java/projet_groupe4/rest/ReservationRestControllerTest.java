@@ -557,4 +557,28 @@ public class ReservationRestControllerTest {
         Mockito.verify(this.srv).deleteById(RESA_ID);
     }
 
+    @Test
+    @WithMockUser(roles = "EMPLOYE")
+    void shouldReturnReservationsByGameMaster() throws Exception {
+        int gmId = 1;
+
+        Reservation r1 = new Reservation();
+        r1.setId(RESA_ID);
+        r1.setNbJoueur(RESA_NBJ);
+        r1.setDatetimeDebut(RESA_DEBUT);
+        r1.setDatetimeFin(RESA_FIN);
+
+        Mockito.when(srv.findByGameMasterId(gmId)).thenReturn(List.of(r1));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/reservation/gamemaster/{id}", gmId)
+                .contentType(MediaType.APPLICATION_JSON))
+               .andExpect(MockMvcResultMatchers.status().isOk())
+               .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(RESA_ID))
+               .andExpect(MockMvcResultMatchers.jsonPath("$[0].nbJoueur").value(RESA_NBJ))
+               .andExpect(MockMvcResultMatchers.jsonPath("$[0].datetimeDebut").exists())
+               .andExpect(MockMvcResultMatchers.jsonPath("$[0].datetimeFin").exists());
+
+        Mockito.verify(srv).findByGameMasterId(gmId);
+    }
+
 }
