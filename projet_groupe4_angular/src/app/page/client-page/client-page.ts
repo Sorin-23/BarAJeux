@@ -88,7 +88,7 @@ export class ClientPage implements OnInit {
                 note: 0,
                 avisModifiable: true,
               } as unknown as Reservation)
-          ); // Type assertion to `Reservation`
+          ); 
         })
       )
       .subscribe({
@@ -135,7 +135,7 @@ export class ClientPage implements OnInit {
 
   // --- Edit Client Profile ---
   enableEdit() {
-    // Create a backup of the current client data
+   
     this.clientBackup = new Client(
       this.client.id,
       this.client.nom,
@@ -157,7 +157,7 @@ export class ClientPage implements OnInit {
 
   cancelEdit() {
     if (this.clientBackup) {
-      // Restore the client data from the backup
+      
       this.client = this.clientBackup;
     }
     this.isEditing = false;
@@ -176,7 +176,7 @@ export class ClientPage implements OnInit {
     }
   }
 
-  // --- Badge Level Method ---
+  // --- Badge  ---
   getBadgeLevel(points: number): string {
     if (!points) return 'novice-transparent';
     if (points >= 500) return 'legende-transparent';

@@ -93,4 +93,17 @@ public class ReservationRestController {
                 .toList();
     }
 
+     @PutMapping("/{id}/cancel")
+    @PreAuthorize("hasRole('CLIENT')") 
+    public void cancelReservation(@PathVariable Integer id) {
+       
+        String clientMail = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName();
+        
+       
+        this.srv.cancelClientReservation(id, clientMail);
+    }
+    
+
 }

@@ -8,12 +8,14 @@
       </div>
     </div>
 
+    <!-- State: No Reservations -->
     <div *ngIf="reservations.length === 0" class="no-reservations">
       <div class="empty-icon">📅</div>
       <h3>Aucune réservation</h3>
       <p>Vous n'avez pas encore de réservations. Allez réserver un jeu !</p>
     </div>
 
+    <!-- State: Table of Reservations -->
     <div *ngIf="reservations.length > 0" class="table-container">
       <table class="reservation-table">
         <thead>
@@ -37,6 +39,7 @@
             [class.odd]="i % 2 === 1"
             [class.highlight]="isReservationHighlighted(r)"
           >
+            <!-- ID -->
             <td class="col-id">
               <span class="badge-id">{{ r.id }}</span>
             </td>
@@ -71,9 +74,14 @@
               <span class="table-badge">{{ r.tableJeu?.nomTable }}</span>
             </td>
 
-            <!-- Statut -->
+            <!-- Statut (Dynamic Colors) -->
             <td class="col-status">
-              <span class="status-badge">
+              <span class="status-badge"
+                [ngClass]="{
+                  'status-confirmed': r.statutReservation === 'confirmée',
+                  'status-cancelled': r.statutReservation === 'annulée',
+                  'status-finished': r.statutReservation === 'terminée'
+                }">
                 {{ r.statutReservation }}
               </span>
             </td>
@@ -98,7 +106,7 @@
               <textarea
                 class="input-avis input-comment"
                 [(ngModel)]="r.avis!.commentaire"
-                placeholder="Partagez votre avis..."
+                placeholder="Votre avis..."
                 [disabled]="!r.avisModifiable"
                 rows="2"
                 maxlength="500"
@@ -126,21 +134,42 @@
                 </span>
               </div>
               <span class="rating-text" *ngIf="r.avis!.note > 0"> {{ r.avis!.note }}/5 </span>
-              <!-- Note en étoiles -->
             </td>
 
+            <!-- ACTION COLUMN (Validate + Cancel) -->
             <td class="col-action">
+              
+              <!-- 1. Validate Review (Only if modifiable) -->
               <button
                 class="btn btn-validate"
                 (click)="saveAvis(r)"
                 *ngIf="r.avisModifiable"
-                title="Valider et enregistrer l'avis"
+                title="Valider l'avis"
+                style="margin-bottom: 5px; display: block; width: 100%;"
               >
                 ✅ Valider
               </button>
-              <span class="status-icon" *ngIf="!r.avisModifiable" title="Avis validé">
-                ✔️ Validé
+              
+              <!-- Icon if Review Validated -->
+              <div class="status-icon" *ngIf="!r.avisModifiable && r.statutReservation === 'terminée'" title="Avis publié">
+                ✔️ Avis Publié
+              </div>
+
+              <!-- 2. CANCEL BUTTON (Only if confirmed) -->
+              <button
+                class="btn btn-cancel"
+                (click)="cancelReservation(r)"
+                *ngIf="r.statutReservation === 'confirmée'"
+                title="Annuler la réservation"
+              >
+                ❌ Annuler
+              </button>
+
+              <!-- Label if Cancelled -->
+              <span *ngIf="r.statutReservation === 'annulée'" class="label-cancelled">
+                🚫 Annulée
               </span>
+
             </td>
           </tr>
         </tbody>

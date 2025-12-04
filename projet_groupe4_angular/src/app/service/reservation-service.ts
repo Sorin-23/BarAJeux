@@ -53,4 +53,12 @@ export class ReservationService {
 public findAllGameMasters(): Observable<Employe[]> {
     return this.http.get<Employe[]>(`${this.apiUrl}/gamemasters`);
 }
+
+
+  //pour annulér une réservation
+  public cancel(id: number): Observable<void> {
+    //  PUT /api/reservation/{id}/cancel
+    return this.http.put<void>(`${this.apiUrl}/${id}/cancel`, {});
+  }
+
 }

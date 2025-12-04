@@ -141,4 +141,40 @@ private Reservation save(Reservation reservation, ReservationRequest request) {
 
     return saved;
 }
+
+    // Méthode pour qu'un client annule sa propre réservation
+   public void cancelClientReservation(Integer id, String clientMail) {
+       
+        Reservation r = this.getById(id)
+                .orElseThrow(() -> new RuntimeException("Réservation introuvable"));
+
+        
+        if (!r.getClient().getMail().equals(clientMail)) {
+            throw new RuntimeException("Non autorisé : Ce n'est pas votre réservation.");
+        }
+
+        
+        if (r.getStatutReservation() == StatutReservation.terminée) {
+            throw new RuntimeException("Impossible d'annuler une réservation terminée.");
+        }
+
+        if (r.getStatutReservation() == StatutReservation.confirmée) {
+            Client client = r.getClient();
+            int currentPoints = client.getPointFidelite();
+
+            
+            int newPoints = Math.max(0, currentPoints - 5); 
+            
+            client.setPointFidelite(newPoints);
+            
+            
+            this.personneDao.save(client); 
+        }
+
+        
+        r.setStatutReservation(StatutReservation.annulée); 
+
+        
+        this.dao.save(r);
+    }
 }

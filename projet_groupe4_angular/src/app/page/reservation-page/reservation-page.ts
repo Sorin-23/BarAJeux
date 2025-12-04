@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { Avis } from '../../dto/avis';
 import { AvisService } from '../../service/avis-service';
 import { TableJeuService } from '../../service/table-jeu-service';
+import { ReservationService } from '../../service/reservation-service'; 
 
 @Component({
   selector: 'app-reservation-page',
@@ -22,7 +23,8 @@ export class ReservationPage implements OnInit {
     private clientService: ClientService,
     private router: Router,
     private avisService: AvisService,
-    private tableJeuService: TableJeuService
+    private tableJeuService: TableJeuService,
+    private reservationService: ReservationService
   ) {}
 
   ngOnInit(): void {
@@ -97,5 +99,24 @@ export class ReservationPage implements OnInit {
         alert("Erreur lors de l'enregistrement de l'avis.");
       },
     });
+  }
+
+  cancelReservation(r: Reservation) {
+    if (confirm("Êtes-vous sûr de vouloir annuler cette réservation ?")) {
+      
+      
+      this.reservationService.cancel(r.id).subscribe({
+        next: () => {
+          alert("Réservation annulée avec succès.");
+          
+          (r.statutReservation as any) = "annulée"; 
+           this.ngOnInit(); 
+        },
+        error: (err) => {
+          console.error(err);
+          alert("Impossible d'annuler cette réservation.");
+        }
+      });
+    }
   }
 }
