@@ -1,0 +1,311 @@
+/* ============================================= */
+/* ============ GLOBAL & SECTIONS ============= */
+/* ============================================= */
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f5f5;
+  color: #1e1e1e;
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2,
+h3 {
+  color: #1e1e1e;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-top: 2rem;
+}
+
+h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.block_white {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  margin: 2rem auto;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+}
+
+/* ============================================= */
+/* ============ FORMULAIRES =================== */
+/* ============================================= */
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.filtre_groupe {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 200px;
+  min-width: 150px;
+  margin-bottom: 15px;
+}
+
+.filtre_groupe label {
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.filtre_groupe input {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(4px);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.filtre_groupe select {
+  padding: 12px 16px;
+  font-size: 1rem;
+  border-radius: 12px;
+  border: 1px solid #c9a86a;
+  background-color: rgba(255, 255, 255, 0.95);
+  transition: all 0.3s ease;
+  width: 20%;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.filtre_groupe select:focus {
+  outline: none;
+  border-color: #b38f44;
+  box-shadow: 0 0 10px rgba(201, 168, 106, 0.4);
+}
+
+.filtre_groupe select option {
+  padding: 8px;
+}
+
+.filtre_groupe input:focus {
+  outline: none;
+  border-color: #c9a86a;
+  box-shadow: 0 0 8px rgba(201, 168, 106, 0.5);
+}
+
+.filtre_groupe input[readonly],
+.filtre_groupe input[disabled] {
+  background-color: #eaeaea;
+  cursor: not-allowed;
+}
+
+/* ============================================= */
+/* ============ BOUTONS ======================= */
+/* ============================================= */
+
+.btn {
+  display: inline-block;
+  padding: 0.5rem 0;
+  border-radius: 12px;
+  background-color: var(--couleur-principale);
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  border: 2px solid var(--couleur-tertiaire);
+  margin-top: 10px;
+}
+
+.btn-annuler,
+.btn-enregistrer {
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  min-width: 100px;
+  margin-right: 10px;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+.btn:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.btn-annuler {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.boutons-reservation {
+  display: flex;
+  justify-content: left;
+  gap: 15px;
+  width: 100%;
+  margin-top: 10px;
+  flex-shrink: 0;
+}
+/* ============================================= */
+/* ============ CARROUSELS ==================== */
+/* ============================================= */
+
+.carrousel-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.carrousel {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 10px;
+}
+
+.carrousel::-webkit-scrollbar {
+  height: 8px;
+}
+
+.carrousel::-webkit-scrollbar-thumb {
+  background-color: #c9a86a;
+  border-radius: 4px;
+}
+
+/* ============================================= */
+/* ============ CARTE TABLE / JEU ============ */
+/* ============================================= */
+
+.carte-jeu {
+  flex: 0 0 250px;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  background: rgba(246, 238, 197, 0.95);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.carte-table {
+  flex: 0 0 300px;
+  height: 350px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(246, 238, 197, 0.95);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+.carte-jeu:hover,
+.carte-table:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.25);
+}
+
+/* Infos et bouton */
+.carte-info {
+  padding: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.carte-info h3 {
+  margin: 0 0 6px;
+  font-size: 1.2rem;
+  color: #1e1e1e;
+}
+
+.carte-info p {
+  margin: 3px 0;
+  font-size: 0.85rem;
+  color: #333;
+}
+
+/* Bouton */
+.actions {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.btn-louer,
+.btn-reserver {
+  width: 48%;
+  font-weight: bold;
+  padding: 0.5rem 0;
+  border-radius: 12px;
+  border: 2px solid var(--couleur-tertiaire);
+  background-color: var(--couleur-principale);
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-louer:hover,
+.btn-reserver:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+}
+/* ============================================= */
+/* ============ BOUTONS CARROUSEL ============= */
+/* ============================================= */
+
+.carrousel-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+/* Flèches à l'intérieur du carrousel */
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(46, 46, 46, 0.8);
+  color: #f7e29b;
+  border: none;
+  border-radius: 50%;
+  font-size: 2rem;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.nav-btn:hover {
+  background-color: #c9a86a;
+  color: #1e1e1e;
+  transform: translateY(-50%) scale(1.1);
+}
+.prev {
+  left: 10px;
+}
+
+.next {
+  right: 10px;
+}

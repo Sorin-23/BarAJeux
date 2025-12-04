@@ -70,12 +70,14 @@
 
             <!-- Statut (Dynamic Colors) -->
             <td class="col-status">
-              <span class="status-badge"
+              <span
+                class="status-badge"
                 [ngClass]="{
                   'status-confirmed': r.statutReservation === 'confirmée',
                   'status-cancelled': r.statutReservation === 'annulée',
                   'status-finished': r.statutReservation === 'terminée'
-                }">
+                }"
+              >
                 {{ r.statutReservation }}
               </span>
             </td>
@@ -132,21 +134,39 @@
 
             <!-- ACTION COLUMN (Validate + Cancel) -->
             <td class="col-action">
-              
               <!-- 1. Validate Review (Only if modifiable) -->
               <button
                 class="btn btn-validate"
                 (click)="saveAvis(r)"
                 *ngIf="r.avisModifiable"
                 title="Valider l'avis"
-                style="margin-bottom: 5px; display: block; width: 100%;"
+                style="margin-bottom: 5px; display: block; width: 100%"
               >
                 ✔️ Valider
               </button>
-              <span class="status-icon" *ngIf="!r.avisModifiable" title="Avis validé">
-                Validé
-              </span>
+              <!-- Icon if Review Validated -->
+              <div
+                class="status-icon"
+                *ngIf="!r.avisModifiable && r.statutReservation === 'terminée'"
+                title="Avis publié"
+              >
+                ✔️ Avis Publié
+              </div>
 
+              <!-- 2. CANCEL BUTTON (Only if confirmed) -->
+              <button
+                class="btn btn-cancel"
+                (click)="cancelReservation(r)"
+                *ngIf="r.statutReservation === 'confirmée'"
+                title="Annuler la réservation"
+              >
+                ❌ Annuler
+              </button>
+
+              <!-- Label if Cancelled -->
+              <span *ngIf="r.statutReservation === 'annulée'" class="label-cancelled">
+                🚫 Annulée
+              </span>
             </td>
           </tr>
         </tbody>

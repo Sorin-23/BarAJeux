@@ -599,18 +599,24 @@
     <h3>Modifier la table #{{ currentEdit['tables']?.id || 'nouveau' }}</h3>
     <form [formGroup]="tableForm" (ngSubmit)="sauvergarder('table', currentEdit['tables'])">
       <div class="filtre_groupe">
-        <label>Nom :<span *ngIf="tableForm.get('nomTable')?.invalid" style="color: red">*</span></label>
+        <label
+          >Nom :<span *ngIf="tableForm.get('nomTable')?.invalid" style="color: red">*</span></label
+        >
         <input type="text" formControlName="nomTable" />
       </div>
       <div class="filtre_groupe">
         <label
-          >Capacité :<span *ngIf="tableForm.get('capacite')?.invalid" style="color: red">*</span></label
+          >Capacité :<span *ngIf="tableForm.get('capacite')?.invalid" style="color: red"
+            >*</span
+          ></label
         >
         <input type="number" formControlName="capacite" min="1" />
       </div>
       <div class="filtre_groupe">
         <label
-          >Image URL :<span *ngIf="tableForm.get('imgUrl')?.invalid" style="color: red">*</span></label
+          >Image URL :<span *ngIf="tableForm.get('imgUrl')?.invalid" style="color: red"
+            >*</span
+          ></label
         >
         <input type="text" formControlName="imgUrl" />
       </div>
@@ -632,17 +638,22 @@
     <h3>Modifier l'employe #{{ currentEdit['employes']?.id || 'nouveau' }}</h3>
     <form [formGroup]="employeForm" (ngSubmit)="sauvergarder('employe', currentEdit['employes'])">
       <div class="filtre_groupe">
-        <label>Nom :
+        <label
+          >Nom :
           <span *ngIf="employeForm.get('nom')?.invalid" style="color: red">*</span>
-        </label> <input type="text" formControlName="nom" />
+        </label>
+        <input type="text" formControlName="nom" />
       </div>
       <div class="filtre_groupe">
-        <label>Prénom :
+        <label
+          >Prénom :
           <span *ngIf="employeForm.get('prenom')?.invalid" style="color: red">*</span>
-        </label> <input type="text" formControlName="prenom" />
+        </label>
+        <input type="text" formControlName="prenom" />
       </div>
       <div class="filtre_groupe">
-        <label>Mail :
+        <label
+          >Mail :
           <span *ngIf="employeForm.get('mail')?.invalid" style="color: red">*</span>
         </label>
         <input type="email" formControlName="mail" />
@@ -653,19 +664,21 @@
       </div>
 
       <div class="filtre_groupe">
-        <label>Téléphone :
+        <label
+          >Téléphone :
           <span *ngIf="employeForm.get('telephone')?.invalid" style="color: red">*</span>
-        </label> <input type="text" formControlName="telephone" />
+        </label>
+        <input type="text" formControlName="telephone" />
       </div>
       <div class="filtre_groupe">
-        <label>Job :
+        <label
+          >Job :
           <span *ngIf="employeForm.get('job')?.invalid" style="color: red">*</span>
-        </label> <input type="text" formControlName="job" />
+        </label>
+        <input type="text" formControlName="job" />
       </div>
       <div class="filtre_groupe">
-        <label>GameMaster :
-          
-        </label> <input type="checkbox" formControlName="gameMaster" />
+        <label>GameMaster : </label> <input type="checkbox" formControlName="gameMaster" />
       </div>
 
       <div class="form-group">
@@ -686,19 +699,25 @@
     <h3>Modifier le badge #{{ currentEdit['badges']?.id || 'nouveau' }}</h3>
     <form [formGroup]="badgeForm" (ngSubmit)="sauvergarder('badge', currentEdit['badges'])">
       <div class="filtre_groupe">
-        <label>nom du badge :
+        <label
+          >nom du badge :
           <span *ngIf="badgeForm.get('nomBadge')?.invalid" style="color: red">*</span>
-        </label> <input type="text" formControlName="nomBadge" />
+        </label>
+        <input type="text" formControlName="nomBadge" />
       </div>
       <div class="filtre_groupe">
-        <label>point minimum :
+        <label
+          >point minimum :
           <span *ngIf="badgeForm.get('pointMin')?.invalid" style="color: red">*</span>
-        </label> <input type="number" formControlName="pointMin" />
+        </label>
+        <input type="number" formControlName="pointMin" />
       </div>
       <div class="filtre_groupe">
-        <label>img URL :
+        <label
+          >img URL :
           <span *ngIf="badgeForm.get('imgURL')?.invalid" style="color: red">*</span>
-        </label> <input type="text" formControlName="imgURL" />
+        </label>
+        <input type="text" formControlName="imgURL" />
       </div>
       <div class="form-group">
         <button type="submit" class="btn enregistrer" [disabled]="badgeForm.invalid">
@@ -718,9 +737,9 @@
     <h3>Modifier l'emprunt #{{ currentEdit['emprunts'].id }}</h3>
     <form [formGroup]="empruntForm" (ngSubmit)="sauvergarder('emprunt', currentEdit['emprunts'])">
       <div class="filtre_groupe">
-        <label>Statut :
-       <span *ngIf="empruntForm.get('statutEmprunt')?.invalid" style="color: red">*</span>
-
+        <label
+          >Statut :
+          <span *ngIf="empruntForm.get('statutEmprunt')?.invalid" style="color: red">*</span>
         </label>
         <select formControlName="statutEmprunt">
           <option *ngFor="let s of enumOptions['statutLocation']" [value]="s">{{ s }}</option>
@@ -750,9 +769,11 @@
       (ngSubmit)="sauvergarder('reservation', currentEdit['reservations'])"
     >
       <div class="filtre_groupe">
-        <label>Statut :
-      <span *ngIf="reservationForm.get('statutReservation')?.invalid" style="color: red">*</span>
-
+        <label
+          >Statut :
+          <span *ngIf="reservationForm.get('statutReservation')?.invalid" style="color: red"
+            >*</span
+          >
         </label>
         <select formControlName="statutReservation">
           <option *ngFor="let s of enumOptions['statutReservation']" [value]="s">{{ s }}</option>

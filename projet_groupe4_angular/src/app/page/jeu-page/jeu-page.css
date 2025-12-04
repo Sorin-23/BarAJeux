@@ -1,0 +1,261 @@
+/* ============================================= */
+/* ============ GLOBAL & SECTIONS ============= */
+/* ============================================= */
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f5f5;
+  color: #1e1e1e;
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2,
+h3 {
+  color: #1e1e1e;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-top: 2rem;
+}
+
+h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.block_white {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 2rem;
+  margin: 2rem auto;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+}
+
+/* ============================================= */
+/* ============ FORMULAIRES =================== */
+/* ============================================= */
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.filtre_groupe {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 200px;
+  min-width: 180px;
+}
+
+.filtre_groupe label {
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.filtre_groupe input {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(4px);
+}
+
+.filtre_groupe input:focus {
+  outline: none;
+  border-color: #c9a86a;
+  box-shadow: 0 0 8px rgba(201, 168, 106, 0.6);
+}
+
+/* ============================================= */
+/* ============ BOUTONS MODERNES ============== */
+/* ============================================= */
+
+.btn {
+  display: inline-block;
+  padding: 0.5rem 0;
+  border-radius: 12px;
+  background-color: var(--couleur-principale);
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  border: 2px solid var(--couleur-tertiaire);
+  margin-top: 10px;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+.enregistrer {
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  min-width: 100px;
+  margin-right: 10px;
+}
+
+/* ============================================= */
+/* ============ CARROUSEL PREMIUM ============= */
+/* ============================================= */
+
+.carrousel-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.carrousel {
+  display: flex;
+  overflow-x: auto;
+  gap: 20px;
+  scroll-behavior: smooth;
+  padding-bottom: 10px;
+}
+
+.carrousel::-webkit-scrollbar {
+  height: 8px;
+}
+
+.carrousel::-webkit-scrollbar-thumb {
+  background-color: #c9a86a;
+  border-radius: 4px;
+}
+
+.carte-jeu {
+  flex: 0 0 250px;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  background: rgba(246, 238, 197, 0.95);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.carte-jeu:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+}
+
+.carte-jeu img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-bottom: 2px solid #c9a86a;
+}
+
+/* Overlay info doré */
+.carte-info {
+  padding: 12px;
+  position: relative;
+}
+
+.carte-info h3 {
+  margin: 0 0 6px;
+  font-size: 1.2rem;
+  color: #1e1e1e;
+}
+
+.carte-info p {
+  margin: 3px 0;
+  font-size: 0.85rem;
+  color: #333;
+}
+
+/* Bouton louer full width */
+.actions {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.btn-louer {
+  width: 48%;
+  font-weight: bold;
+  padding: 0.5rem 0;
+  border-radius: 12px;
+  border: 2px solid var(--couleur-tertiaire);
+  background-color: var(--couleur-principale);
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.carrousel-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+/* Flèches à l'intérieur du carrousel */
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(46, 46, 46, 0.8);
+  color: #f7e29b;
+  border: none;
+  border-radius: 50%;
+  font-size: 2rem;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.nav-btn:hover {
+  background-color: #c9a86a;
+  color: #1e1e1e;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.prev {
+  left: 10px;
+}
+
+.next {
+  right: 10px;
+}
+
+/* ============================================= */
+/* ============ FORMULAIRE EMPRUNT ============ */
+/* ============================================= */
+
+#filtre_form .filtre_groupe,
+#emprunt_form .filtre_groupe {
+  flex: 1 1 200px;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+#filtre_form .filtre_groupe input,
+#emprunt_form .filtre_groupe input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-group {
+  width: 100%;
+  margin-top: 15px;
+}

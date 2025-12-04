@@ -4,7 +4,14 @@
   <form id="filtre_form" [formGroup]="filtreFormTable" (ngSubmit)="appliquerFiltreTable()">
     <div class="filtre_groupe">
       <label for="nbPersonne">Nombre de personnes</label>
-      <input type="number" id="nbPersonne" min="1" max="10" formControlName="nbPersonnes" />
+      <input
+        type="number"
+        id="nbPersonne"
+        min="1"
+        max="10"
+        formControlName="nbPersonnes"
+        placeholder="Entre 1 et 10"
+      />
     </div>
 
     <div class="filtre_groupe">
@@ -112,16 +119,20 @@
       <input type="checkbox" formControlName="avecGameMaster" (change)="updateDispoIfNeeded()" />
     </div>
 
-    <div *ngIf="reservationForm.get('avecGameMaster')?.value" class="filtre_groupe">
-      <select formControlName="gameMasterId">
+    <div class="filtre_groupe" *ngIf="reservationForm.get('avecGameMaster')?.value">
+      <label for="gameMasterId">Choisissez un Game Master</label>
+      <select id="gameMasterId" formControlName="gameMasterId">
+        <option value="" disabled selected *ngIf="gameMastersDispo.length === 0">
+          Aucun Game Master disponible
+        </option>
         <option *ngFor="let gm of gameMastersDispo" [value]="gm.id">
           {{ gm.nom }}
         </option>
       </select>
     </div>
-    <div class="form-group">
-      <button type="submit" class="btn enregistrer">Réserver</button>
-      <button type="button" (click)="resetFiltreTable()" class="btn annuler">Annuler</button>
+    <div class="form-group boutons-reservation">
+      <button type="submit" class="btn btn-enregistrer">Réserver</button>
+      <button type="button" (click)="resetFiltreTable()" class="btn btn-annuler">Annuler</button>
     </div>
   </form>
 </section>
