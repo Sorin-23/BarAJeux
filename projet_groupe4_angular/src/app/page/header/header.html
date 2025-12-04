@@ -1,26 +1,30 @@
 <header>
   <div class="logo">
     <a routerLink="/home">
-      <img src="assets/images/logo.png" alt="La taverne des 4 AS" />
+      <img src="assets/images/logo-removebg-preview.png" alt="La taverne des 4 AS" />
     </a>
   </div>
   <nav class="menu" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-    <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Accueil</a>
+    <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+      >Accueil</a
+    >
     <!-- Liens visibles uniquement si NON connecté -->
     <ng-container *ngIf="!(isLoggedIn$ | async)">
-      
       <a routerLink="/login" routerLinkActive="active">Se connecter</a>
-   </ng-container>
+    </ng-container>
 
-   <!--  Liens visibles uniquement si connecté -->
+    <!--  Liens visibles uniquement si connecté -->
     <ng-container *ngIf="isLoggedIn$ | async">
-      <a *ngIf="role == 'ROLE_CLIENT'" routerLink="/table" routerLinkActive="active">Réservation de table</a>
-      <a *ngIf="role == 'ROLE_CLIENT'" routerLink="/jeu" routerLinkActive="active">Emprunt de jeu</a>
+      <a *ngIf="role == 'ROLE_CLIENT'" routerLink="/table" routerLinkActive="active"
+        >Réservation de table</a
+      >
+      <a *ngIf="role == 'ROLE_CLIENT'" routerLink="/jeu" routerLinkActive="active"
+        >Emprunt de jeu</a
+      >
       <a *ngIf="role == 'ROLE_CLIENT'" routerLink="/client" routerLinkActive="active">Compte</a>
       <a *ngIf="role == 'ROLE_EMPLOYE'" routerLink="/admin" routerLinkActive="active">Admin</a>
       <a *ngIf="role == 'ROLE_EMPLOYE'" routerLink="/employe" routerLinkActive="active">Compte</a>
       <a (click)="logout()">Se déconnecter</a>
     </ng-container>
-
   </nav>
 </header>

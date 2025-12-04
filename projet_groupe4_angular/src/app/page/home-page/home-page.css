@@ -1,93 +1,211 @@
-
 /* ============================================= */
-/* =========== - PAGE INDEX ============== */
+/* ========= STYLE PAGE ACCUEIL ======= */
 /* ============================================= */
 
+/* ---------- SECTION HERO ---------- */
+.hero {
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)),
+    url('/assets/images/bienvenue.png') center/cover no-repeat;
+  height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 5vh;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.hero h1 {
+  color: var(--couleur-secondaire);
+  font-size: 3.5rem;
+  text-shadow: 2px 2px 10px #000;
+  margin: 0;
+  padding: 0 1rem;
+  font-family: 'Georgia', serif;
+  letter-spacing: 2px;
+}
+
+/* ---------- MESSAGE BIENVENUE ---------- */
 #message_bienvenu {
-    display: flex;
-    flex-direction: row;
-    gap: 5vh;
+  background: var(--couleur-secondaire);
+  border: 2px solid var(--couleur-tertiaire);
+  padding: 2rem;
+  margin: -4rem auto 4vh auto;
+  width: 90%;
+  max-width: 900px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  position: relative;
+  z-index: 10;
+}
+
+#message_bienvenu p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--couleur-principale);
 }
 
 #message_bienvenu .badge_img {
-    height: 10vh;
-    width: auto;
-    border-radius: 10px;
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  border-radius: 12px;
 }
 
+/* ---------- DESCRIPTION TAVERNE ---------- */
+.intro-taverne {
+  text-align: center;
+  max-width: 800px;
+  margin: 5vh auto;
+  padding: 0 1.5rem;
+  color: var(--couleur-principale);
+}
 
+.intro-taverne .quote {
+  font-style: italic;
+  font-size: 1.2rem;
+  color: var(--couleur-tertiaire);
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+/* ---------- IMAGE BAR ---------- */
 #img_bar {
-    height: 40vh;
-    display: block;
-    margin: 20px auto;
-    width: auto;
+  width: 100%;
+  max-width: 1000px;
+  height: 700px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  margin: 5vh auto;
+  display: block;
+}
 
+/* ---------- BLOCS RESERVATION / EMPRUNT ---------- */
+.actions-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 6vh auto;
+  padding: 0 1rem;
 }
 
 .bloc-resa {
-    display: flex;
-    height: 12vh;
-    align-items: center;
-    text-align: center;
-    margin-top: 10vh;
-    gap: 5%;
-
-
+  flex: 1 1 450px;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-left: 5px solid var(--couleur-tertiaire);
+  border-radius: 12px;
+  padding: 1.5rem;
+  gap: 1.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  text-decoration: none;
 }
 
+.bloc-resa:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  background: var(--couleur-secondaire-hover);
+}
 
 .bloc-resa .logo_resa {
-    flex: 1;
-    max-height: 20vh;
-    width: auto;
-    border-radius: 20px;
-
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--couleur-tertiaire);
 }
 
-.class_resa {
-    flex: 2;
-    text-decoration: none;
-    color: var(--couleur-principale);
-    margin-right: 20vh;
-    width: 80%;
+.content-resa h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  color: var(--couleur-principale);
+  font-family: 'Georgia', serif;
 }
 
-.class_resa:hover {
-    text-decoration: underline;
-
+.content-resa p {
+  margin: 0;
+  color: var(--couleur-principale);
+  font-size: 1rem;
+  line-height: 1.4;
 }
 
-.bloc-resa h2 {
-    text-align: center;
-}
-
+/* ---------- SECTION STATS (JEUX) ---------- */
 #info_jeu {
-    margin: 10vh;
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    flex-wrap: wrap;
+  background-color: var(--couleur-principale);
+  color: var(--couleur-secondaire);
+  padding: 4rem 2rem;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  align-items: center;
+  flex-wrap: wrap-reverse;
 }
 
-#info_jeu #left_container {
-    flex: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+#left_container {
+  flex: 1;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
-#info_jeu #right_container {
-    flex: 3;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.stat-box h2,
+.stat-box h3 {
+  color: var(--couleur-tertiaire);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  font-family: 'Georgia', serif;
 }
 
-#info_jeu #right_container img {
-    max-width: 60%;
-    max-height: 300px;
-    width: auto;
-    height: auto;
-    border-radius: 15px;
-    object-fit: cover;
+.stat-box ol {
+  padding-left: 1.5rem;
+  list-style-position: inside;
+}
+
+.stat-box li {
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+#right_container img {
+  width: 350px;
+  height: 450px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 4px solid var(--couleur-tertiaire);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  transform: rotate(3deg);
+}
+
+/* ---------- BOUTONS ---------- */
+.btn-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+#info_jeu .btn {
+  background-color: var(--couleur-tertiaire);
+  color: var(--couleur-principale);
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: 0.25s;
+}
+
+#info_jeu .btn:hover {
+  background-color: var(--couleur-secondaire-hover);
+  color: var(--couleur-principale);
+  transform: translateY(-2px);
 }

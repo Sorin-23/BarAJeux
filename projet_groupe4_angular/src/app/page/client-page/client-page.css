@@ -1,152 +1,309 @@
-
 /* ============================================= */
-/* =========== - PAGE CLIENT ============== */
+/* PAGE CLIENT - CORRIGÉE ET OPTIMISÉE */
 /* ============================================= */
-
 
 #client_formulaire {
-    display: flex;
-    gap: 5%;
-    padding: 1.5vh;
-
-
+  display: flex;
+  gap: 3rem;
+  padding: 3vh 1.5vh;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-#client_reservation {
-    display: none;
-    gap: 5%;
-    padding: 1.5vh;
-    flex-direction: column;
-    width: 100%;
-
-}
-
+/* --- BADGE (Colonne Gauche) --- */
 #client_formulaire #client_badge {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
+  flex: 0 0 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  background-color: var(--couleur-secondaire);
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 #client_formulaire #client_badge .badge_img {
-    height: 40vh;
-    width: auto;
-    margin: 1vh;
-    border-radius: 10px;
-    margin-bottom: 1vh;
-
+  width: 220px;
+  height: 220px;
+  border: 5px solid var(--couleur-tertiaire);
+  border-radius: 50%;
+  object-fit: contain;
+  margin: 10px 0;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
 
 #client_formulaire #client_badge h4 {
-    text-align: center;
-    margin-top: 1vh;
+  margin: 15px 0 0 0;
+  font-size: 1.1rem;
+  color: var(--couleur-principale);
 }
 
+.btn-switch {
+  background-color: var(--couleur-principale);
+  color: var(--couleur-secondaire);
+  font-weight: bold;
+  margin-bottom: 20px;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-switch:hover {
+  background-color: var(--couleur-principale-hover);
+  transform: translateY(-2px);
+}
+
+/* --- INFORMATIONS (Colonne Droite) --- */
 #client_formulaire #informations {
-    flex: 4;
-    display: flex;
-    flex-direction: column;
-    gap: 5%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
-#client_formulaire #informations form {
-
-    display: flex;
-    flex-direction: column;
+#informations h2 {
+  margin: 0;
+  color: var(--couleur-tertiaire);
+  border-bottom: 2px solid var(--couleur-tertiaire);
+  padding-bottom: 10px;
+  font-family: 'Georgia', serif;
+  font-size: 1.4rem;
 }
 
-#client_formulaire #informations label {
-    font-weight: bold;
-    margin-bottom: 0.3vh;
+/* ✅ GRID pour layout 2 colonnes */
+#client_formulaire #informations form.general_fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 15px;
 }
 
-#client_formulaire #informations #gameMaster {
-    width: 1.2em;
-    height: 1.2em;
-    cursor: pointer;
-    accent-color: var(--couleur-principale);
-
+.form-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
-#client_reservation #client_retour_infos{
-    display: flex;
-    justify-content: flex-start;
+.form-field-group label {
+  font-weight: bold;
+  color: var(--couleur-principale);
+  font-size: 0.95rem;
 }
 
-#client_reservation .input_avis {
+.form-field-group input {
   width: 100%;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  padding: 5px;
-  resize: vertical;
+  padding: 0.7em 1em;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: var(--couleur-secondaire);
+  color: var(--couleur-principale);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  transition: all 0.2s;
+  font-size: 0.95rem;
 }
 
-#client_reservation .input_avis:disabled {
+.form-field-group input:focus:not([disabled]) {
+  border-color: var(--couleur-tertiaire);
+  box-shadow: 0 0 0 3px rgba(212, 166, 106, 0.3);
+  outline: none;
+}
+
+.form-field-group input[disabled] {
   background-color: #f3f3f3;
-  color: #666;
+  border: 1px dashed #ddd;
+  color: #999;
+  cursor: not-allowed;
 }
 
+#client_fields {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 20px;
+}
+
+#client_fields > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+#client_fields label {
+  font-weight: bold;
+  color: var(--couleur-principale);
+  font-size: 0.95rem;
+}
+
+/* ✅ CLÉS: Utiliser les mêmes styles que .form-field-group input */
+#client_fields input {
+  width: 100%;
+  padding: 0.7em 1em;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: var(--couleur-secondaire);
+  color: var(--couleur-principale);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  transition: all 0.2s;
+  font-size: 0.95rem;
+}
+
+#client_fields input:focus:not([disabled]) {
+  border-color: var(--couleur-tertiaire);
+  box-shadow: 0 0 0 3px rgba(212, 166, 106, 0.3);
+  outline: none;
+}
+
+#client_fields input[disabled] {
+  background-color: #f3f3f3;
+  border: 1px dashed #ddd;
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* --- BOUTONS --- */
 #client_btn_section {
-    display: flex;
-    gap: 1rem;
-    justify-content: flex-start;
-    margin-top: 1.5vh;
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--couleur-tertiaire);
 }
 
 #client_btn_section .btn {
-    flex: 1;
-    max-width: 150px;
-}
-
-.note_etoiles {
-  display: inline-flex;
+  padding: 10px 20px;
+  font-weight: bold;
+  border-radius: 8px;
+  border: none;
   cursor: pointer;
-  color: #ccc;
-  font-size: 1.5rem;
+  transition: all 0.2s;
+  font-size: 0.95rem;
 }
 
-.note_etoiles span {
-  transition: color 0.2s;
+.btn.modifier {
+  background: var(--couleur-tertiaire);
+  color: var(--couleur-principale);
 }
 
-.note_etoiles span.active {
-  color: gold;
-}
-.note_etoiles.disabled {
-  pointer-events: none;
-  cursor: default;
-  opacity: 0.7;
+.btn.modifier:hover {
+  background: var(--couleur-secondaire-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-#client_formulaire #informations input {
-    padding: 0.5em 0.7em;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    width: 100%;
-    box-sizing: border-box;
-
+.btn.annuler {
+  background: #ccc;
+  color: #333;
 }
+
+.btn.annuler:hover {
+  background: #aaa;
+}
+
+.btn.enregistrer {
+  background: var(--couleur-principale);
+  color: var(--couleur-secondaire);
+}
+
+.btn.enregistrer:hover {
+  background: var(--couleur-principale-hover);
+  transform: translateY(-2px);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* --- CHANGEMENT DE MOT DE PASSE --- */
 #change_password {
-  margin-top: 20px;
+  grid-column: 1 / -1;
+  margin-top: 10px;
 }
 
 .change-password-btn {
-  background-color: #e67e22;
-  color: white;
-  padding: 10px;
+  background-color: var(--couleur-tertiaire);
+  color: var(--couleur-principale);
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-weight: bold;
   border: none;
   cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .change-password-btn:hover {
-  background-color: #e67e22;
+  background-color: var(--couleur-secondaire-hover);
+  transform: translateY(-1px);
+}
+
+#change_password > div {
+  margin-top: 15px;
+  padding: 20px;
+  background-color: var(--couleur-secondaire);
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--couleur-tertiaire);
 }
 
 #change_password form {
-  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+#change_password .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+#change_password .form-group label {
+  font-weight: bold;
+  color: var(--couleur-principale);
+  font-size: 0.95rem;
+}
+
+#change_password .form-group input {
+  width: 100%;
+  padding: 0.7em 1em;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: var(--couleur-secondaire);
+  color: var(--couleur-principale);
+  box-sizing: border-box;
+  transition: all 0.2s;
+}
+
+#change_password .form-group input:focus {
+  border-color: var(--couleur-tertiaire);
+  box-shadow: 0 0 0 3px rgba(212, 166, 106, 0.3);
+  outline: none;
+}
+
+/* Messages de feedback */
+#change_password .password-message {
   padding: 10px;
-  background-color: #f9f9f9;
-  border-radius: 5px;
+  border-radius: 6px;
+  font-weight: 500;
+  margin-top: 10px;
+}
+
+#change_password .password-error {
+  background-color: #fee;
+  color: #c33;
+  border: 1px solid #fcc;
+}
+
+#change_password .password-success {
+  background-color: #efe;
+  color: #3c3;
+  border: 1px solid #cfc;
 }
