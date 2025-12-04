@@ -17,6 +17,7 @@ import projet_groupe4.model.Client;
 import projet_groupe4.model.Emprunt;
 import projet_groupe4.model.Jeu;
 import projet_groupe4.model.Personne;
+import projet_groupe4.model.StatutLocation;
 
 @Service
 public class EmpruntService {
@@ -64,47 +65,54 @@ public class EmpruntService {
 	public List<TopJeuResponse> getTop3Emprunts(){
 		log.debug("Les jeux les plus empruntés");
 		List<Object[]> results = dao.findTopEmprunts();
-        return results.stream()
-                .map(r -> new TopJeuResponse((Jeu) r[0], ((Long) r[1]).doubleValue()))
-                .limit(3)
-                .toList();
-    
+		return results.stream()
+				.map(r -> new TopJeuResponse((Jeu) r[0], ((Long) r[1]).doubleValue()))
+				.limit(3)
+				.toList();
+
 	}
 
-
 	private Emprunt save(Emprunt emprunt, EmpruntRequest request) {
-    boolean isNew = (emprunt.getId() == null);
+		boolean isNew = (emprunt.getId() == null);
 
-    emprunt.setDateEmprunt(request.getDateEmprunt());
-    emprunt.setDateRetour(request.getDateRetour());
-    emprunt.setDateRetourReel(request.getDateRetourReel());
-    emprunt.setStatutLocation(request.getStatutLocation());
+		emprunt.setDateEmprunt(request.getDateEmprunt());
+		emprunt.setDateRetour(request.getDateRetour());
+		emprunt.setDateRetourReel(request.getDateRetourReel());
 
-    Personne personne = this.personneDao.findById(request.getClientId())
-            .orElseThrow(IdNotFoundException::new);
+		if (request.getDateRetourReel() != null) {
+			if (request.getDateRetourReel().isAfter(request.getDateRetour())) {
+				emprunt.setStatutLocation(StatutLocation.enRetard);
+			} else {
+				emprunt.setStatutLocation(StatutLocation.rendu);
+			}
+		} else {
+			emprunt.verifierRetard();
+		}
 
-    if (!(personne instanceof Client client)) {
-        throw new RuntimeException("L'id ne correspond pas à un client");
-    }
+		Personne personne = this.personneDao.findById(request.getClientId())
+				.orElseThrow(IdNotFoundException::new);
 
-    emprunt.setClient(client);
-    emprunt.setJeu(this.jeuDao.getReferenceById(request.getJeuId()));
+		if (!(personne instanceof Client client)) {
+			throw new RuntimeException("L'id ne correspond pas à un client");
+		}
 
-    
-    Emprunt saved = this.dao.save(emprunt);
+		emprunt.setClient(client);
+		emprunt.setJeu(this.jeuDao.getReferenceById(request.getJeuId()));
 
-    // Si c'est un nouvel emprunt, on ajoute 10 points de fidélité
-    if (isNew) {
-        Integer currentPoints = client.getPointFidelite();
-        if (currentPoints == null) {
-            currentPoints = 0;
-        }
+		Emprunt saved = this.dao.save(emprunt);
 
-        client.setPointFidelite(currentPoints + 10);
-        this.personneDao.save(client);
-    }
+		// Si c'est un nouvel emprunt, on ajoute 10 points de fidélité
+		if (isNew) {
+			Integer currentPoints = client.getPointFidelite();
+			if (currentPoints == null) {
+				currentPoints = 0;
+			}
 
-    return saved;
-}
+			client.setPointFidelite(currentPoints + 10);
+			this.personneDao.save(client);
+		}
+
+		return saved;
+	}
 
 }
