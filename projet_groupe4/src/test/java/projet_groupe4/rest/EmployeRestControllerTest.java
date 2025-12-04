@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import projet_groupe4.dao.IDAOPersonne;
+import projet_groupe4.dto.request.PasswordEmployeRequest;
 import projet_groupe4.dto.request.SubscribeEmployeRequest;
 import projet_groupe4.model.Employe;
 import projet_groupe4.service.PersonneService;
@@ -514,4 +515,194 @@ public class EmployeRestControllerTest {
 
         Mockito.verify(this.srv).deleteById(EMPLOYE_ID);
     }
+    
+    
+    
+    
+    
+    
+    
+    @Test
+    void shouldGetMyProfileUnauthorized() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get(API_URL + "/me"))
+               .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockUser(roles = "CLIENT")
+    void shouldGetMyProfileForbidden() throws Exception {
+    	mockMvc.perform(MockMvcRequestBuilders.get(API_URL + "/me"))
+        .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    @WithMockUser(roles = "EMPLOYE")
+    void shouldGetMyProfileOk() throws Exception {
+        Employe e = new Employe();
+        e.setId(EMPLOYE_ID);
+        e.setNom(EMPLOYE_NOM);
+        e.setPrenom(EMPLOYE_PRENOM);
+        e.setMail(EMPLOYE_MAIL);
+
+        Mockito.when(srv.getByMail(EMPLOYE_MAIL)).thenReturn(Optional.of(e));
+
+        mockMvc.perform(MockMvcRequestBuilders.get(API_URL + "/me")
+                .with(SecurityMockMvcRequestPostProcessors.user(EMPLOYE_MAIL).roles("EMPLOYE")))
+               .andExpect(MockMvcResultMatchers.status().isOk())
+               .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(EMPLOYE_ID))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.nom").value(EMPLOYE_NOM))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.prenom").value(EMPLOYE_PRENOM))
+               .andExpect(MockMvcResultMatchers.jsonPath("$.mail").value(EMPLOYE_MAIL));
+    }
+
+    @Test
+    @WithMockUser(roles = "EMPLOYE")
+    void shouldGetMyProfileNotFound() throws Exception {
+        Mockito.when(srv.getByMail(EMPLOYE_MAIL)).thenReturn(Optional.empty());
+
+        mockMvc.perform(MockMvcRequestBuilders.get(API_URL + "/me")
+                .principal(() -> EMPLOYE_MAIL))
+               .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    // --- PUT /api/employe/me ---
+    @Test
+    void shouldUpdateMyProfileUnauthorized() throws Exception {
+    	mockMvc.perform(MockMvcRequestBuilders.put(API_URL + "/me")
+    	        .contentType(MediaType.APPLICATION_JSON)
+    	        .content("{}"))
+    	       .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "CLIENT")
+    void shouldUpdateMyProfileForbidden() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.put(API_URL + "/me")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{}"))
+               .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "EMPLOYE")
+    void shouldUpdateMyProfileOk() throws Exception {
+        Employe e = new Employe();
+        e.setId(EMPLOYE_ID);
+        e.setMail(EMPLOYE_MAIL);
+
+        Mockito.when(srv.getByMail(EMPLOYE_MAIL)).thenReturn(Optional.of(e));
+
+        SubscribeEmployeRequest req = new SubscribeEmployeRequest();
+        req.setNom("NewNom");
+        req.setPrenom("Prenom");
+        req.setMail(EMPLOYE_MAIL);
+        req.setMdp("mdp");
+        req.setTelephone("00000000");
+        req.setJob("Serveur");
+        req.setGameMaster(true);
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        mockMvc.perform(MockMvcRequestBuilders.put(API_URL + "/me")
+                .with(SecurityMockMvcRequestPostProcessors.user(EMPLOYE_MAIL).roles("EMPLOYE"))
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(req)))
+               .andExpect(MockMvcResultMatchers.status().isOk());
+
+        ArgumentCaptor<SubscribeEmployeRequest> captor = ArgumentCaptor.forClass(SubscribeEmployeRequest.class);
+        Mockito.verify(srv).update(Mockito.eq(EMPLOYE_ID), captor.capture());
+
+        SubscribeEmployeRequest actualReq = captor.getValue();
+        Assertions.assertEquals("NewNom", actualReq.getNom());
+        Assertions.assertEquals("Prenom", actualReq.getPrenom());
+        Assertions.assertEquals(EMPLOYE_MAIL, actualReq.getMail());
+        Assertions.assertEquals("mdp", actualReq.getMdp());
+        Assertions.assertEquals("00000000", actualReq.getTelephone());
+        Assertions.assertEquals("Serveur", actualReq.getJob());
+        Assertions.assertTrue(actualReq.isGameMaster());
+    }
+
+    @Test
+    @WithMockUser(roles = "EMPLOYE")
+    void shouldUpdateMyProfileBadRequest() throws Exception {
+        Employe e = new Employe();
+        e.setId(EMPLOYE_ID);
+
+        Mockito.when(srv.getByMail(EMPLOYE_MAIL)).thenReturn(Optional.of(e));
+
+        // Nom null
+        SubscribeEmployeRequest req = new SubscribeEmployeRequest();
+        req.setNom(null);
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        mockMvc.perform(MockMvcRequestBuilders.put(API_URL + "/me")
+                .principal(() -> EMPLOYE_MAIL)
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(req)))
+               .andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+        Mockito.verify(srv, Mockito.never()).update(Mockito.eq(EMPLOYE_ID), Mockito.any());
+    }
+
+    // --- PUT /api/employe/{id}/password ---
+    @Test
+    void shouldChangePasswordUnauthorized() throws Exception {
+        PasswordEmployeRequest req = new PasswordEmployeRequest();
+        req.setOldPassword("old");
+        req.setNewPassword("new");
+
+        mockMvc.perform(MockMvcRequestBuilders.put(API_URL_BY_ID + "/password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(req)))
+               .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "CLIENT")
+    void shouldChangePasswordForbidden() throws Exception {
+        PasswordEmployeRequest req = new PasswordEmployeRequest();
+        req.setOldPassword("old");
+        req.setNewPassword("new");
+
+        mockMvc.perform(MockMvcRequestBuilders.put(API_URL_BY_ID + "/password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(req)))
+               .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "EMPLOYE")
+    void shouldChangePasswordOk() throws Exception {
+        PasswordEmployeRequest req = new PasswordEmployeRequest();
+        req.setOldPassword("old");
+        req.setNewPassword("new");
+
+        Mockito.when(srv.changePassword(EMPLOYE_ID, "old", "new")).thenReturn(true);
+
+        mockMvc.perform(MockMvcRequestBuilders.put(API_URL_BY_ID + "/password")
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(req)))
+               .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    @WithMockUser(roles = "EMPLOYE")
+    void shouldChangePasswordForbiddenWhenOldPasswordIncorrect() throws Exception {
+        PasswordEmployeRequest req = new PasswordEmployeRequest();
+        req.setOldPassword("wrong");
+        req.setNewPassword("new");
+
+        Mockito.when(srv.changePassword(EMPLOYE_ID, "wrong", "new")).thenReturn(false);
+
+        mockMvc.perform(MockMvcRequestBuilders.put(API_URL_BY_ID + "/password")
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(req)))
+               .andExpect(MockMvcResultMatchers.status().isForbidden());
+    }
+    
 }

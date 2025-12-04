@@ -206,7 +206,7 @@ public class AvisRestControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "EMPLOYE")
+    @WithMockUser(roles = "CLIENT")
     void shouldCreateStatusOk() throws Exception {
         // given
         Avis avisMock = new Avis();
@@ -222,7 +222,7 @@ public class AvisRestControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "EMPLOYE")
+    @WithMockUser(roles = "CLIENT")
     void shouldCreateUseDaoSave() throws Exception {
         // given
         ArgumentCaptor<AvisRequest> avisCaptor = ArgumentCaptor.captor();
@@ -255,7 +255,7 @@ public class AvisRestControllerTest {
             "0,'    ',commentaire",
             "0,,commentaire"
     })
-    @WithMockUser(roles = "EMPLOYE")
+    @WithMockUser(roles = "CLIENT")
     void shouldCreateStatusBadRequest(int note, String titre, String commentaire) throws Exception {
         // given
 
@@ -306,7 +306,7 @@ public class AvisRestControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "EMPLOYE")
+    @WithMockUser(roles = "CLIENT")
     void shouldUpdateStatusOk() throws Exception {
         // given
         Mockito.when(srv.getById(AVIS_ID)).thenReturn(Optional.of(new Avis()));
@@ -319,7 +319,7 @@ public class AvisRestControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "EMPLOYE")
+    @WithMockUser(roles = "CLIENT")
     void shouldUpdateUseSrvUpdate() throws Exception {
         // given
         Avis a = new Avis();
@@ -350,7 +350,7 @@ public class AvisRestControllerTest {
             "0,'    ',commentaire",
             "0,,commentaire"
     })
-    @WithMockUser(roles = "EMPLOYE")
+    @WithMockUser(roles = "CLIENT")
     void shouldUpdateStatusBadRequest(int note, String titre, String commentaire) throws Exception {
         // given
 
@@ -398,7 +398,7 @@ public class AvisRestControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "EMPLOYE")
+    @WithMockUser(roles = "CLIENT")
     void shouldDeleteStatusOk() throws Exception {
 
         ResultActions result = this.mockMvc.perform(
@@ -409,7 +409,7 @@ public class AvisRestControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "EMPLOYE")
+    @WithMockUser(roles = "CLIENT")
     void shouldDeleteUseServiceDeleteById() throws Exception {
 
         this.mockMvc.perform(
@@ -418,5 +418,66 @@ public class AvisRestControllerTest {
 
         Mockito.verify(this.srv).deleteById(AVIS_ID);
     }
+    
+    @Test
+    @WithMockUser(roles = "CLIENT")
+    void shouldGetAvisByReservationStatusOk() throws Exception {
+        // --- GIVEN ---
+        int reservationId = 1;
+        Avis avis = new Avis();
+        avis.setId(AVIS_ID);
+        avis.setNote(AVIS_NOTE);
+        avis.setTitre(AVIS_TITRE);
+        avis.setCommentaire(AVIS_COMMENTAIRE);
+
+        Mockito.when(srv.getByReservationId(reservationId)).thenReturn(Optional.of(avis));
+
+        // --- WHEN ---
+        ResultActions result = this.mockMvc.perform(
+            MockMvcRequestBuilders.get("/api/avis/by-reservation/{reservationId}", reservationId)
+        );
+
+        // --- THEN ---
+        result.andExpect(MockMvcResultMatchers.status().isOk())
+              .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(AVIS_ID))
+              .andExpect(MockMvcResultMatchers.jsonPath("$.note").value(AVIS_NOTE))
+              .andExpect(MockMvcResultMatchers.jsonPath("$.titre").value(AVIS_TITRE))
+              .andExpect(MockMvcResultMatchers.jsonPath("$.commentaire").value(AVIS_COMMENTAIRE));
+    }
+
+    @Test
+    @WithMockUser(roles = "CLIENT")
+    void shouldGetAvisByReservationStatusNotFound() throws Exception {
+        // --- GIVEN ---
+        int reservationId = 1;
+        Mockito.when(srv.getByReservationId(reservationId)).thenReturn(Optional.empty());
+
+        // --- WHEN ---
+        ResultActions result = this.mockMvc.perform(
+            MockMvcRequestBuilders.get("/api/avis/by-reservation/{reservationId}", reservationId)
+        );
+
+        // --- THEN ---
+        result.andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.content().string(""));
+    }
+
+    @Test
+    void shouldGetAvisByReservationStatusUnauthorized() throws Exception {
+        // --- GIVEN ---
+        int reservationId = 1;
+
+        // --- WHEN ---
+        ResultActions result = this.mockMvc.perform(
+            MockMvcRequestBuilders.get("/api/avis/by-reservation/{reservationId}", reservationId)
+        );
+
+        // --- THEN ---
+        result.andExpect(MockMvcResultMatchers.status().isUnauthorized());
+    }
+    
+    
+    
+    
 
 }
