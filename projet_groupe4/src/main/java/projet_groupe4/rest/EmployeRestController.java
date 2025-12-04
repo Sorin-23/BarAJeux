@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+
 
 import jakarta.validation.Valid;
 import projet_groupe4.dto.request.PasswordEmployeRequest;
@@ -115,5 +117,47 @@ public ResponseEntity<?> changePassword(
     return ResponseEntity.ok(new EntityUpdatedResponse(id, true));
 }
 
+
+@GetMapping("/me")
+    @PreAuthorize("hasAnyRole('EMPLOYE')") // Ensure only employees access this
+    public EmployeResponse getMyProfile(Authentication authentication) {
+        // 1. Get email from the JWT Token
+        String email = authentication.getName();
+
+        // 2. Find the person using the existing Service method
+        Personne p = srv.getByMail(email)
+                        .orElseThrow(IdNotFoundException::new);
+
+        // 3. Ensure it is actually an Employe (not a Client)
+        if (!(p instanceof Employe emp)) {
+            throw new IdNotFoundException(); // Or a specific Forbidden exception
+        }
+
+        // 4. Convert to DTO
+        return EmployeResponse.convert(emp);
+    }
+
+    /**
+     * PUT /api/employe/me
+     * Updates the currently logged-in employee's info.
+     */
+    @PutMapping("/me")
+    @PreAuthorize("hasRole('EMPLOYE')")
+    public EntityUpdatedResponse updateMyProfile(
+            Authentication authentication, 
+            @Valid @RequestBody SubscribeEmployeRequest request) {
+        
+        // 1. Get email from Token
+        String email = authentication.getName();
+
+        // 2. Get the specific ID of this user
+        Personne p = srv.getByMail(email)
+                        .orElseThrow(IdNotFoundException::new);
+
+        // 3. Reuse the existing update method using the found ID
+        this.srv.update(p.getId(), request);
+
+        return new EntityUpdatedResponse(p.getId(), true);
+    }
 
 }

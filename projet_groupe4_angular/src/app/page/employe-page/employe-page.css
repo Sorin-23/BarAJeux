@@ -1,0 +1,124 @@
+/* Container Layout */
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #f3e5ce; /* Background from screenshot */
+  min-height: 100vh;
+}
+
+.header-section h1 {
+  color: #5a3a22; /* Dark brown */
+  margin-bottom: 20px;
+  font-family: 'Times New Roman', serif; /* Assuming tavern style */
+}
+
+/* Card Style */
+.content-card {
+  background-color: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 30px;
+}
+
+h2 {
+  color: #5a3a22;
+  border-bottom: 2px solid #d4b483;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+/* Inputs */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-weight: bold;
+  color: #3e2723;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Info View Rows */
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+/* Buttons */
+.btn-custom {
+  background-color: #cca36e; 
+  color: #5a3a22;
+  font-weight: bold;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-top: 10px;
+}
+
+.btn-custom:hover {
+  background-color: #b08d55;
+}
+
+.btn-custom:disabled {
+  background-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+.btn-cancel {
+  background-color: #8d8d8d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+/* Validation Special Box */
+.validation-box {
+  background-color: #fff3cd;
+  border: 1px solid #ffeeba;
+  padding: 15px;
+  border-radius: 5px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.required-label {
+  color: #856404;
+  font-weight: bold;
+}
+
+/* Messages */
+.error-text {
+  color: red;
+  font-size: 0.8rem;
+}
+
+.message-box {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: bold;
+}
+.message-box.success { color: green; background-color: #d4edda; }
+.message-box.error { color: red; background-color: #f8d7da; }

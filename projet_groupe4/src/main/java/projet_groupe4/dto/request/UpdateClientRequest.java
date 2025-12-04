@@ -31,7 +31,7 @@ public class UpdateClientRequest {
     @NotBlank
     private String codePostale;
 
-    // Ville peut être optionnelle si tu veux
+    // Ville peut être optionnelle
     private String ville;
 
     public UpdateClientRequest() {

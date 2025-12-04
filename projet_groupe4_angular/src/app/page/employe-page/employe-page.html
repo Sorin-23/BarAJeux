@@ -1,23 +1,103 @@
-<div id="informations" class="block_white">
-  <h2>Modifier votre mot de passe</h2>
+<div class="container-fluid main-container">
+  
+  <!-- HEADER / TITLE -->
+  <div class="header-section">
+    <h1>Mon Profil Employé</h1>
+  </div>
 
-  <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
-    <div class="filtre_groupe">
-      <label>Ancien mot de passe :</label> <input type="password" formControlName="oldPassword" />
+  <!-- SECTION 1: PERSONAL INFO (New) -->
+  <div class="content-card" *ngIf="currentEmploye">
+    <h2>Mes Informations Personnelles</h2>
+    
+    <!-- View Mode -->
+    <div *ngIf="!isEditingProfile" class="info-view">
+      <div class="info-row">
+        <strong>Nom :</strong> <span>{{ currentEmploye.nom }}</span>
+      </div>
+      <div class="info-row">
+        <strong>Prénom :</strong> <span>{{ currentEmploye.prenom }}</span>
+      </div>
+      <div class="info-row">
+        <strong>Email :</strong> <span>{{ currentEmploye.mail }}</span>
+      </div>
+      <div class="info-row">
+        <strong>Téléphone :</strong> <span>{{ currentEmploye.telephone }}</span>
+      </div>
+      <div class="info-row">
+        <strong>Poste :</strong> <span>{{ currentEmploye.job }}</span>
+      </div>
+
+      <button class="btn-custom mt-3" (click)="toggleEditProfile()">Modifier mes infos</button>
     </div>
 
-    <div class="filtre_groupe">
-      <label>Nouveau mot de passe :</label> <input type="password" formControlName="newPassword" />
-    </div>
+    <!-- Edit Mode -->
+    <div *ngIf="isEditingProfile" class="info-edit">
+      <form (ngSubmit)="saveProfile()">
+        <div class="form-group">
+          <label>Nom</label>
+          <input type="text" [(ngModel)]="currentEmploye.nom" name="nom" class="input-field" required>
+        </div>
+        <div class="form-group">
+          <label>Prénom</label>
+          <input type="text" [(ngModel)]="currentEmploye.prenom" name="prenom" class="input-field" required>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="text" [(ngModel)]="currentEmploye.mail" name="mail" class="input-field" required>
+        </div>
+        <div class="form-group">
+          <label>Téléphone</label>
+          <input type="text" [(ngModel)]="currentEmploye.telephone" name="telephone" class="input-field" required>
+        </div>
+        
+        <!-- Validation Password Field -->
+        <div class="validation-box">
+          <label class="required-label">Mot de passe requis pour valider :</label>
+          <input type="password" [(ngModel)]="validationPassword" name="valPass" 
+                 class="input-field" placeholder="Votre mot de passe actuel" required>
+        </div>
 
-    <div class="filtre_groupe">
-      <label>Confirmer le nouveau mot de passe :</label>
-      <input type="password" formControlName="confirmPassword" />
+        <div class="button-group">
+          <button type="submit" class="btn-custom">Enregistrer</button>
+          <button type="button" class="btn-cancel" (click)="toggleEditProfile()">Annuler</button>
+        </div>
+      </form>
     </div>
-    <div class="form-group">
-      <button type="submit" class="btn modifier" [disabled]="passwordForm.invalid">Modifier</button>
-    </div>
-  </form>
+  </div>
 
-  <p>{{ msg }}</p>
+  <!-- SECTION 2: CHANGE PASSWORD (Existing) -->
+  <div class="content-card">
+    <h2>Modifier votre mot de passe</h2>
+    
+    <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+      
+      <div class="form-group">
+        <label>Ancien mot de passe :</label>
+        <input type="password" formControlName="oldPassword" class="input-field">
+      </div>
+
+      <div class="form-group">
+        <label>Nouveau mot de passe :</label>
+        <input type="password" formControlName="newPassword" class="input-field">
+        <small *ngIf="passwordForm.get('newPassword')?.errors?.['minlength']" class="error-text">
+          6 caractères minimum.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label>Confirmer le nouveau mot de passe :</label>
+        <input type="password" formControlName="confirmPassword" class="input-field">
+        <small *ngIf="passwordForm.errors?.['passwordMismatch'] && passwordForm.get('confirmPassword')?.touched" class="error-text">
+          Les mots de passe ne correspondent pas.
+        </small>
+      </div>
+
+      <button type="submit" class="btn-custom" [disabled]="passwordForm.invalid">Modifier</button>
+    </form>
+    
+    <div *ngIf="msg" class="message-box" [ngClass]="{'error': msg.includes('incorrect'), 'success': msg.includes('succès')}">
+      {{ msg }}
+    </div>
+  </div>
+
 </div>
