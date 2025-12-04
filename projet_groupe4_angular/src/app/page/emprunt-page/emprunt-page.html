@@ -1,0 +1,90 @@
+<main id="emprunt_page">
+  <section class="emprunt-card block_white">
+    <!-- HEADER: Retour + Titre -->
+    <div class="emprunt-header">
+      <button class="btn btn-back" (click)="goBack()">← Revenir</button>
+      <h2>Mes emprunts</h2>
+      <div class="header-stats">
+        <span class="stat-badge">{{ emprunts.length }} emprunt(s)</span>
+      </div>
+    </div>
+
+    <!-- ÉTAT VIDE -->
+    <div *ngIf="emprunts.length === 0" class="no-emprunts">
+      <div class="empty-icon">📚</div>
+      <h3>Aucun emprunt</h3>
+      <p>Vous n'avez pas encore emprunté de jeux.</p>
+    </div>
+
+    <!-- TABLEAU EMPRUNTS -->
+    <div *ngIf="emprunts.length > 0" class="table-container">
+      <!-- Vue Desktop: Tableau classique -->
+      <table class="emprunt-table">
+        <thead>
+          <tr>
+            <th class="col-game">Jeu</th>
+            <th class="col-date-emprunt">Date d'emprunt</th>
+            <th class="col-date-retour">Date de retour prévue</th>
+            <th class="col-date-retour-reel">Retour réel</th>
+            <th class="col-status">Statut</th>
+            <th class="col-action">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr
+            *ngFor="let e of emprunts; let i = index"
+            [class.odd]="i % 2 === 1"
+            [class.highlight]="isEmpruntHighlighted(e)"
+          >
+            <!-- Jeu -->
+            <td class="col-game">
+              <span class="game-name">{{ e.jeu?.nom }}</span>
+            </td>
+
+            <!-- Date d'emprunt -->
+            <td class="col-date-emprunt">
+              <span class="date-badge">
+                {{ e.dateEmprunt | date : 'dd/MM/yyyy' }}
+              </span>
+            </td>
+
+            <!-- Date de retour prévue -->
+            <td class="col-date-retour">
+              <span class="date-badge">
+                {{ e.dateRetour | date : 'dd/MM/yyyy' }}
+              </span>
+            </td>
+
+            <!-- Retour réel -->
+            <td class="col-date-retour-reel">
+              <span class="date-badge" *ngIf="e.dateRetourReel; else noReturn">
+                {{ e.dateRetourReel | date : 'dd/MM/yyyy' }}
+              </span>
+              <ng-template #noReturn>
+                <span class="no-return">En cours</span>
+              </ng-template>
+            </td>
+
+            <!-- Statut -->
+            <td class="col-status">
+              <span class="status-badge">
+                {{ e.statutLocation }}
+              </span>
+            </td>
+
+            <!-- Action -->
+            <td class="col-action">
+              <button *ngIf="!e.dateRetourReel" class="btn-terminer" (click)="terminerEmprunt(e)">
+                Terminer
+              </button>
+
+              <!-- Si déjà terminé -->
+              <span *ngIf="e.dateRetourReel" class="status-finished"> Rendu </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>

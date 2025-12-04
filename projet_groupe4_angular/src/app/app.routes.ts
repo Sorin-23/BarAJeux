@@ -10,6 +10,7 @@ import { InscriptionPage } from './page/inscription-page/inscription-page';
 import { roleGuard } from './guard/role-guard';
 import { ReservationPage } from './page/reservation-page/reservation-page';
 import { EmployePage } from './page/employe-page/employe-page';
+import { EmpruntPage } from './page/emprunt-page/emprunt-page';
 
 export const routes: Routes = [
   {
@@ -31,6 +32,7 @@ export const routes: Routes = [
     data: { role: 'ROLE_CLIENT' },
   },
   { path: 'reservations/:id', component: ReservationPage },
+  { path: 'emprunts/:id', component: EmpruntPage },
   {
     path: 'admin',
     component: AdminPage,

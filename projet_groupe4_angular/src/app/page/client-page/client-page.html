@@ -5,6 +5,7 @@
   <div id="client_formulaire" *ngIf="currentView === 'info'">
     <div id="client_badge">
       <button class="btn btn-switch" (click)="goToReservations()">Voir mes réservations</button>
+      <button class="btn btn-switch" (click)="goToEmprunts()">Voir mes emprunts</button>
 
       <img
         [src]="'assets/images/badge/' + getBadgeLevel(client.pointFidelite) + '.png'"

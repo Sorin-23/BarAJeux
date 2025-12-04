@@ -30,7 +30,8 @@ export class ClientPage implements OnInit {
   client: Client;
   clientBackup: Client | null = null;
   reservationsList: Reservation[] = [];
-  clientWithResa: ClientWithReservationResponse | null = null;
+  //clientWithResa: ClientWithReservationResponse | null = null;
+  //clientWithEmprunt: ClientWithEmpruntResponse | null = null;
 
   oldPassword: string = '';
   newPassword: string = '';
@@ -176,7 +177,13 @@ export class ClientPage implements OnInit {
     }
   }
 
-  // --- Badge  ---
+  goToEmprunts() {
+    if (this.client?.id) {
+      this.router.navigate(['/emprunts', this.client.id]);
+    }
+  }
+
+  // --- Badge Level Method ---
   getBadgeLevel(points: number): string {
     if (!points) return 'novice-transparent';
     if (points >= 500) return 'legende-transparent';

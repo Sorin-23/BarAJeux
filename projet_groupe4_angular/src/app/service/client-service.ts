@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Subject, Observable, startWith, switchMap, map } from 'rxjs';
 import { Client } from '../dto/client';
 import { ClientWithReservationResponse } from '../dto/client-with-reservation-response';
+import { ClientWithEmpruntResponse } from '../dto/client-with-emprunt-response';
 
 @Injectable({
   providedIn: 'root',
@@ -30,22 +31,20 @@ export class ClientService {
     this.refresh$.next();
   }
 
-  //  FIND BY ID 
+  //  FIND BY ID
   public findById(id: number): Observable<Client> {
     return this.http
       .get<any>(`${this.apiUrl}/${id}`)
       .pipe(map((json) => this.mapJsonToClient(json)));
   }
 
-  // FIND BY USERNAME 
+  // FIND BY USERNAME
   public findByUsername(username: string): Observable<Client> {
     const encodedUsername = encodeURIComponent(username);
     return this.http
       .get<any>(`${this.apiUrl}/username/${encodedUsername}`)
       .pipe(map((json) => this.mapJsonToClient(json)));
   }
-
-
 
   //  SAVE (POST vs PUT)
   public save(client: Client): void {
@@ -74,25 +73,35 @@ export class ClientService {
     }
   }
 
-public changePassword(clientId: number, oldPassword: string, newPassword: string): Observable<string> {
-  const payload = { oldPassword, newPassword };
-  return this.http.put<string>(`${this.apiUrl}/${clientId}/password`, payload, { responseType: 'text' as 'json' });
-}
+  public changePassword(
+    clientId: number,
+    oldPassword: string,
+    newPassword: string
+  ): Observable<string> {
+    const payload = { oldPassword, newPassword };
+    return this.http.put<string>(`${this.apiUrl}/${clientId}/password`, payload, {
+      responseType: 'text' as 'json',
+    });
+  }
 
-
-  // DELETE 
+  // DELETE
   public deleteById(id: number): void {
     this.http.delete<void>(`${this.apiUrl}/${id}`).subscribe(() => this.refresh());
   }
 
-  // RESERVATIONS et AVIS 
+  // RESERVATIONS et AVIS
   // matche @GetMapping("/reservations/{id}")
   public getReservations(clientId: number): Observable<ClientWithReservationResponse> {
     return this.http.get<ClientWithReservationResponse>(`${this.apiUrl}/reservations/${clientId}`);
   }
 
+  // EMPRUNTS et AVIS
+  // matche @GetMapping("/emprunts/{id}")
+  public getEmprunts(clientId: number): Observable<ClientWithEmpruntResponse> {
+    return this.http.get<ClientWithEmpruntResponse>(`${this.apiUrl}/emprunts/${clientId}`);
+  }
+
   public saveAvis(reservationId: number, avisData: any): Observable<void> {
-    
     return this.http.post<void>(`/avis`, avisData);
   }
 

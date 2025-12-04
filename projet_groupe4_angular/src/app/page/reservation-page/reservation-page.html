@@ -20,7 +20,6 @@
       <table class="reservation-table">
         <thead>
           <tr>
-            <th class="col-id">ID</th>
             <th class="col-date">Date début</th>
             <th class="col-date">Date fin</th>
             <th class="col-game">Jeu</th>
@@ -39,11 +38,6 @@
             [class.odd]="i % 2 === 1"
             [class.highlight]="isReservationHighlighted(r)"
           >
-            <!-- ID -->
-            <td class="col-id">
-              <span class="badge-id">{{ r.id }}</span>
-            </td>
-
             <!-- Date Début -->
             <td class="col-date">
               <span class="date-badge">
@@ -147,27 +141,10 @@
                 title="Valider l'avis"
                 style="margin-bottom: 5px; display: block; width: 100%;"
               >
-                ✅ Valider
+                ✔️ Valider
               </button>
-              
-              <!-- Icon if Review Validated -->
-              <div class="status-icon" *ngIf="!r.avisModifiable && r.statutReservation === 'terminée'" title="Avis publié">
-                ✔️ Avis Publié
-              </div>
-
-              <!-- 2. CANCEL BUTTON (Only if confirmed) -->
-              <button
-                class="btn btn-cancel"
-                (click)="cancelReservation(r)"
-                *ngIf="r.statutReservation === 'confirmée'"
-                title="Annuler la réservation"
-              >
-                ❌ Annuler
-              </button>
-
-              <!-- Label if Cancelled -->
-              <span *ngIf="r.statutReservation === 'annulée'" class="label-cancelled">
-                🚫 Annulée
+              <span class="status-icon" *ngIf="!r.avisModifiable" title="Avis validé">
+                Validé
               </span>
 
             </td>

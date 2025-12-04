@@ -2,27 +2,22 @@
 /* PAGE RÉSERVATIONS */
 /* ============================================= */
 
-#reservation_page {
+#emprunt_page {
   padding: 1.5rem 2rem;
   max-width: 1500px;
   margin: 0 auto;
-  
 }
 
 /* --- CARD PRINCIPALE --- */
-.reservation-card {
+.emprunt-card {
   padding: 1.5rem 2rem;
   border-radius: 12px;
   background-color: var(--couleur-secondaire);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.07);
-
-  width: 100%;            
-  box-sizing: border-box; 
-  overflow-x: hidden;     
 }
 
 /* --- HEADER --- */
-.reservation-header {
+.emprunt-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -31,7 +26,7 @@
   flex-wrap: wrap;
 }
 
-.reservation-header h2 {
+.emprunt-header h2 {
   margin: 0;
   flex: 1;
   color: var(--couleur-tertiaire);
@@ -75,7 +70,7 @@
 }
 
 /* --- ÉTAT VIDE --- */
-.no-reservations {
+.no-emprunts {
   text-align: center;
   padding: 3rem 1.5rem;
   color: #666;
@@ -87,13 +82,13 @@
   opacity: 0.7;
 }
 
-.no-reservations h3 {
+.no-emprunts h3 {
   margin: 0.8rem 0;
   font-size: 1.1rem;
   color: var(--couleur-principale);
 }
 
-.no-reservations p {
+.no-emprunts p {
   margin: 0.4rem 0;
   font-size: 0.85rem;
   color: #999;
@@ -105,18 +100,17 @@
   overflow-x: auto;
   border-radius: 8px;
   border: 1px solid #e5e5e5;
-  display: block;
 }
 
 /* --- TABLE STYLING --- */
-.reservation-table {
+.emprunt-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.8rem;
   background: white;
 }
 
-.reservation-table thead {
+.emprunt-table thead {
   background: linear-gradient(135deg, var(--couleur-principal), var(--couleur-tertiaire));
   color: black;
   position: sticky;
@@ -124,7 +118,7 @@
   z-index: 10;
 }
 
-.reservation-table thead th {
+.emprunt-table thead th {
   text-align: left;
   padding: 0.8rem;
   font-weight: 600;
@@ -134,69 +128,59 @@
   letter-spacing: 0.4px;
 }
 
-.reservation-table thead th:last-child {
+.emprunt-table thead th:last-child {
   border-right: none;
 }
 
 /* --- COLONNES SIZING --- */
-.col-date {
-  width: 100px;
-}
+
 .col-game {
   width: 100px;
 }
-.col-table {
-  width: 80px;
+
+.col-date-emprunt {
+  width: 100px;
 }
+
+.col-date-retour {
+  width: 100px;
+}
+
+.col-date-retour-reel {
+  width: 100px;
+}
+
 .col-status {
   width: 100px;
 }
-.col-avis {
-  width: 120px;
-  min-width: 120px;
-}
-.col-comment {
-  width: 160px;
-  min-width: 160px;
-}
-.col-rating {
-  width: 80px;
-}
+
 .col-action {
   width: 80px;
 }
 
 /* --- CORPS TABLE --- */
-.reservation-table tbody td {
+.emprunt-table tbody td {
   padding: 0.7rem 0.8rem;
   border-bottom: 1px solid #f0f0f0;
   vertical-align: middle;
 }
 
 /* Zebra striping */
-.reservation-table tbody tr {
+.emprunt-table tbody tr {
   background-color: #ffffff;
   transition: all 0.2s;
 }
 
-.reservation-table tbody tr.odd {
+.emprunt-table tbody tr.odd {
   background-color: #fafafa;
 }
 
-.reservation-table tbody tr:hover {
+.emprunt-table tbody tr:hover {
   background-color: #f6f2ea;
   box-shadow: inset 1px 0 0 var(--couleur-tertiaire);
 }
 
 /* --- BADGES & STYLING --- */
-.badge-id {
-  background: #e8e8e8;
-  padding: 3px 8px;
-  border-radius: 4px;
-  font-weight: bold;
-  font-size: 0.75rem;
-  color: #333;
-}
 
 .date-badge {
   display: block;
@@ -206,12 +190,6 @@
   font-size: 0.75rem;
 }
 
-.time-badge {
-  display: block;
-  font-size: 0.75rem;
-  color: #999;
-}
-
 .game-name {
   font-weight: 600;
   color: var(--couleur-principale);
@@ -219,23 +197,13 @@
   font-size: 0.75rem;
 }
 
-.table-badge {
-  background: rgba(212, 166, 106, 0.15);
-  padding: 3px 8px;
-  border-radius: 4px;
-  font-weight: 500;
-  font-size: 0.75rem;
-}
-
 /* --- STATUS BADGES --- */
 .status-badge {
-  display: inline-block;
-  padding: 4px 10px;
+  display: block;
   border-radius: 16px;
   font-weight: 600;
   font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.4px;
 }
 
 .status-active {
@@ -256,83 +224,8 @@
   border: 1px solid #f5c6cb;
 }
 
-/* --- INPUTS AVIS --- */
-.input-avis {
-  width: 100%;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 4px;
-  font-size: 0.75rem;
-  box-sizing: border-box;
-  background-color: #fff;
-  transition: all 0.2s;
-  font-family: inherit;
-}
-
-.input-avis:focus {
-  border-color: var(--couleur-tertiaire);
-  box-shadow: 0 0 0 2px rgba(212, 166, 106, 0.2);
-  outline: none;
-}
-
-.input-avis:disabled {
-  background-color: #f5f5f5;
-  color: #999;
-  border: 1px dashed #ddd;
-  cursor: not-allowed;
-}
-
-.input-titre {
-  font-weight: 500;
-}
-
-.input-comment {
-  resize: vertical;
-  min-height: 40px;
-}
-
-.char-count {
-  font-size: 0.65rem;
-  margin-top: 1px;
-  text-align: right;
-}
-
-/* --- ÉTOILES RATING --- */
-.note-etoiles {
-  display: inline-flex;
-  gap: 2px;
-  cursor: pointer;
-  font-size: 1.1rem;
-}
-
-.note-etoiles .star {
-  color: #ddd;
-  transition: all 0.15s;
-}
-
-.note-etoiles .star:hover {
-  color: gold;
-  transform: scale(1.1);
-}
-
-.note-etoiles .star.active {
-  color: gold;
-}
-
-.note-etoiles.disabled {
-  pointer-events: none;
-  opacity: 0.7;
-}
-
-.rating-text {
-  font-size: 0.65rem;
-  margin-top: 2px;
-  text-align: center;
-  color: #b45309;
-}
-
 /* --- BOUTON VALIDER --- */
-.btn-validate {
+.btn-terminer {
   background: var(--couleur-principal);
   color: black;
   padding: 4px 8px;
@@ -343,60 +236,15 @@
   transition: all 0.2s;
 }
 
-.btn-validate:hover {
+.btn-terminer:hover {
   background: var(--couleur-principale-hover);
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* --- STATUS ICON --- */
-.status-icon {
+.status-finished {
   color: green;
   font-weight: bold;
   font-size: 0.75rem;
-}
-
-
-/* --- Status Badge Colors --- */
-.status-confirmed {
-  background: #d4f4dd; 
-  color: #2d7a3a;      
-  border: 1px solid #a8e6b3;
-}
-
-.status-finished {
-  background: #e2e3e5; 
-  color: #383d41;      
-  border: 1px solid #d6d8db;
-}
-
-
-/* --- Cancel Button --- */
-.btn-cancel {
-  background: #dc3545; 
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-weight: bold;
-  font-size: 0.75rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  border: none;
-  display: block; 
-  width: 100%;
-}
-
-.btn-cancel:hover {
-  background: #c82333; 
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* --- Cancelled Label --- */
-.label-cancelled {
-  color: #dc3545;
-  font-size: 0.7rem;
-  font-weight: bold;
-  display: block;
-  text-align: center;
-  margin-top: 5px;
 }
