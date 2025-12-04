@@ -3,26 +3,31 @@
     <div class="reservation-header">
       <button class="btn btn-back" (click)="goBack()">← Revenir</button>
       <h2>Mes réservations</h2>
+      <div class="header-stats">
+        <span class="stat-badge">{{ reservations.length }} réservation(s)</span>
+      </div>
     </div>
 
     <div *ngIf="reservations.length === 0" class="no-reservations">
-      <p>Aucune réservation trouvée.</p>
+      <div class="empty-icon">📅</div>
+      <h3>Aucune réservation</h3>
+      <p>Vous n'avez pas encore de réservations. Allez réserver un jeu !</p>
     </div>
 
     <div *ngIf="reservations.length > 0" class="table-container">
       <table class="reservation-table">
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Date début</th>
-            <th>Date fin</th>
-            <th>Jeu</th>
-            <th>Table</th>
-            <th>Statut</th>
-            <th>Titre Avis</th>
-            <th>Commentaire</th>
-            <th>Note</th>
-            <th>Action</th>
+            <th class="col-id">ID</th>
+            <th class="col-date">Date début</th>
+            <th class="col-date">Date fin</th>
+            <th class="col-game">Jeu</th>
+            <th class="col-table">Table</th>
+            <th class="col-status">Statut</th>
+            <th class="col-avis">Titre Avis</th>
+            <th class="col-comment">Commentaire</th>
+            <th class="col-rating">Note</th>
+            <th class="col-action">Action</th>
           </tr>
         </thead>
 
@@ -30,57 +35,112 @@
           <tr
             *ngFor="let r of reservations; let i = index"
             [class.odd]="i % 2 === 1"
+            [class.highlight]="isReservationHighlighted(r)"
           >
-            <td>{{ r.id }}</td>
-            <td>{{ r.datetimeDebut | date : 'dd/MM/yyyy HH:mm' }}</td>
-            <td>{{ r.datetimeFin | date : 'dd/MM/yyyy HH:mm' }}</td>
-            <td>{{ r.jeu?.nom }}</td>
-            <td>{{ r.tableJeu?.nomTable }}</td>
-            <td>{{ r.statutReservation }}</td>
+            <td class="col-id">
+              <span class="badge-id">{{ r.id }}</span>
+            </td>
 
-            <!-- Titre avis -->
-            <td>
+            <!-- Date Début -->
+            <td class="col-date">
+              <span class="date-badge">
+                {{ r.datetimeDebut | date : 'dd/MM/yyyy' }}
+              </span>
+              <span class="time-badge">
+                {{ r.datetimeDebut | date : 'HH:mm' }}
+              </span>
+            </td>
+
+            <!-- Date Fin -->
+            <td class="col-date">
+              <span class="date-badge">
+                {{ r.datetimeFin | date : 'dd/MM/yyyy' }}
+              </span>
+              <span class="time-badge">
+                {{ r.datetimeFin | date : 'HH:mm' }}
+              </span>
+            </td>
+
+            <!-- Jeu -->
+            <td class="col-game">
+              <span class="game-name">{{ r.jeu?.nom }}</span>
+            </td>
+
+            <!-- Table -->
+            <td class="col-table">
+              <span class="table-badge">{{ r.tableJeu?.nomTable }}</span>
+            </td>
+
+            <!-- Statut -->
+            <td class="col-status">
+              <span class="status-badge">
+                {{ r.statutReservation }}
+              </span>
+            </td>
+
+            <!-- Titre Avis -->
+            <td class="col-avis">
               <input
                 type="text"
-                class="input-avis"
+                class="input-avis input-titre"
                 [(ngModel)]="r.avis!.titre"
                 placeholder="Titre..."
                 [disabled]="!r.avisModifiable"
+                maxlength="100"
               />
+              <span class="char-count" *ngIf="r.avisModifiable">
+                {{ (r.avis!.titre || '').length }}/100
+              </span>
             </td>
 
             <!-- Commentaire -->
-            <td>
+            <td class="col-comment">
               <textarea
-                class="input-avis"
+                class="input-avis input-comment"
                 [(ngModel)]="r.avis!.commentaire"
-                placeholder="Commentaire..."
+                placeholder="Partagez votre avis..."
                 [disabled]="!r.avisModifiable"
                 rows="2"
+                maxlength="500"
               ></textarea>
+              <span class="char-count" *ngIf="r.avisModifiable">
+                {{ (r.avis!.commentaire || '').length }}/500
+              </span>
             </td>
 
-            <!-- Note en étoiles -->
-            <td>
-              <div class="note-etoiles" [class.disabled]="!r.avisModifiable">
+            <!-- Note (Étoiles) -->
+            <td class="col-rating">
+              <div
+                class="note-etoiles"
+                [class.disabled]="!r.avisModifiable"
+                [title]="r.avisModifiable ? 'Cliquez pour noter' : 'Non modifiable'"
+              >
                 <span
                   *ngFor="let star of [1, 2, 3, 4, 5]"
                   (click)="setRating(r, star)"
                   [class.active]="r.avis!.note >= star"
-                  >★</span
+                  [class.hover]="!r.avisModifiable"
+                  class="star"
                 >
+                  ★
+                </span>
               </div>
+              <span class="rating-text" *ngIf="r.avis!.note > 0"> {{ r.avis!.note }}/5 </span>
+              <!-- Note en étoiles -->
             </td>
 
-            <!-- Bouton Valider Avis -->
-            <td>
+            <td class="col-action">
               <button
                 class="btn btn-validate"
                 (click)="saveAvis(r)"
                 *ngIf="r.avisModifiable"
+                title="Valider et enregistrer l'avis"
               >
-                ✔️
+                ✅ Valider
               </button>
+              <span class="status-icon" *ngIf="!r.avisModifiable" title="Avis validé">
+                ✔️ Validé
+              </span>
             </td>
           </tr>
         </tbody>
@@ -88,4 +148,3 @@
     </div>
   </section>
 </main>
-

@@ -21,12 +21,11 @@ export class ReservationPage implements OnInit {
     private route: ActivatedRoute,
     private clientService: ClientService,
     private router: Router,
-    private avisService : AvisService ,
-    private tableJeuService : TableJeuService
+    private avisService: AvisService,
+    private tableJeuService: TableJeuService
   ) {}
 
   ngOnInit(): void {
-
     const clientId = Number(this.route.snapshot.paramMap.get('id'));
     if (clientId) {
       this.clientService.getReservations(clientId).subscribe({
@@ -38,29 +37,34 @@ export class ReservationPage implements OnInit {
                 if (avis) {
                   avis.note = Number(avis.note);
                   r.avis = avis;
-                  console.log(avis)
+                  console.log(avis);
                   r.avisModifiable = false; // pas modifiable, déjà existant
                 } else {
                   r.avis = new Avis(0, 0, '', '', r.id);
                   r.avisModifiable = true; // peut créer un avis
                 }
               },
-              
             });
             if (r.tableID) {
-            this.tableJeuService.findById(r.tableID).subscribe({
-              next: (table) => r.tableJeu = table,
-              error: (err) => console.error(`Erreur récupération table réservation ${r.id}:`, err)
-            });
-          }
-            
-            
+              this.tableJeuService.findById(r.tableID).subscribe({
+                next: (table) => (r.tableJeu = table),
+                error: (err) =>
+                  console.error(`Erreur récupération table réservation ${r.id}:`, err),
+              });
+            }
+
             return r;
           });
         },
       });
-    };
+    }
+  }
 
+  isReservationHighlighted(reservation: Reservation): boolean {
+    // Exemple: surligner les réservations aujourd'hui
+    const today = new Date();
+    const startDate = new Date(reservation.datetimeDebut);
+    return startDate.toDateString() === today.toDateString();
   }
 
   goBack() {
@@ -94,5 +98,4 @@ export class ReservationPage implements OnInit {
       },
     });
   }
-  
 }

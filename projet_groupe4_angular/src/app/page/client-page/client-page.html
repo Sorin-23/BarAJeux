@@ -17,27 +17,40 @@
     <div id="informations" class="block_white">
       <h2>Mes informations personnelles</h2>
       <form class="general_fields">
-        <label>Nom :</label>
-        <input type="text" [(ngModel)]="client.nom" name="nom" [disabled]="!isEditing" />
-
-        <label>Prénom :</label>
-        <input type="text" [(ngModel)]="client.prenom" name="prenom" [disabled]="!isEditing" />
-
-        <label>Email :</label>
-        <input type="email" [(ngModel)]="client.mail" name="mail" [disabled]="!isEditing" />
-
-        <label>Téléphone :</label>
-        <input type="text" [(ngModel)]="client.telephone" name="tel" [disabled]="!isEditing" />
-
+        <div class="form-field-group">
+          <label>Nom :</label>
+          <input type="text" [(ngModel)]="client.nom" name="nom" [disabled]="!isEditing" />
+        </div>
+        <div class="form-field-group">
+          <label>Prénom :</label>
+          <input type="text" [(ngModel)]="client.prenom" name="prenom" [disabled]="!isEditing" />
+        </div>
+        <div class="form-field-group">
+          <label>Email :</label>
+          <input type="email" [(ngModel)]="client.mail" name="mail" [disabled]="!isEditing" />
+        </div>
+        <div class="form-field-group">
+          <label>Téléphone :</label>
+          <input type="text" [(ngModel)]="client.telephone" name="tel" [disabled]="!isEditing" />
+        </div>
         <div id="client_fields">
-          <label>Adresse :</label>
-          <input type="text" [(ngModel)]="client.adresse" name="adresse" [disabled]="!isEditing" />
-
-          <label>Ville :</label>
-          <input type="text" [(ngModel)]="client.ville" name="ville" [disabled]="!isEditing" />
-
-          <label>Code Postal :</label>
-          <input type="text" [(ngModel)]="client.codePostale" name="cp" [disabled]="!isEditing" />
+          <div>
+            <label>Adresse :</label>
+            <input
+              type="text"
+              [(ngModel)]="client.adresse"
+              name="adresse"
+              [disabled]="!isEditing"
+            />
+          </div>
+          <div>
+            <label>Ville :</label>
+            <input type="text" [(ngModel)]="client.ville" name="ville" [disabled]="!isEditing" />
+          </div>
+          <div>
+            <label>Code Postal :</label>
+            <input type="text" [(ngModel)]="client.codePostale" name="cp" [disabled]="!isEditing" />
+          </div>
         </div>
 
         <div id="client_btn_section">
@@ -52,40 +65,40 @@
           </button>
         </div>
       </form>
-    </div>
-  </div>
+      <div id="change_password">
+        <button type="button" (click)="toggleChangePasswordForm()" class="btn change-password-btn">
+          Changer mon mot de passe
+        </button>
 
-  <!-- TAB 2: CHANGE PASSWORD -->
-  <div id="change_password">
-    <button type="button" (click)="toggleChangePasswordForm()" class="btn change-password-btn">
-      Changer mon mot de passe
-    </button>
+        <div *ngIf="isChangingPassword">
+          <h3>Changer mon mot de passe</h3>
+          <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+            <div class="filtre_groupe">
+              <label>Ancien mot de passe :</label>
+              <input type="password" formControlName="oldPassword" />
+            </div>
 
-    <div *ngIf="isChangingPassword">
-      <h3>Changer mon mot de passe</h3>
-      <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
-        <div class="filtre_groupe">
-          <label>Ancien mot de passe :</label>
-          <input type="password" formControlName="oldPassword" />
+            <div class="filtre_groupe">
+              <label>Nouveau mot de passe :</label>
+              <input type="password" formControlName="newPassword" />
+            </div>
+
+            <div class="filtre_groupe">
+              <label>Confirmer le nouveau mot de passe :</label>
+              <input type="password" formControlName="confirmPassword" />
+            </div>
+
+            <div class="form-group">
+              <button type="submit" class="btn enregistrer" [disabled]="passwordForm.invalid">
+                Modifier
+              </button>
+            </div>
+          </form>
+
+          <p *ngIf="passwordError" style="color: red">{{ passwordError }}</p>
+          <p *ngIf="passwordSuccess" style="color: green">{{ passwordSuccess }}</p>
         </div>
-
-        <div class="filtre_groupe">
-          <label>Nouveau mot de passe :</label>
-          <input type="password" formControlName="newPassword" />
-        </div>
-
-        <div class="filtre_groupe">
-          <label>Confirmer le nouveau mot de passe :</label>
-          <input type="password" formControlName="confirmPassword" />
-        </div>
-
-        <div class="form-group">
-          <button type="submit" class="btn enregistrer" [disabled]="passwordForm.invalid">Modifier</button>
-        </div>
-      </form>
-
-      <p *ngIf="passwordError" style="color: red;">{{ passwordError }}</p>
-      <p *ngIf="passwordSuccess" style="color: green;">{{ passwordSuccess }}</p>
+      </div>
     </div>
   </div>
 </main>

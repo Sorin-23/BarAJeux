@@ -1,92 +1,98 @@
-<h1>Bienvenue à la Tavern des 4 As !</h1>
-<div id="message_bienvenu" *ngIf="prenom && role === 'ROLE_CLIENT'">
-  <p>
-    <br /><!-- affiché message personnalisé si connecté sinon metre autre message ou retirer #message_bienvenu-->
-    Bravo {{ prenom }} {{ nom }} Tes exploits à la Taverne des 4 As ne passent pas inaperçus 🍻
-    Grâce à tes réservations, tu as obtenu le badge :
-    <br />
-    <br />
-    <br /><br />
-    Continue de jouer, de réserver et de partager des parties épiques pour débloquer de nouveaux
-    insignes de prestige !
-  </p>
+<header class="hero">
+  <h1>Bienvenue à la Taverne des 4 As !</h1>
+</header>
+
+<section id="message_bienvenu" *ngIf="prenom && role === 'ROLE_CLIENT'">
+  <div class="text-badge">
+    <h3>Bravo {{ prenom }} {{ nom }} ! 🍻</h3>
+    <p>
+      Tes exploits à la Taverne ne passent pas inaperçus. Grâce à tes réservations, tu as obtenu un
+      nouveau badge de prestige.
+      <br /><br />
+      <strong>Prochain objectif :</strong> Continue de jouer et partager des parties épiques pour
+      débloquer l'insigne légendaire !
+    </p>
+  </div>
   <img
     *ngIf="badgeActuel?.id"
     [src]="'assets/images/badge/' + badgeActuel?.imgURL"
     [alt]="badgeActuel?.nomBadge"
     class="badge_img"
+    title="Votre badge actuel : {{ badgeActuel?.nomBadge }}"
   />
-</div>
+</section>
 
-<h2>La taverne des 4 As</h2>
+<section class="intro-taverne">
+  <h2>L'Esprit de la Taverne</h2>
+  <p>
+    La Taverne des 4 As n’est pas un simple bar : c’est un repaire chaleureux où se rencontrent
+    passionnés de jeux, curieux et amis. Stratège chevronné ou joueur du dimanche, nos portes sont
+    ouvertes pour des soirées mémorables.
+  </p>
+  <p class="quote">“On vient pour jouer… on reste pour l’ambiance.”</p>
+</section>
 
-<p>
-  La Taverne des 4 As n’est pas un simple bar : c’est un repaire chaleureux où se rencontrent
-  passionnés de jeux, curieux et amis en quête de bons moments. Ici, chaque partie est une aventure,
-  chaque table une histoire, et chaque verre un prétexte à partager.Que vous soyez stratège
-  chevronné, joueur du dimanche ou amateur de découvertes, notre taverne vous ouvre ses portes pour
-  des soirées mémorables autour de jeux de société et de convivialité.
-</p>
-<p>“À la Taverne des 4 As, on vient pour jouer… mais on reste pour l’ambiance.”</p>
-<img src="assets/images/bienvenue.png" alt="Intérieur du bar" id="img_bar" />
+<img src="assets/images/bienvenue.png" alt="Intérieur du bar chaleureux" id="img_bar" />
 
-<div class="bloc-resa" *ngIf="prenom && role === 'ROLE_CLIENT'">
-  <a routerLink="/table">
-    <img src="assets/images/resa_table.png" alt="Réservation de table" class="logo_resa" />
+<section class="actions-container" *ngIf="prenom && role === 'ROLE_CLIENT'">
+  <a routerLink="/table" class="bloc-resa">
+    <img src="assets/images/resa_table.png" alt="Icone réservation table" class="logo_resa" />
+    <div class="content-resa">
+      <h2>Réserver une table</h2>
+      <p>Choisissez vos jeux et laissez la Taverne s’occuper du reste : convivialité garantie.</p>
+    </div>
   </a>
-  <a routerLink="/table" class="class_resa">
-    <h2>Réserver une table</h2>
-    <p>
-      Réservez votre table, choisissez vos jeux, et laissez la Taverne des 4 As s’occuper du reste :
-      convivialité garantie.
-    </p>
-  </a>
-</div>
 
-<div id="info_table"></div>
-<!-- à développer ??-->
-<div class="bloc-resa" *ngIf="prenom && role === 'ROLE_CLIENT'">
-  <a routerLink="/jeu">
-    <img src="assets/images/resa_jeu.png" alt="Emprunter un jeu" class="logo_resa" />
+  <a routerLink="/jeu" class="bloc-resa">
+    <img src="assets/images/resa_jeu.png" alt="Icone emprunt jeu" class="logo_resa" />
+    <div class="content-resa">
+      <h2>Emprunter un jeu</h2>
+      <p>Une ludothèque variée où chaque dé lancé rapproche les joueurs.</p>
+    </div>
   </a>
-  <a routerLink="/jeu" class="class_resa">
-    <h2>Emprunter un jeu</h2>
-    <p>
-      Une ludothèque variée où chaque dé lancé et chaque carte jouée rapprochent les joueurs autour
-      de moments inoubliables.
-    </p>
-  </a>
-</div>
+</section>
 
-<div id="info_jeu">
+<section id="info_jeu">
   <div id="left_container">
-    <div id="top_jeu_resa">
-      Jeux les plus réservés :
+    <h2>Le Tableau d'Honneur 🏆</h2>
+
+    <div class="stat-box" id="top_jeu_resa">
+      <h3>🔥 Les plus réservés</h3>
       <ol>
-        <li *ngFor="let jeu of topReserves">{{ jeu.jeu.nom }} ({{ jeu.count }} réservations)</li>
+        <li *ngFor="let jeu of topReserves">
+          <strong>{{ jeu.jeu.nom }}</strong> — {{ jeu.count }} réservations
+        </li>
       </ol>
     </div>
 
-    <div id="top_jeu_loue">
-      Jeux les plus loués :
+    <div class="stat-box" id="top_jeu_loue">
+      <h3>🏠 Les plus empruntés</h3>
       <ol>
-        <li *ngFor="let jeu of topLoc">{{ jeu.jeu.nom }} ({{ jeu.count }} emprunts)</li>
+        <li *ngFor="let jeu of topLoc">
+          <strong>{{ jeu.jeu.nom }}</strong> — {{ jeu.count }} emprunts
+        </li>
       </ol>
     </div>
 
-    <div id="top_jeu_aime">
-      Jeux les plus aimés :
+    <div class="stat-box" id="top_jeu_aime">
+      <h3>❤️ Les coups de cœur</h3>
       <ol>
-        <li *ngFor="let jeu of topLike">{{ jeu.jeu.nom }} (note : {{ jeu.count }})</li>
+        <li *ngFor="let jeu of topLike">
+          <strong>{{ jeu.jeu.nom }}</strong> — Note : {{ jeu.count }}/5
+        </li>
       </ol>
     </div>
-    <div *ngIf="prenom && role === 'ROLE_CLIENT'">
-      <a routerLink="/jeu"><input type="button" value="Emprunter un jeu" class="btn" /></a>
-      <a routerLink="/table"><input type="button" value="Réserver une table" class="btn" /></a>
+
+    <div class="btn-group" *ngIf="prenom && role === 'ROLE_CLIENT'">
+      <button routerLink="/jeu" class="btn">Voir tous les jeux</button>
+      <button routerLink="/table" class="btn">Réserver maintenant</button>
     </div>
   </div>
-  <div id="right_container">
-    <img [src]="'assets/images/jeux/' + topReserves[0].jeu.imgURL" 
-  [alt]="'jeu le plus réservé : ' + topReserves[0].jeu.nom"  />
+
+  <div id="right_container" *ngIf="topReserves && topReserves.length > 0">
+    <img
+      [src]="'assets/images/jeux/' + topReserves[0].jeu.imgURL"
+      [alt]="'Jeu vedette : ' + topReserves[0].jeu.nom"
+    />
   </div>
-</div>
+</section>

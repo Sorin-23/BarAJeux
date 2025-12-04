@@ -7,7 +7,13 @@ import { Client } from '../../dto/client';
 import { Reservation } from '../../dto/reservation';
 import { ClientWithReservationResponse } from '../../dto/client-with-reservation-response';
 import { Router, RouterModule } from '@angular/router';
-import { FormGroup, FormControl, Validators, AbstractControl, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  AbstractControl,
+  ReactiveFormsModule,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-client-page',
@@ -26,11 +32,11 @@ export class ClientPage implements OnInit {
   reservationsList: Reservation[] = [];
   clientWithResa: ClientWithReservationResponse | null = null;
 
-  oldPassword: string = "";
-  newPassword: string = "";
-  confirmPassword: string = "";
-  passwordError: string = "";
-  passwordSuccess: string = "";
+  oldPassword: string = '';
+  newPassword: string = '';
+  confirmPassword: string = '';
+  passwordError: string = '';
+  passwordSuccess: string = '';
 
   passwordForm: FormGroup;
 
@@ -68,23 +74,28 @@ export class ClientPage implements OnInit {
   }
 
   loadReservations(clientId: number) {
-  this.clientService.getReservations(clientId).pipe(
-    map((data: any) => {
-      const list = data.reservations ?? [];
-      return list.map((item: any) => ({
-        original: item,
-        titreAvis: '',
-        commentaire: '',
-        note: 0,
-        avisModifiable: true,
-      }) as unknown as Reservation); // Type assertion to `Reservation`
-    })
-  ).subscribe({
-    next: (list) => (this.reservationsList = list),
-    error: (err) => console.error('Error loading reservations', err),
-  });
-}
-  
+    this.clientService
+      .getReservations(clientId)
+      .pipe(
+        map((data: any) => {
+          const list = data.reservations ?? [];
+          return list.map(
+            (item: any) =>
+              ({
+                original: item,
+                titreAvis: '',
+                commentaire: '',
+                note: 0,
+                avisModifiable: true,
+              } as unknown as Reservation)
+          ); // Type assertion to `Reservation`
+        })
+      )
+      .subscribe({
+        next: (list) => (this.reservationsList = list),
+        error: (err) => console.error('Error loading reservations', err),
+      });
+  }
 
   passwordMatchValidator(group: AbstractControl): { [key: string]: boolean } | null {
     const password = group.get('newPassword')?.value;
@@ -114,7 +125,7 @@ export class ClientPage implements OnInit {
         } else {
           this.passwordError = 'Erreur serveur.';
         }
-      }
+      },
     });
   }
 
@@ -167,10 +178,11 @@ export class ClientPage implements OnInit {
 
   // --- Badge Level Method ---
   getBadgeLevel(points: number): string {
-    if (!points) return 'novice';
-    if (points >= 500) return 'maitre';
-    if (points >= 200) return 'expert';
-    if (points >= 100) return 'apprenti';
-    return 'novice';
+    if (!points) return 'novice-transparent';
+    if (points >= 500) return 'legende-transparent';
+    if (points >= 300) return 'maitre-transparent';
+    if (points >= 150) return 'expert-transparent';
+    if (points >= 50) return 'apprenti-transparent';
+    return 'novice-transparent';
   }
 }
