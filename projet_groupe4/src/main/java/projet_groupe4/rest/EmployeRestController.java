@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.security.core.Authentication;
-
 
 import jakarta.validation.Valid;
 import projet_groupe4.dto.request.PasswordEmployeRequest;
@@ -126,7 +125,7 @@ public class EmployeRestController {
         return ResponseEntity.ok(new EntityUpdatedResponse(id, true));
     }
 
-}
+
 
 
 @GetMapping("/me")
@@ -148,10 +147,7 @@ public class EmployeRestController {
         return EmployeResponse.convert(emp);
     }
 
-    /**
-     * PUT /api/employe/me
-     * Updates the currently logged-in employee's info.
-     */
+    
     @PutMapping("/me")
     @PreAuthorize("hasRole('EMPLOYE')")
     public EntityUpdatedResponse updateMyProfile(
