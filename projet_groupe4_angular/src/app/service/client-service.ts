@@ -4,6 +4,7 @@ import { Subject, Observable, startWith, switchMap, map } from 'rxjs';
 import { Client } from '../dto/client';
 import { ClientWithReservationResponse } from '../dto/client-with-reservation-response';
 import { ClientWithEmpruntResponse } from '../dto/client-with-emprunt-response';
+import { Emprunt } from '../dto/emprunt';
 
 @Injectable({
   providedIn: 'root',

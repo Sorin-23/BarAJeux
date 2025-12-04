@@ -17,7 +17,6 @@ import projet_groupe4.model.Client;
 import projet_groupe4.model.Emprunt;
 import projet_groupe4.model.Jeu;
 import projet_groupe4.model.Personne;
-import projet_groupe4.model.StatutLocation;
 
 @Service
 public class EmpruntService {
@@ -38,7 +37,7 @@ public class EmpruntService {
 	}
 
 	public Optional<Emprunt> getById(Integer id) {
-		log.debug("Récupération de l'emprunt id {}",id);
+		log.debug("Récupération de l'emprunt id {}", id);
 		return this.dao.findById(id);
 	}
 
@@ -48,21 +47,22 @@ public class EmpruntService {
 	}
 
 	public Emprunt update(Integer id, EmpruntRequest request) {
-		log.debug("Mise à jour de l'emprunt id {}",id);
+		log.debug("Mise à jour de l'emprunt id {}", id);
 		Emprunt emprunt = getById(id).orElseThrow(() -> new IdNotFoundException());
 		return this.save(emprunt, request);
 	}
 
 	public void deleteById(Integer id) {
-		log.debug("Suppression par id de l'emprunt id {}",id);
+		log.debug("Suppression par id de l'emprunt id {}", id);
 		this.dao.deleteById(id);
 	}
 
 	public void delete(Emprunt emprunt) {
-		log.debug("Suppression de l'emprunt id {}",emprunt.getId());
+		log.debug("Suppression de l'emprunt id {}", emprunt.getId());
 		this.dao.delete(emprunt);
 	}
-	public List<TopJeuResponse> getTop3Emprunts(){
+
+	public List<TopJeuResponse> getTop3Emprunts() {
 		log.debug("Les jeux les plus empruntés");
 		List<Object[]> results = dao.findTopEmprunts();
 		return results.stream()
@@ -78,17 +78,7 @@ public class EmpruntService {
 		emprunt.setDateEmprunt(request.getDateEmprunt());
 		emprunt.setDateRetour(request.getDateRetour());
 		emprunt.setDateRetourReel(request.getDateRetourReel());
-
-		if (request.getDateRetourReel() != null) {
-			if (request.getDateRetourReel().isAfter(request.getDateRetour())) {
-				emprunt.setStatutLocation(StatutLocation.enRetard);
-			} else {
-				emprunt.setStatutLocation(StatutLocation.rendu);
-			}
-		} else {
-			emprunt.verifierRetard();
-		}
-
+		emprunt.setStatutLocation(request.getStatutLocation());
 		Personne personne = this.personneDao.findById(request.getClientId())
 				.orElseThrow(IdNotFoundException::new);
 

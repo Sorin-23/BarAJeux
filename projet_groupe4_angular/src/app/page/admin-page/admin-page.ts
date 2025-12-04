@@ -207,15 +207,8 @@ export class AdminPage implements OnInit {
     });*/
     this.filteredItems[section] = this.data[section].filter((item) => {
       // Recherche textuelle sur les champs disponibles
-      const searchableText = [
-        item.nom,
-        item.name,
-        item.nomTable,
-        item.nomBadge,
-        item.titre
-      
-      ]
-        .filter((v) => !!v) 
+      const searchableText = [item.nom, item.name, item.nomTable, item.nomBadge, item.titre]
+        .filter((v) => !!v)
         .join(' ')
         .toLowerCase();
 
@@ -458,7 +451,15 @@ export class AdminPage implements OnInit {
           formEmprunt.dateRetourReel
         );
         console.log(empruntModifie.toJson());
-        this.empruntService.save(empruntModifie);
+        this.empruntService.save(empruntModifie).subscribe({
+          next: (res) => {
+            console.log('Emprunt sauvegardé', res);
+            this.loadSection('emprunts', this.empruntService);
+            this.editMode = false;
+            this.currentEdit['emprunts'] = null;
+          },
+          error: (err) => console.error('Erreur lors de la sauvegarde de l’emprunt', err),
+        });
         break;
     }
 
