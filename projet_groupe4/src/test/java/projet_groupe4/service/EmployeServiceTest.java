@@ -40,4 +40,26 @@ public class EmployeServiceTest {
         assertThat(result).isNotNull();
         assertThat(result.getMail()).isEqualTo(mail);
     }
+    @Test
+    void testUpdateMyProfile() {
+        Employe existing = new Employe();
+        existing.setNom("Old");
+        existing.setPrenom("Old");
+        existing.setMdp("oldPass");
+
+        Employe updates = new Employe();
+        updates.setNom("New");
+        updates.setPrenom("New");
+        updates.setMdp("newPass");
+
+        when(daoEmploye.findByMail("test@mail.com")).thenReturn(Optional.of(existing));
+        when(daoEmploye.save(existing)).thenAnswer(i -> i.getArgument(0));
+
+        Employe result = service.updateMyProfile("test@mail.com", updates);
+
+        assertThat(result.getNom()).isEqualTo("New");
+        assertThat(result.getPrenom()).isEqualTo("New");
+        assertThat(result.getMdp()).isEqualTo("newPass");
+    }
+
 }

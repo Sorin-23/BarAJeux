@@ -216,5 +216,43 @@ public class PersonneServiceTest {
 
         assertThat(result).contains(c);
     }
+    @Test
+    void testDeleteById() {
+        service.deleteById(1);
+    }
+
+    @Test
+    void testDelete() {
+        Client c = new Client();
+        service.delete(c);
+    }
+    @Test
+    void testUpdateLastConnexion() {
+        Client c = new Client();
+        when(dao.findByMail("mail@test.com")).thenReturn(Optional.of(c));
+        service.updateLastConnexion("mail@test.com");
+        // vérification via c.getDateLastConnexion() si nécessaire
+    }
+
+    @Test
+    void testUpdateDerniereReservation() {
+        Client c = new Client();
+        when(dao.findByMail("mail@test.com")).thenReturn(Optional.of(c));
+        service.updateDerniereReservation("mail@test.com");
+    }
+    @Test
+    void testChangePasswordClient() {
+        Client c = new Client();
+        c.setMdp("encodedOld");
+        when(dao.findById(1)).thenReturn(Optional.of(c));
+        when(passwordEncoder.matches("old", "encodedOld")).thenReturn(true);
+        when(passwordEncoder.encode("new")).thenReturn("encodedNew");
+        when(dao.save(any(Client.class))).thenAnswer(i -> i.getArgument(0));
+
+        boolean result = service.changePassword(1, "old", "new");
+        assertThat(result).isTrue();
+        assertThat(c.getMdp()).isEqualTo("encodedNew");
+    }
+
 
 }
