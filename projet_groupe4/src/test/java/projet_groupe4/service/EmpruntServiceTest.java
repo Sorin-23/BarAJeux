@@ -27,7 +27,7 @@ import projet_groupe4.model.Jeu;
 
 @ExtendWith(MockitoExtension.class)
 public class EmpruntServiceTest {
-	@Mock
+    @Mock
     private IDAOEmprunt dao;
 
     @Mock
