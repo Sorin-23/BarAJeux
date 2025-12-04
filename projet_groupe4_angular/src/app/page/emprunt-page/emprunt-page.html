@@ -27,7 +27,6 @@
             <th class="col-date-retour">Date de retour prévue</th>
             <th class="col-date-retour-reel">Retour réel</th>
             <th class="col-status">Statut</th>
-            <th class="col-action">Action</th>
           </tr>
         </thead>
 
@@ -71,16 +70,6 @@
               <span class="status-badge">
                 {{ e.statutLocation }}
               </span>
-            </td>
-
-            <!-- Action -->
-            <td class="col-action">
-              <button *ngIf="!e.dateRetourReel" class="btn-terminer" (click)="terminerEmprunt(e)">
-                Terminer
-              </button>
-
-              <!-- Si déjà terminé -->
-              <span *ngIf="e.dateRetourReel" class="status-finished"> Rendu </span>
             </td>
           </tr>
         </tbody>

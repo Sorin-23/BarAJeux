@@ -64,7 +64,7 @@ export class ClientWithEmpruntResponse {
       prenom: this.prenom,
       email: this.email,
       telephone: this.telephone,
-      reservations: this.emprunts,
+      emprunts: this.emprunts,
     };
   }
 }
