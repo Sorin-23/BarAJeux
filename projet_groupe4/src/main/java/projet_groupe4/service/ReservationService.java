@@ -3,6 +3,8 @@ package projet_groupe4.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import projet_groupe4.dao.IDAOJeu;
@@ -25,6 +27,7 @@ public class ReservationService {
 	private final IDAOJeu jeuDao;
 	private final IDAOTableJeu tableJeuDao;
 	private final IDAOPersonne personneDao;
+    private final static Logger log = LoggerFactory.getLogger(ReservationService.class);
 
 	public ReservationService(IDAOReservation dao, IDAOJeu jeuDao, IDAOTableJeu tableJeuDao, IDAOPersonne personneDao) {
 		this.dao = dao;
@@ -34,31 +37,38 @@ public class ReservationService {
 	}
 
 	public List<Reservation> getAll() {
+        log.debug("Liste des réservations");
 		return this.dao.findAll();
 	}
 
 	public Optional<Reservation> getById(Integer id) {
+        log.debug("Récupération de la réservation id {}",id);
 		return this.dao.findById(id);
 	}
 
 	public Reservation create(ReservationRequest request) {
+        log.debug("Création d'une nouvelle réservation");
 		return this.save(new Reservation(), request);
 	}
 
 	public Reservation update(Integer id, ReservationRequest request) {
-		Reservation reservation = this.getById(id).orElseThrow(IdNotFoundException::new);
+		log.debug("Mise à jour de la réservation id {}",id);
+        Reservation reservation = this.getById(id).orElseThrow(IdNotFoundException::new);
 		return this.save(reservation, request);
 	}
 
 	public void deleteById(Integer id) {
+        log.debug("Suppression de la réservation id {}",id);
 		this.dao.deleteById(id);
 	}
 
 	public void delete(Reservation reservation) {
+        log.debug("Suppression de la réservation");
 		this.dao.delete(reservation);
 	}
 	
 	public List<TopJeuResponse> getTop3Reservations(){
+        log.debug("Les jeux le plus réservés");
 		List<Object[]> results = dao.findTopReservations();
         return results.stream()
                 .map(r -> new TopJeuResponse((Jeu) r[0], ((Long) r[1]).doubleValue()))
@@ -68,11 +78,13 @@ public class ReservationService {
 	}
 	
 	public List<Reservation> findByGameMasterId(int id) {
+        log.debug("Liste des réservations par GM id {}",id);
     	return this.dao.findByGameMasterId(id);
 	}
 
 
 private Reservation save(Reservation reservation, ReservationRequest request) {
+    log.debug("Mise à jour/Ajout de la réservation id {}",reservation.getId());
     StatutReservation oldStatus = reservation.getStatutReservation();
 
     

@@ -1,5 +1,7 @@
 package projet_groupe4.rest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +17,7 @@ import projet_groupe4.dto.response.AuthResponse;
 public class AuthRestController {
 
 	private final SecurityService service;
+	private final static Logger log = LoggerFactory.getLogger(AuthRestController.class);
 
 	public AuthRestController(SecurityService service) {
 		this.service = service;
@@ -22,6 +25,7 @@ public class AuthRestController {
 
 	@PostMapping("/auth")
 	public AuthResponse auth(@Valid @RequestBody AuthRequest request) {
+		log.debug("Demande d'authentification !");
 		return this.service.auth(request);
 	}
 }

@@ -2,6 +2,8 @@ package projet_groupe4.rest;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,6 +36,7 @@ import projet_groupe4.service.PersonneService;
 public class EmployeRestController {
 
     private final PersonneService srv;
+    private final static Logger log = LoggerFactory.getLogger(EmployeRestController.class);
 
     public EmployeRestController(PersonneService srv) {
         this.srv = srv;
@@ -41,12 +44,13 @@ public class EmployeRestController {
 
     @GetMapping
     public List<EmployeResponse> allEmployes() {
-        System.out.println("Appel de allEmployes");
+        log.debug("Appel de allEmployes");
         return this.srv.getAllEmployes().stream().map(EmployeResponse::convert).toList();
     }
 
     @GetMapping("/{id}")
     public EmployeResponse ficheEmploye(@PathVariable Integer id) {
+        log.debug("Récupération de l'employé id {}", id);
         return this.srv.getEmployeById(id).map(EmployeResponse::convert).orElseThrow(IdNotFoundException::new);
     }
 
@@ -54,6 +58,7 @@ public class EmployeRestController {
     @PreAuthorize("hasRole('EMPLOYE')")
     @ResponseStatus(HttpStatus.CREATED)
     public EntityCreatedResponse ajouterEmploye(@Valid @RequestBody SubscribeEmployeRequest request) {
+        log.debug("Création d'un compte employé");
         return new EntityCreatedResponse(this.srv.create(request).getId());
     }
 
@@ -62,6 +67,7 @@ public class EmployeRestController {
     public EntityUpdatedResponse modifierEmploye(@PathVariable Integer id,
             @Valid @RequestBody SubscribeEmployeRequest request) {
 
+        log.debug("Mise à jour compte employé id {}", id);
         this.srv.update(id, request);
 
         return new EntityUpdatedResponse(id, true);
@@ -71,13 +77,15 @@ public class EmployeRestController {
     @PreAuthorize("hasRole('EMPLOYE')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteEmploye(@PathVariable Integer id) {
+        log.debug("Suppression de l'employé id {}", id);
         this.srv.deleteById(id);
     }
-    
+
     @GetMapping("/username/{email}")
     public EmployeResponse getByUsername(@PathVariable String email) {
+        log.debug("Employé par username");
         Personne p = srv.getByMail(email)
-                        .orElseThrow(IdNotFoundException::new);
+                .orElseThrow(IdNotFoundException::new);
         if (!(p instanceof Employe emp)) {
             throw new IdNotFoundException();
         }
@@ -86,35 +94,38 @@ public class EmployeRestController {
 
     @GetMapping("/gamemasters")
     public List<EmployeResponse> allGameMasters() {
-    System.out.println("Appel de allGameMasters");
-    return this.srv.getAllEmployes().stream()
-            .filter(Employe::isGameMaster)           
-            .map(EmployeResponse::convert)         
-            .toList();
+        log.debug("Appel de allGameMasters");
+        return this.srv.getAllEmployes().stream()
+                .filter(Employe::isGameMaster)
+                .map(EmployeResponse::convert)
+                .toList();
     }
 
-    /*@GetMapping("/gamemaster/{id}")
-    @PreAuthorize("hasRole('EMPLOYE')")
-    public List<Reservation> getReservationsByGameMaster(@PathVariable int id) {
-        return this.srv.findByGameMasterId(id);
-    }*/
+    /*
+     * @GetMapping("/gamemaster/{id}")
+     * 
+     * @PreAuthorize("hasRole('EMPLOYE')")
+     * public List<Reservation> getReservationsByGameMaster(@PathVariable int id) {
+     * return this.srv.findByGameMasterId(id);
+     * }
+     */
 
     @PutMapping("/{id}/password")
-@PreAuthorize("hasRole('EMPLOYE')")
-public ResponseEntity<?> changePassword(
-        @PathVariable Integer id,
-        @RequestBody PasswordEmployeRequest req
-) {
-    boolean ok = srv.changePassword(id, req.getOldPassword(), req.getNewPassword());
-    System.out.println("OLD = " + req.getOldPassword());
-    System.out.println("NEW = " + req.getNewPassword());
+    @PreAuthorize("hasRole('EMPLOYE')")
+    public ResponseEntity<?> changePassword(
+            @PathVariable Integer id,
+            @RequestBody PasswordEmployeRequest req) {
+        log.debug("Changer le mdp");
+        boolean ok = srv.changePassword(id, req.getOldPassword(), req.getNewPassword());
 
-    if (!ok) {
-        return ResponseEntity.status(403)
-                             .body("Ancien mot de passe incorrect");
+        if (!ok) {
+            return ResponseEntity.status(403)
+                    .body("Ancien mot de passe incorrect");
+        }
+
+        return ResponseEntity.ok(new EntityUpdatedResponse(id, true));
     }
 
-    return ResponseEntity.ok(new EntityUpdatedResponse(id, true));
 }
 
 

@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ import projet_groupe4.model.Personne;
 public class PersonneService {
 	private final IDAOPersonne dao;
 	private final PasswordEncoder passwordEncoder;
+	private final static Logger log = LoggerFactory.getLogger(PersonneService.class);
 
 
 
@@ -31,38 +34,46 @@ public class PersonneService {
 	}
 
 	public List<Personne> getAll() {
+		log.debug("Liste des comptes");
 		return this.dao.findAll();
 	}
 
 	public List<Client> getAllClients() {
+		log.debug("Liste des clients");
 		return this.dao.findAllClient();
 	}
 
 	public List<Employe> getAllEmployes() {
+		log.debug("Liste des employés");
 		return this.dao.findAllEmploye();
 	}
 
 	public Personne getById(Integer id) {
+		log.debug("Récupération du compte id {}",id);
 		return this.dao.findById(id).orElseThrow(() -> new ResourceNotFoundException());
 	}
 
 	public Optional<Client> getClientById(Integer clientId) {
+		log.debug("Récupération du client id {}",clientId);
 		return dao.findById(clientId)
 				.filter(p -> p instanceof Client) // garde uniquement si c’est un Client
 				.map(p -> (Client) p);
 	}
 
 	public Optional<Employe> getEmployeById(Integer empId) {
+		log.debug("Récupération de l'employé id {}",empId);
 		return dao.findById(empId)
 				.filter(p -> p instanceof Employe) // garde uniquement si c’est un Client
 				.map(p -> (Employe) p);
 	}
 
 	public Optional<Personne> getByMail(String mail) {
+		log.debug("Récupération du compte avec mail {}",mail);
 		return this.dao.findByMail(mail);
 	}
 
 	public Personne create(Object request) {
+		log.debug("Création d'un nouveau compte");
 		if (request instanceof SubscribeClientRequest clientRequest) {
 			return saveClient(new Client(), clientRequest);
 		} else if (request instanceof SubscribeEmployeRequest employeRequest) {
@@ -94,6 +105,7 @@ public class PersonneService {
 	private Client updateClient(Client client, UpdateClientRequest request) {
 		// On met à jour uniquement les infos de profil modifiables depuis la page
 		// client
+		log.debug("Mise à jour du client {}",client.getId());
 		client.setNom(request.getNom());
 		client.setPrenom(request.getPrenom());
 		client.setMail(request.getMail());
@@ -114,8 +126,10 @@ public class PersonneService {
 
 
 	public Personne update(Integer id, Object request) {
+		log.debug("Update du compte id {}",id);
 		// 1. Nouveau cas : mise à jour du profil client avec UpdateClientRequest
 		if (request instanceof UpdateClientRequest updateReq) {
+			log.debug("Mise à jour du client");
 			Client client = this.getClientById(id).orElseThrow(IdNotFoundException::new);
 			return updateClient(client, updateReq);
 		}
@@ -123,12 +137,14 @@ public class PersonneService {
 		// 2. Ancien cas : inscription / mise à jour complète avec
 		// SubscribeClientRequest
 		if (request instanceof SubscribeClientRequest clientRequest) {
+			log.debug("inscription/mise à jour complète d'un client");
 			Client client = this.getClientById(id).orElseThrow(IdNotFoundException::new);
 			return saveClient(client, clientRequest);
 		}
 
 		// 3. Cas employé inchangé
 		if (request instanceof SubscribeEmployeRequest employeRequest) {
+			log.debug("Mise à jour/inscription complète d'un employé");
 			Employe employe = this.getEmployeById(id).orElseThrow(IdNotFoundException::new);
 			return saveEmploye(employe, employeRequest);
 		}
@@ -138,6 +154,7 @@ public class PersonneService {
 	}
 
 	public Personne updateInfosConnect(Integer id, String login, String password) {
+		log.debug("Update info connexion compte {}",login);
 		Personne personne = this.dao.findById(id).orElseThrow(IdNotFoundException::new);
 		personne.setMail(login);
 		if (password != null) {
@@ -147,14 +164,17 @@ public class PersonneService {
 	}
 
 	public void deleteById(Integer id) {
+		log.debug("Suppression du compte par id {}",id);
 		this.dao.deleteById(id);
 	}
 
 	public void delete(Personne personne) {
+		log.debug("Suppression du compte");
 		this.dao.delete(personne);
 	}
 
 	public List<Personne> getByNomContaining(String nom) {
+		log.debug("Liste des comptes dont le nom contient {}",nom);
 		if (nom == null || nom.trim().isEmpty()) {
 			return getAll();
 		}
@@ -162,6 +182,7 @@ public class PersonneService {
 	}
 
 	public List<Personne> getByPrenomContaining(String prenom) {
+		log.debug("Liste des comptes dont le prenom contient {}",prenom);
 		if (prenom == null || prenom.trim().isEmpty()) {
 			return getAll();
 		}
@@ -169,14 +190,17 @@ public class PersonneService {
 	}
 
 	public Optional<Client> getByIdWithEmprunts(@Param("id") Integer id) {
+		log.debug("Client avec les emprunts {}",id);
 		return this.dao.findByIdWithEmprunts(id);
 	}
 
 	public Optional<Client> getByIdWithReservations(@Param("id") Integer id) {
+		log.debug("Client avec réservations {}",id);
 		return this.dao.findByIdWithReservations(id);
 	}
 
 	private Client saveClient(Client client, SubscribeClientRequest request) {
+		log.debug("Mise à jour/Inscription compte client");
 		client.setNom(request.getNom());
 		client.setPrenom(request.getPrenom());
 		client.setMail(request.getMail());
@@ -192,6 +216,7 @@ public class PersonneService {
 	}
 
 	private Employe saveEmploye(Employe employe, SubscribeEmployeRequest request) {
+		log.debug("Mise à jour/Inscription compte employé");
 		employe.setNom(request.getNom());
 		employe.setPrenom(request.getPrenom());
 		employe.setMail(request.getMail());
@@ -204,6 +229,7 @@ public class PersonneService {
 	}
 
 	public void updateLastConnexion(String mail) {
+		log.debug("Update de la dernière connexion du client");
 		this.dao.findByMail(mail)
 		.filter(p -> p instanceof Client) // optionnel si tu veux seulement les clients
 		.map(p -> (Client) p)
@@ -215,6 +241,7 @@ public class PersonneService {
 
 
 	public void updateDerniereReservation(String mail) {
+		log.debug("Update de la dernière réservation du client");
 		this.dao.findByMail(mail)
 		.filter(p -> p instanceof Client)
 		.map(p -> (Client) p)
@@ -247,14 +274,17 @@ public class PersonneService {
 */
 
 public boolean changePassword(int id, String oldPassword, String newPassword) {
+	log.debug("Changement du mdp");
     
     Object entity = this.dao.findById(id).orElseThrow(() -> new RuntimeException("Entity not found"));
 
    
     if (entity instanceof Employe) {
+		log.debug("Changement mdp employé");
         Employe emp = (Employe) entity;
         
         if (!passwordEncoder.matches(oldPassword, emp.getMdp())) {
+			log.debug("ancien mdp incorrect");
             return false; 
         }
        
@@ -265,10 +295,12 @@ public boolean changePassword(int id, String oldPassword, String newPassword) {
 
   
     if (entity instanceof Client) {
+		log.debug("Changement mdp client");
         Client client = (Client) entity;
        
         if (!passwordEncoder.matches(oldPassword, client.getMdp())) {
-            return false; 
+            log.debug("ancien mdp incorrect");
+			return false; 
         }
        
         client.setMdp(passwordEncoder.encode(newPassword));

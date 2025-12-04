@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import projet_groupe4.dao.IDAOJeu;
@@ -22,6 +24,7 @@ public class JeuService {
 	private final IDAOJeu dao;
 	private final EmpruntService empruntService;
     private final ReservationService reservationService;
+	private final static Logger log = LoggerFactory.getLogger(JeuService.class);
 
 	public JeuService(IDAOJeu dao,  EmpruntService empruntService, ReservationService reservationService) {
 		this.dao = dao;
@@ -30,31 +33,38 @@ public class JeuService {
 	}
 
 	public List<Jeu> getAll() {
+		log.debug("Liste des jeux");
 		return this.dao.findAll();
 	}
 
 	public Optional<Jeu> getById(Integer id) {
+		log.debug("Récupération du jeu id {}",id);
 		return this.dao.findById(id);
 	}
 
 	public Jeu create(JeuRequest request) {
+		log.debug("Création du jeu {}",request.getNom());
 		return this.save(new Jeu(), request);
 	}
 
 	public Jeu update(Integer id, JeuRequest request) {
+		log.debug("Mise à jour du jeu {}",id);
 		Jeu jeu = getById(id).orElseThrow(() -> new IdNotFoundException());
 		return this.save(jeu, request);
 	}
 
 	public void deleteById(Integer id) {
+		log.debug("Suppression par id du jeu {}",id);
 		this.dao.deleteById(id);
 	}
 
 	public void delete(Jeu jeu) {
+		log.debug("Suppression du jeu {}",jeu.getNom());
 		this.dao.delete(jeu);
 	}
 
 	public List<Jeu> getByNomContaining(String nom) {
+		log.debug("Recherche des jeux par le nom contenant {}",nom);
 		if (nom == null || nom.trim().isEmpty()) {
 			return getAll();
 		}
@@ -62,6 +72,7 @@ public class JeuService {
 	}
 
 	private Jeu save(Jeu jeu, JeuRequest request) {
+		log.debug("Ajout/Update du jeu {}",request.getNom());
 		jeu.setNom(request.getNom());
 		jeu.setTypesJeux(request.getTypesJeux());
 		jeu.setAgeMinimum(request.getAgeMinimum());
@@ -78,6 +89,7 @@ public class JeuService {
 	}
 	
 	public List<Jeu> getDisponibles(LocalDate dateDebut){
+		log.debug("Liste des jeux disponibles à {}",dateDebut);
 		LocalDate dateFin = dateDebut.plusDays(15);
 		LocalDateTime debutLDT = dateDebut.atStartOfDay();
 	    LocalDateTime finLDT = dateFin.atTime(23, 59);
@@ -116,6 +128,7 @@ public class JeuService {
     }
 
 	public List<TopJeuResponse> getTop3Notes() {
+		log.debug("Liste des jeux les mieux notés");
 	    return dao.findTopByNote().stream()
 	              .limit(3)
 	              .map(j -> new TopJeuResponse(j, j.getNote()))

@@ -2,6 +2,8 @@ package projet_groupe4.rest;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,6 +29,7 @@ import projet_groupe4.service.EmpruntService;
 @PreAuthorize("hasAnyRole('EMPLOYE', 'CLIENT')")
 public class EmpruntRestController {
 	private final EmpruntService srv;
+	private final static Logger log = LoggerFactory.getLogger(EmpruntRestController.class);
 
 	public EmpruntRestController(EmpruntService srv) {
 		this.srv = srv;
@@ -34,11 +37,13 @@ public class EmpruntRestController {
 
 	@GetMapping
 	public List<EmpruntResponse> allEmprunts() {
+		log.debug("Liste des emprunts");
 		return this.srv.getAll().stream().map(EmpruntResponse::convert).toList();
 	}
 
 	@GetMapping("/{id}")
 	public EmpruntResponse ficheEmprunt(@PathVariable Integer id) {
+		log.debug("Fiche emprunt id {}",id);
 		return this.srv.getById(id).map(EmpruntResponse::convert).orElseThrow(IdNotFoundException::new);
 	}
 
@@ -47,12 +52,14 @@ public class EmpruntRestController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public EntityCreatedResponse ajouterEmprunt(@Valid @RequestBody EmpruntRequest request) {
 		 
+		log.debug("Ajouter un nouveau emprunt");
 		return new EntityCreatedResponse(this.srv.create(request).getId());
 	}
 
 	@PutMapping("/{id}")
 	@PreAuthorize("hasAnyRole('EMPLOYE','CLIENT')")
 	public EntityUpdatedResponse modifierEmprunt(@PathVariable Integer id, @Valid @RequestBody EmpruntRequest request) {
+		log.debug("Modification de l'emprunt id {}",id);
 		this.srv.update(id, request);
 		return new EntityUpdatedResponse(id, true);
 	}
@@ -61,6 +68,7 @@ public class EmpruntRestController {
 	@PreAuthorize("hasRole('EMPLOYE')")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteEmprunt(@PathVariable Integer id) {
+		log.debug("Suppression de l'emprunt id {}",id);
 		this.srv.deleteById(id);
 	}
 

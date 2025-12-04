@@ -2,6 +2,8 @@ package projet_groupe4.rest;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,6 +32,7 @@ import projet_groupe4.service.ReservationService;
 public class ReservationRestController {
     private final ReservationService srv;
     private final PersonneService personneService;
+    private final static Logger log = LoggerFactory.getLogger(ReservationRestController.class);
 
     public ReservationRestController(ReservationService srv, PersonneService personneService) {
         this.srv = srv;
@@ -38,11 +41,13 @@ public class ReservationRestController {
 
     @GetMapping
     public List<ReservationResponse> allReservations() {
+        log.debug("Liste des réservations");
         return this.srv.getAll().stream().map(ReservationResponse::convert).toList();
     }
 
     @GetMapping("/{id}")
     public ReservationResponse ficheReservation(@PathVariable int id) {
+        log.debug("Fiche réservation id {}", id);
         return this.srv.getById(id).map(ReservationResponse::convert).orElseThrow(IdNotFoundException::new);
     }
 
@@ -50,6 +55,7 @@ public class ReservationRestController {
     @PreAuthorize("hasRole('CLIENT')")
     @ResponseStatus(HttpStatus.CREATED)
     public EntityCreatedResponse ajouterReservation(@Valid @RequestBody ReservationRequest request) {
+        log.debug("Ajouter une nouvelle réservation");
         String clientMail = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName();
@@ -63,6 +69,7 @@ public class ReservationRestController {
     @PreAuthorize("hasAnyRole('EMPLOYE','CLIENT')")
     public EntityUpdatedResponse modifierReservation(@PathVariable int id,
             @Valid @RequestBody ReservationRequest request) {
+        log.debug("Modification de la réservation id {}", id);
         this.srv.update(id, request);
 
         return new EntityUpdatedResponse(id, true);
@@ -72,18 +79,18 @@ public class ReservationRestController {
     @PreAuthorize("hasRole('EMPLOYE')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteReservation(@PathVariable Integer id) {
+        log.debug("Suppression de la réservation id {}", id);
         this.srv.deleteById(id);
     }
 
     @GetMapping("/gamemaster/{id}")
     @PreAuthorize("hasRole('EMPLOYE')")
     public List<ReservationResponse> getReservationByGameMaster(@PathVariable int id) {
+        log.debug("Liste des réservations par GM id {}", id);
         return this.srv.findByGameMasterId(id)
-                    .stream()
-                    .map(ReservationResponse::convert)
-                    .toList();
+                .stream()
+                .map(ReservationResponse::convert)
+                .toList();
     }
-
-    
 
 }
