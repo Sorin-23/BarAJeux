@@ -1,52 +1,48 @@
-
-
 /* ============================================= */
 /* =========== - PAGE ADMIN ============== */
 /* ============================================= */
 
 .btn_admin.active {
-    background-color: var(--couleur-principale);
-    color: var(--couleur-secondaire);
+  background-color: var(--couleur-principale);
+  color: var(--couleur-secondaire);
 }
 
 #bdd_recherche_ajout {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    
-
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
 }
 
 th,
- td {
-    border: 1px solid #ddd;
-    padding: 12px 15px;
-    text-align: center;
-    word-wrap: break-word;
+td {
+  border: 1px solid #ddd;
+  padding: 12px 15px;
+  text-align: center;
+  word-wrap: break-word;
 }
 
- th {
-    background-color: var(--couleur-tertiaire);
-    color: var(--couleur-secondaire);
-    font-weight: bold;
+th {
+  background-color: var(--couleur-tertiaire);
+  color: var(--couleur-secondaire);
+  font-weight: bold;
 }
 
- tr:nth-child(even) {
-    background-color: #f9f9f9;
+tr:nth-child(even) {
+  background-color: #f9f9f9;
 }
 
- tr:hover {
-    background-color: #f1f1f1;
+tr:hover {
+  background-color: #f1f1f1;
 }
 
- td .btn_crud {
-    padding: 5px 10px;
-    margin: 0 3px;
+td .btn_crud {
+  padding: 5px 10px;
+  margin: 0 3px;
 }
 #bdd_dashboard {
   padding: 2vh 2vw;
@@ -89,36 +85,129 @@ th,
   color: #222;
 }
 
-
-
 /* ===== Dropdown filtres ===== */
 #bdd_recherche_ajout select {
-    padding: 0.8vh 1vh; 
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    background-color: #fdfdfd;
-    font-size: 1em;
-    color: #333;
-    cursor: pointer;
-    transition: 0.2s;
-    margin-left: 1vh; 
+  padding: 0.8vh 1vh;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #fdfdfd;
+  font-size: 1em;
+  color: #333;
+  cursor: pointer;
+  transition: 0.2s;
+  margin-left: 1vh;
 }
 
 #bdd_recherche_ajout select:focus {
-    outline: none;
-    border-color: var(--couleur-principale);
-    box-shadow: 0 0 4px var(--couleur-principale);
+  outline: none;
+  border-color: var(--couleur-principale);
+  box-shadow: 0 0 4px var(--couleur-principale);
 }
 
 #bdd_recherche_ajout select option {
-    padding: 0.5em;
+  padding: 0.5em;
 }
 
-
 #admin_bouton_section {
-    display: flex;
-    flex-wrap: wrap;         
-    gap: 10px;              
-    justify-content: center;
-    margin-bottom: 20px;    
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+#admin_form_section {
+  max-width: 800px;
+  margin: 3vh auto;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+#admin_form_section h3 {
+  text-align: center;
+  font-family: 'Georgia', serif;
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  color: var(--couleur-principale);
+}
+
+.filtre_groupe {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+}
+
+.filtre_groupe label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: var(--couleur-principale);
+}
+
+.filtre_groupe input[type='text'],
+.filtre_groupe input[type='number'],
+.filtre_groupe input[type='date'],
+.filtre_groupe input[type='email'],
+.filtre_groupe select {
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  transition: 0.2s;
+}
+
+.filtre_groupe input:focus,
+.filtre_groupe select:focus {
+  outline: none;
+  border-color: var(--couleur-principale);
+  box-shadow: 0 0 5px var(--couleur-principale);
+}
+
+.filtre_groupe input[type='checkbox'] {
+  width: auto;
+  margin-top: 0.3rem;
+}
+
+.form-group {
+  display: flex;
+  justify-content: flex-start;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btn.enregistrer {
+  background-color: var(--couleur-principale);
+  color: var(--couleur-secondaire);
+  font-weight: bold;
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn.enregistrer:hover {
+  background-color: var(--couleur-secondaire-hover);
+}
+
+.btn.annuler {
+  background-color: #ccc;
+  color: #222;
+  font-weight: bold;
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn.annuler:hover {
+  background-color: #aaa;
+}
+
+/* Erreurs */
+.filtre_groupe span {
+  font-size: 0.9rem;
+  margin-left: 0.3rem;
 }

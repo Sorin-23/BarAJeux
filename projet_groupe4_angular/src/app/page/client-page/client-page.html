@@ -4,9 +4,10 @@
   <!-- TAB 1: INFORMATIONS -->
   <div id="client_formulaire" *ngIf="currentView === 'info'">
     <div id="client_badge">
-      <button class="btn btn-switch" (click)="goToReservations()">Voir mes réservations</button>
-      <button class="btn btn-switch" (click)="goToEmprunts()">Voir mes emprunts</button>
-
+      <div class="btn-switch-container">
+        <button class="btn btn-switch" (click)="goToReservations()">Voir mes réservations</button>
+        <button class="btn btn-switch" (click)="goToEmprunts()">Voir mes emprunts</button>
+      </div>
       <img
         [src]="'assets/images/badge/' + getBadgeLevel(client.pointFidelite) + '.png'"
         alt="Badge"

@@ -82,11 +82,6 @@
         </li>
       </ol>
     </div>
-
-    <div class="btn-group" *ngIf="prenom && role === 'ROLE_CLIENT'">
-      <button routerLink="/jeu" class="btn">Voir tous les jeux</button>
-      <button routerLink="/table" class="btn">Réserver maintenant</button>
-    </div>
   </div>
 
   <div id="right_container" *ngIf="topReserves && topReserves.length > 0">
